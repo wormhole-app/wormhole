@@ -11,3 +11,6 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 anyhow = "1"
 flutter_rust_bridge = "1"
+magic-wormhole = "0.6.0"
+futures = "0.3.12"
+async-std = "1.12.0"
