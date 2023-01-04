@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 print(result.files.single.path);
                 print(result.files.single.name);
-                final stream =  api.sendFile(fileName: file.name, filePath: file.path!);
+                final stream =  api.sendFile(fileName: file.name, filePath: file.path!, codeLength: 2);
                 stream.listen((event) {
                   switch(event.event) {
                     case Events.Code:

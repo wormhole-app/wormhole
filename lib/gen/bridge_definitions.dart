@@ -9,28 +9,44 @@ import 'dart:async';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 
 abstract class Native {
-  Stream<String> test({dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kTestConstMeta;
-
   Stream<TUpdate> sendFile(
-      {required String fileName, required String filePath, dynamic hint});
+      {required String fileName,
+      required String filePath,
+      required int codeLength,
+      dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSendFileConstMeta;
+
+  Future<TUpdate> newStaticMethodTUpdate(
+      {required Events event, required String value, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kNewStaticMethodTUpdateConstMeta;
 }
 
 enum Events {
   Code,
   Total,
   Sent,
+  Error,
+  Finished,
+  StartTransfer,
 }
 
 class TUpdate {
+  final Native bridge;
   final Events event;
   final String value;
 
   TUpdate({
+    required this.bridge,
     required this.event,
     required this.value,
   });
+
+  static Future<TUpdate> newTUpdate(
+          {required Native bridge,
+          required Events event,
+          required String value,
+          dynamic hint}) =>
+      bridge.newStaticMethodTUpdate(event: event, value: value, hint: hint);
 }

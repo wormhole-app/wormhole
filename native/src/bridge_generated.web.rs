@@ -2,13 +2,13 @@ use super::*;
 // Section: wire functions
 
 #[wasm_bindgen]
-pub fn wire_test(port_: MessagePort) {
-    wire_test_impl(port_)
+pub fn wire_send_file(port_: MessagePort, file_name: String, file_path: String, code_length: u8) {
+    wire_send_file_impl(port_, file_name, file_path, code_length)
 }
 
 #[wasm_bindgen]
-pub fn wire_send_file(port_: MessagePort, file_name: String, file_path: String) {
-    wire_send_file_impl(port_, file_name, file_path)
+pub fn wire_new__static_method__TUpdate(port_: MessagePort, event: i32, value: String) {
+    wire_new__static_method__TUpdate_impl(port_, event, value)
 }
 
 // Section: allocate functions
@@ -33,6 +33,16 @@ impl Wire2Api<Vec<u8>> for Box<[u8]> {
 impl Wire2Api<String> for JsValue {
     fn wire2api(self) -> String {
         self.as_string().expect("non-UTF-8 string, or not a string")
+    }
+}
+impl Wire2Api<Events> for JsValue {
+    fn wire2api(self) -> Events {
+        (self.unchecked_into_f64() as i32).wire2api()
+    }
+}
+impl Wire2Api<i32> for JsValue {
+    fn wire2api(self) -> i32 {
+        self.unchecked_into_f64() as _
     }
 }
 impl Wire2Api<u8> for JsValue {

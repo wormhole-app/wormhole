@@ -21,20 +21,11 @@ use std::sync::Arc;
 
 // Section: wire functions
 
-fn wire_test_impl(port_: MessagePort) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
-        WrapInfo {
-            debug_name: "test",
-            port: Some(port_),
-            mode: FfiCallMode::Stream,
-        },
-        move || move |task_callback| test(task_callback.stream_sink()),
-    )
-}
 fn wire_send_file_impl(
     port_: MessagePort,
     file_name: impl Wire2Api<String> + UnwindSafe,
     file_path: impl Wire2Api<String> + UnwindSafe,
+    code_length: impl Wire2Api<u8> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
@@ -45,9 +36,33 @@ fn wire_send_file_impl(
         move || {
             let api_file_name = file_name.wire2api();
             let api_file_path = file_path.wire2api();
+            let api_code_length = code_length.wire2api();
             move |task_callback| {
-                send_file(api_file_name, api_file_path, task_callback.stream_sink())
+                send_file(
+                    api_file_name,
+                    api_file_path,
+                    api_code_length,
+                    task_callback.stream_sink(),
+                )
             }
+        },
+    )
+}
+fn wire_new__static_method__TUpdate_impl(
+    port_: MessagePort,
+    event: impl Wire2Api<Events> + UnwindSafe,
+    value: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "new__static_method__TUpdate",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_event = event.wire2api();
+            let api_value = value.wire2api();
+            move |task_callback| Ok(TUpdate::new(api_event, api_value))
         },
     )
 }
@@ -74,6 +89,24 @@ where
     }
 }
 
+impl Wire2Api<Events> for i32 {
+    fn wire2api(self) -> Events {
+        match self {
+            0 => Events::Code,
+            1 => Events::Total,
+            2 => Events::Sent,
+            3 => Events::Error,
+            4 => Events::Finished,
+            5 => Events::StartTransfer,
+            _ => unreachable!("Invalid variant for Events: {}", self),
+        }
+    }
+}
+impl Wire2Api<i32> for i32 {
+    fn wire2api(self) -> i32 {
+        self
+    }
+}
 impl Wire2Api<u8> for u8 {
     fn wire2api(self) -> u8 {
         self
@@ -88,6 +121,9 @@ impl support::IntoDart for Events {
             Self::Code => 0,
             Self::Total => 1,
             Self::Sent => 2,
+            Self::Error => 3,
+            Self::Finished => 4,
+            Self::StartTransfer => 5,
         }
         .into_dart()
     }

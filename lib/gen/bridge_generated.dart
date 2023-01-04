@@ -20,31 +20,20 @@ class NativeImpl implements Native {
   factory NativeImpl.wasm(FutureOr<WasmModule> module) =>
       NativeImpl(module as ExternalLibrary);
   NativeImpl.raw(this._platform);
-  Stream<String> test({dynamic hint}) {
-    return _platform.executeStream(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner.wire_test(port_),
-      parseSuccessData: _wire2api_String,
-      constMeta: kTestConstMeta,
-      argValues: [],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta get kTestConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
-        debugName: "test",
-        argNames: [],
-      );
-
   Stream<TUpdate> sendFile(
-      {required String fileName, required String filePath, dynamic hint}) {
+      {required String fileName,
+      required String filePath,
+      required int codeLength,
+      dynamic hint}) {
     var arg0 = _platform.api2wire_String(fileName);
     var arg1 = _platform.api2wire_String(filePath);
+    var arg2 = api2wire_u8(codeLength);
     return _platform.executeStream(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner.wire_send_file(port_, arg0, arg1),
-      parseSuccessData: _wire2api_t_update,
+      callFfi: (port_) =>
+          _platform.inner.wire_send_file(port_, arg0, arg1, arg2),
+      parseSuccessData: (d) => _wire2api_t_update(d),
       constMeta: kSendFileConstMeta,
-      argValues: [fileName, filePath],
+      argValues: [fileName, filePath, codeLength],
       hint: hint,
     ));
   }
@@ -52,7 +41,27 @@ class NativeImpl implements Native {
   FlutterRustBridgeTaskConstMeta get kSendFileConstMeta =>
       const FlutterRustBridgeTaskConstMeta(
         debugName: "send_file",
-        argNames: ["fileName", "filePath"],
+        argNames: ["fileName", "filePath", "codeLength"],
+      );
+
+  Future<TUpdate> newStaticMethodTUpdate(
+      {required Events event, required String value, dynamic hint}) {
+    var arg0 = api2wire_events(event);
+    var arg1 = _platform.api2wire_String(value);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_new__static_method__TUpdate(port_, arg0, arg1),
+      parseSuccessData: (d) => _wire2api_t_update(d),
+      constMeta: kNewStaticMethodTUpdateConstMeta,
+      argValues: [event, value],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kNewStaticMethodTUpdateConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "new__static_method__TUpdate",
+        argNames: ["event", "value"],
       );
 
   void dispose() {
@@ -77,6 +86,7 @@ class NativeImpl implements Native {
     if (arr.length != 2)
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return TUpdate(
+      bridge: this,
       event: _wire2api_events(arr[0]),
       value: _wire2api_String(arr[1]),
     );
@@ -92,6 +102,16 @@ class NativeImpl implements Native {
 }
 
 // Section: api2wire
+
+@protected
+int api2wire_events(Events raw) {
+  return api2wire_i32(raw.index);
+}
+
+@protected
+int api2wire_i32(int raw) {
+  return raw;
+}
 
 @protected
 int api2wire_u8(int raw) {

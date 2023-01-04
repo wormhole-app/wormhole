@@ -128,37 +128,48 @@ class NativeWire implements FlutterRustBridgeWireBase {
   late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
-  void wire_test(
-    int port_,
-  ) {
-    return _wire_test(
-      port_,
-    );
-  }
-
-  late final _wire_testPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>('wire_test');
-  late final _wire_test = _wire_testPtr.asFunction<void Function(int)>();
-
   void wire_send_file(
     int port_,
     ffi.Pointer<wire_uint_8_list> file_name,
     ffi.Pointer<wire_uint_8_list> file_path,
+    int code_length,
   ) {
     return _wire_send_file(
       port_,
       file_name,
       file_path,
+      code_length,
     );
   }
 
   late final _wire_send_filePtr = _lookup<
       ffi.NativeFunction<
           ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
-              ffi.Pointer<wire_uint_8_list>)>>('wire_send_file');
+              ffi.Pointer<wire_uint_8_list>, ffi.Uint8)>>('wire_send_file');
   late final _wire_send_file = _wire_send_filePtr.asFunction<
-      void Function(
-          int, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+      void Function(int, ffi.Pointer<wire_uint_8_list>,
+          ffi.Pointer<wire_uint_8_list>, int)>();
+
+  void wire_new__static_method__TUpdate(
+    int port_,
+    int event,
+    ffi.Pointer<wire_uint_8_list> value,
+  ) {
+    return _wire_new__static_method__TUpdate(
+      port_,
+      event,
+      value,
+    );
+  }
+
+  late final _wire_new__static_method__TUpdatePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Int32, ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_new__static_method__TUpdate');
+  late final _wire_new__static_method__TUpdate =
+      _wire_new__static_method__TUpdatePtr
+          .asFunction<void Function(int, int, ffi.Pointer<wire_uint_8_list>)>();
 
   ffi.Pointer<wire_uint_8_list> new_uint_8_list_0(
     int len,

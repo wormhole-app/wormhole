@@ -42,10 +42,11 @@ external NativeWasmModule get wasmModule;
 class NativeWasmModule implements WasmModule {
   external Object /* Promise */ call([String? moduleName]);
   external NativeWasmModule bind(dynamic thisArg, String moduleName);
-  external dynamic /* void */ wire_test(NativePortType port_);
+  external dynamic /* void */ wire_send_file(NativePortType port_,
+      String file_name, String file_path, int code_length);
 
-  external dynamic /* void */ wire_send_file(
-      NativePortType port_, String file_name, String file_path);
+  external dynamic /* void */ wire_new__static_method__TUpdate(
+      NativePortType port_, int event, String value);
 }
 
 // Section: WASM wire connector
@@ -54,9 +55,11 @@ class NativeWire extends FlutterRustBridgeWasmWireBase<NativeWasmModule> {
   NativeWire(FutureOr<WasmModule> module)
       : super(WasmModule.cast<NativeWasmModule>(module));
 
-  void wire_test(NativePortType port_) => wasmModule.wire_test(port_);
+  void wire_send_file(NativePortType port_, String file_name, String file_path,
+          int code_length) =>
+      wasmModule.wire_send_file(port_, file_name, file_path, code_length);
 
-  void wire_send_file(
-          NativePortType port_, String file_name, String file_path) =>
-      wasmModule.wire_send_file(port_, file_name, file_path);
+  void wire_new__static_method__TUpdate(
+          NativePortType port_, int event, String value) =>
+      wasmModule.wire_new__static_method__TUpdate(port_, event, value);
 }

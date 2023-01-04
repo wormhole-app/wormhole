@@ -2,17 +2,22 @@ use super::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_test(port_: i64) {
-    wire_test_impl(port_)
-}
-
-#[no_mangle]
 pub extern "C" fn wire_send_file(
     port_: i64,
     file_name: *mut wire_uint_8_list,
     file_path: *mut wire_uint_8_list,
+    code_length: u8,
 ) {
-    wire_send_file_impl(port_, file_name, file_path)
+    wire_send_file_impl(port_, file_name, file_path, code_length)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_new__static_method__TUpdate(
+    port_: i64,
+    event: i32,
+    value: *mut wire_uint_8_list,
+) {
+    wire_new__static_method__TUpdate_impl(port_, event, value)
 }
 
 // Section: allocate functions
