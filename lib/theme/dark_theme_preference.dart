@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DarkThemePreference {
@@ -10,7 +13,13 @@ class DarkThemePreference {
 
   Future<bool> getTheme() async {
     final prefs = await SharedPreferences.getInstance();
-    // todo use systems default theme if noting is defined here
-    return prefs.getBool(themeStatus) ?? false;
+
+    final darkmode = prefs.getBool(themeStatus);
+    if (darkmode == null) {
+      var brightness = SchedulerBinding.instance.window.platformBrightness;
+      return brightness == Brightness.dark;
+    } else {
+      return darkmode;
+    }
   }
 }
