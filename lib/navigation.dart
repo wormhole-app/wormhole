@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rust_bridge_template/navigation_provider.dart';
 import 'package:flutter_rust_bridge_template/pages/receive_page.dart';
 import 'package:flutter_rust_bridge_template/pages/send_page.dart';
 import 'package:flutter_rust_bridge_template/pages/settings_page.dart';
@@ -14,6 +15,8 @@ class Navigation extends StatefulWidget {
 
 class _NavigationState extends State<Navigation> {
   int _selectedIndex = 0;
+  final navigation = NavigationProvider(_widgetOptions[0]);
+
   static const List<Widget> _widgetOptions = <Widget>[
     SendPage(),
     ReceivePage(),
@@ -21,6 +24,8 @@ class _NavigationState extends State<Navigation> {
   ];
 
   void _onItemTapped(int index) {
+    navigation.setActivePage(_widgetOptions[index]);
+
     setState(() {
       _selectedIndex = index;
     });
@@ -31,32 +36,44 @@ class _NavigationState extends State<Navigation> {
     final themeprov = Provider.of<DarkThemeProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Wormhole"),
-        actions: [IconButton(onPressed: () {
-          themeprov.invertTheme();
-        }, icon: const Icon(Icons.light_mode_outlined))],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.upload),
-            label: 'Send',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.download),
-            label: 'Receive',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
-      body: _widgetOptions[_selectedIndex]
-    );
+        appBar: AppBar(
+          title: const Text("Wormhole"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  themeprov.invertTheme();
+                },
+                icon: const Icon(Icons.light_mode_outlined))
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.upload),
+              label: 'Send',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.download),
+              label: 'Receive',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.amber[800],
+          onTap: _onItemTapped,
+        ),
+        body: ChangeNotifierProvider(
+          builder: (context, child) {
+            return Consumer<NavigationProvider>(
+              builder: (context, value, child) {
+                return value.getActivePage();
+              },
+            );
+          },
+          create: (context) => navigation,
+        ));
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Styles {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     return ThemeData(
+      iconTheme: IconThemeData(color: isDarkTheme ? Colors.white70  : Colors.black),
       primarySwatch: Colors.blue,
       primaryColor: isDarkTheme ? Colors.black : Colors.white,
       backgroundColor: isDarkTheme ? Colors.black : const Color(0xffF1F5FB),
@@ -22,6 +23,7 @@ class Styles {
       ),
       textSelectionTheme: TextSelectionThemeData(
           selectionColor: isDarkTheme ? Colors.white : Colors.black),
+      textTheme: const TextTheme(headlineLarge: TextStyle(fontWeight: FontWeight.bold))
     );
   }
 }
