@@ -1,7 +1,7 @@
 FROM cirrusci/flutter
 
 ENV ANDROID_NDK_VERSION 22.1.7171670
-#ENV PATH="/root/.cargo/bin:$PATH"
+ENV PATH="/root/.cargo/bin:$PATH"
 
 
 RUN yes | sdkmanager "ndk;$ANDROID_NDK_VERSION"
