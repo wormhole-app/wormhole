@@ -1,0 +1,16 @@
+image: luki42/flutter-rust
+
+stages:
+  - build
+
+flutter_build_android:
+  stage: build
+  before_script:
+    - flutter packages get
+    - flutter clean
+  script:
+    - flutter build apk --target-platform android-arm64
+    - mv build/app/outputs/apk/release/app-release.apk ./wormhole.apk
+  artifacts:
+    paths:
+      - wormhole.apk
