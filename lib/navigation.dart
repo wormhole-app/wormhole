@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/navigation_provider.dart';
-import 'package:flutter_rust_bridge_template/pages/receive_page.dart';
-import 'package:flutter_rust_bridge_template/pages/send_page.dart';
-import 'package:flutter_rust_bridge_template/pages/settings_page.dart';
-import 'package:flutter_rust_bridge_template/theme/dark_theme_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'navigation_provider.dart';
+import 'pages/receive_page.dart';
+import 'pages/send_page.dart';
+import 'pages/settings_page.dart';
+import 'theme/dark_theme_provider.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _NavigationState extends State<Navigation> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Wormhole"),
+          title: const Text('Wormhole'),
           actions: [
             IconButton(
                 onPressed: () {

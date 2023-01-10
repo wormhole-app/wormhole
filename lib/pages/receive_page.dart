@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/utils/paths.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 
 import '../gen/ffi.dart' if (dart.library.html) 'ffi_web.dart';
 import '../navigation_provider.dart';
+import '../utils/paths.dart';
 import 'connecting_page.dart';
 
 class ReceivePage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _ReceivePageState extends State<ReceivePage> {
 
   _ReceivePageState() {
     controller.addListener(() {
-      if (controller.text.endsWith(" ")) {
+      if (controller.text.endsWith(' ')) {
         controller.text =
             '${controller.text.substring(0, controller.text.length - 1)}-';
         controller.selection = TextSelection.fromPosition(
@@ -45,13 +45,13 @@ class _ReceivePageState extends State<ReceivePage> {
             height: 20,
           ),
           Text(
-            "Receive File",
+            'Receive File',
             style: theme.textTheme.headlineLarge,
           ),
           const SizedBox(
             height: 5,
           ),
-          const Text("Enter the transmit code from the sender"),
+          const Text('Enter the transmit code from the sender'),
           const SizedBox(
             height: 25,
           ),
@@ -63,7 +63,7 @@ class _ReceivePageState extends State<ReceivePage> {
                 filled: true,
                 labelStyle: theme.textTheme.bodyMedium,
                 focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
                     borderSide: BorderSide(color: theme.focusColor, width: 2)),
                 hintStyle: theme.textTheme.bodyMedium?.apply(
                     color: theme.textTheme.bodyMedium?.color?.withOpacity(.4)),
@@ -84,7 +84,7 @@ class _ReceivePageState extends State<ReceivePage> {
               child: ElevatedButton(
                   onPressed: _onReceiveButtonClick,
                   child: const Text(
-                    "Select File",
+                    'Select File',
                   )),
             ),
           ),
@@ -98,12 +98,12 @@ class _ReceivePageState extends State<ReceivePage> {
 
     final dpath = await getDownloadPath();
     if (dpath == null) {
-      print("no download path available");
+      debugPrint('no download path available');
       return;
     }
 
     final s = api.requestFile(passphrase: text, storageFolder: dpath);
-
+    if (!mounted) return;
     Provider.of<NavigationProvider>(context, listen: false)
         .setActivePage(ConnectingPage(
             stream: s,
@@ -134,7 +134,7 @@ class _ReceivePageState extends State<ReceivePage> {
                                   OpenFilex.open(file);
                                 },
                                 child: const Text(
-                                  "Open file",
+                                  'Open file',
                                 )),
                           ),
                         ),

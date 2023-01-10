@@ -1,10 +1,10 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/navigation_provider.dart';
-import 'package:flutter_rust_bridge_template/pages/connecting_page.dart';
 import 'package:provider/provider.dart';
 
 import '../gen/ffi.dart' if (dart.library.html) 'ffi_web.dart';
+import '../navigation_provider.dart';
+import 'connecting_page.dart';
 
 class SendPage extends StatefulWidget {
   const SendPage({Key? key}) : super(key: key);
@@ -24,6 +24,7 @@ class _SendPageState extends State<SendPage> {
       final stream = api.sendFile(
           fileName: file.name, filePath: file.path!, codeLength: 2);
 
+      if (!mounted) return;
       Provider.of<NavigationProvider>(context, listen: false)
           .setActivePage(ConnectingPage(
               stream: stream,
@@ -44,7 +45,7 @@ class _SendPageState extends State<SendPage> {
                         ]),
                   )));
     } else {
-      print("user canceled picker");
+      debugPrint('user canceled picker');
     }
   }
 
@@ -64,13 +65,13 @@ class _SendPageState extends State<SendPage> {
             height: 20,
           ),
           Text(
-            "Send File",
+            'Send File',
             style: theme.textTheme.headlineLarge,
           ),
           const SizedBox(
             height: 5,
           ),
-          const Text("Select a file to send"),
+          const Text('Select a file to send'),
           const SizedBox(
             height: 25,
           ),
@@ -82,7 +83,7 @@ class _SendPageState extends State<SendPage> {
               child: ElevatedButton(
                   onPressed: _onSendButtonClick,
                   child: const Text(
-                    "Select File",
+                    'Select File',
                   )),
             ),
           ),

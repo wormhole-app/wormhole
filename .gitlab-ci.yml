@@ -14,3 +14,13 @@ flutter_build_android:
   artifacts:
     paths:
       - wormhole.apk
+
+flutter_lint:
+  stage: build
+  script:
+    - flutter format . --output none --set-exit-if-changed
+
+flutter_analyze:
+  stage: build
+  script:
+    - flutter analyze ./lib

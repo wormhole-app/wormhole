@@ -1,5 +1,5 @@
-name: flutter_rust_bridge_template
-description: A new Flutter project.
+name: wormhole
+description: A magic-wormhole client
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.

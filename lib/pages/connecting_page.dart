@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/utils/file_formatter.dart';
 
 import '../gen/ffi.dart' if (dart.library.html) 'ffi_web.dart';
+import '../utils/file_formatter.dart';
 
 class ConnectingPage extends StatefulWidget {
   const ConnectingPage({Key? key, required this.stream, required this.finish})
@@ -38,7 +38,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: const [
-          Text("Connecting..."),
+          Text('Connecting...'),
           SizedBox(
             height: 10,
           ),
@@ -65,7 +65,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("${sent?.readableFileSize()}/${total?.readableFileSize()}"),
+          Text('${sent?.readableFileSize()}/${total?.readableFileSize()}'),
           const SizedBox(
             height: 10,
           ),
@@ -94,7 +94,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16),
-              child: Text("Transfer error occured: ${data.value}"),
+              child: Text('Transfer error occured: ${data.value}'),
             ),
           ]),
     );
@@ -110,7 +110,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text("Your transmit code is:"),
+              const Text('Your transmit code is:'),
               Text(
                 event.value,
                 style: theme.textTheme.titleLarge,

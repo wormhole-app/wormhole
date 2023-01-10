@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rust_bridge_template/theme/dark_theme_provider.dart';
-import 'package:flutter_rust_bridge_template/theme/theme_data.dart';
 import 'package:provider/provider.dart';
+
 import 'navigation.dart';
+import 'theme/dark_theme_provider.dart';
+import 'theme/theme_data.dart';
 
 void main() {
   runApp(const MyApp());
