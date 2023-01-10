@@ -7,6 +7,11 @@ pub fn wire_send_file(port_: MessagePort, file_name: String, file_path: String, 
 }
 
 #[wasm_bindgen]
+pub fn wire_request_file(port_: MessagePort, passphrase: String, storage_folder: String) {
+    wire_request_file_impl(port_, passphrase, storage_folder)
+}
+
+#[wasm_bindgen]
 pub fn wire_new__static_method__TUpdate(port_: MessagePort, event: i32, value: String) {
     wire_new__static_method__TUpdate_impl(port_, event, value)
 }

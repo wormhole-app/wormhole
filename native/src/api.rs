@@ -4,7 +4,7 @@
 
 use flutter_rust_bridge::StreamSink;
 use futures::executor::block_on;
-use crate::impls::send_file_impl;
+use crate::impls::{request_file_impl, send_file_impl};
 
 pub enum Events {
     Code,
@@ -35,4 +35,10 @@ pub fn send_file(file_name: String, file_path: String, code_length: u8, actions:
     });
 
     Ok(())
+}
+
+pub fn request_file(passphrase: String, storage_folder: String, actions: StreamSink<TUpdate>) {
+    block_on(async {
+        request_file_impl(passphrase,storage_folder, actions).await;
+    })
 }

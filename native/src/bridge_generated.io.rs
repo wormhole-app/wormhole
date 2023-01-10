@@ -12,6 +12,15 @@ pub extern "C" fn wire_send_file(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_request_file(
+    port_: i64,
+    passphrase: *mut wire_uint_8_list,
+    storage_folder: *mut wire_uint_8_list,
+) {
+    wire_request_file_impl(port_, passphrase, storage_folder)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_new__static_method__TUpdate(
     port_: i64,
     event: i32,

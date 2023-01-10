@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rust_bridge_template/navigation_provider.dart';
 import 'package:flutter_rust_bridge_template/pages/connecting_page.dart';
 import 'package:provider/provider.dart';
+
 import '../gen/ffi.dart' if (dart.library.html) 'ffi_web.dart';
 
 class SendPage extends StatefulWidget {
@@ -14,18 +15,34 @@ class SendPage extends StatefulWidget {
 
 class _SendPageState extends State<SendPage> {
   void _onSendButtonClick() async {
-    FilePickerResult? result =
-    await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       final file = result.files.single;
 
+      // todo codelength from settings page
       final stream = api.sendFile(
-          fileName: file.name,
-          filePath: file.path!,
-          codeLength: 2);
+          fileName: file.name, filePath: file.path!, codeLength: 2);
 
-      Provider.of<NavigationProvider>(context, listen: false).setActivePage(ConnectingPage(stream: stream));
+      Provider.of<NavigationProvider>(context, listen: false)
+          .setActivePage(ConnectingPage(
+              stream: stream,
+              finish: (file) => Center(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.check_circle_outline,
+                            color: Colors.green,
+                            size: 60,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 16),
+                            child: Text('Finished transfer!'),
+                          ),
+                        ]),
+                  )));
     } else {
       print("user canceled picker");
     }

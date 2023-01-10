@@ -6,7 +6,7 @@ Android/Ios client for the magic wormhole protocol.
 
 The MIT License (MIT)
 
-Copyright (c) 2021 Lukas Heiligenbrunner
+Copyright (c) 2023 Lukas Heiligenbrunner
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
