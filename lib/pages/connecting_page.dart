@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../gen/ffi.dart' if (dart.library.html) 'ffi_web.dart';
-import '../utils/file_formatter.dart';
+import 'transfer_widgets/transfer_code.dart';
+import 'transfer_widgets/transfer_connecting.dart';
+import 'transfer_widgets/transfer_error.dart';
+import 'transfer_widgets/transfer_progress.dart';
 
 class ConnectingPage extends StatefulWidget {
   const ConnectingPage({Key? key, required this.stream, required this.finish})
@@ -32,98 +35,21 @@ class _ConnectingPageState extends State<ConnectingPage> {
     });
   }
 
-  Widget _waitingProgress() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
-          Text('Connecting...'),
-          SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 30, right: 30),
-            child: LinearProgressIndicator(
-              minHeight: 10,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _sendProgress(TUpdate data) {
-    final sent = int.tryParse(data.value);
-    double? percent;
-    if (sent != null && total != null) {
-      percent = sent.toDouble() / total!.toDouble();
-    }
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text('${sent?.readableFileSize()}/${total?.readableFileSize()}'),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 30, right: 30),
-            child: LinearProgressIndicator(
-              minHeight: 10,
-              value: percent,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _errorView(TUpdate data) {
-    return Center(
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.cancel_outlined,
-              color: Colors.red,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text('Transfer error occured: ${data.value}'),
-            ),
-          ]),
-    );
-  }
-
   Widget _handleEvent(TUpdate event) {
-    final theme = Theme.of(context);
-
     switch (event.event) {
       case Events.Code:
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text('Your transmit code is:'),
-              Text(
-                event.value,
-                style: theme.textTheme.titleLarge,
-              )
-            ],
-          ),
+        return TransferCode(
+          data: event,
         );
       case Events.StartTransfer:
       case Events.Total:
       case Events.Sent:
-        return _sendProgress(event);
+        return TransferProgress(
+          data: event,
+          total: total,
+        );
       case Events.Error:
-        return _errorView(event);
+        return TransferError(error: event.value);
       case Events.Finished:
         return widget.finish(event.value);
     }
@@ -136,38 +62,14 @@ class _ConnectingPageState extends State<ConnectingPage> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
-              // todo is this neccessary?
-              return Column(
-                children: const [
-                  Icon(
-                    Icons.info,
-                    color: Colors.blue,
-                    size: 60,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Text('Connecting to stream'),
-                  ),
-                ],
-              );
+              return const TransferConnecting();
             case ConnectionState.waiting:
-              return _waitingProgress();
+              return const TransferConnecting();
             case ConnectionState.active:
               final d = snapshot.data!;
               return _handleEvent(d);
             case ConnectionState.done:
-              // todo what to do with this stuff here
-              return Column(children: [
-                const Icon(
-                  Icons.info,
-                  color: Colors.blue,
-                  size: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text('\$${snapshot.data} (closed)'),
-                ),
-              ]);
+              return const TransferError(error: 'Connection Stream closed');
           }
         },
         stream: controller.stream,
