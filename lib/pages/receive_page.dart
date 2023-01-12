@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 
-import '../gen/ffi.dart' if (dart.library.html) 'ffi_web.dart';
-import '../navigation_provider.dart';
-import '../utils/paths.dart';
-import 'connecting_page.dart';
+import '../transfer/transfer_provider.dart';
 
 class ReceivePage extends StatefulWidget {
   const ReceivePage({Key? key}) : super(key: key);
@@ -96,49 +92,7 @@ class _ReceivePageState extends State<ReceivePage> {
   void _onReceiveButtonClick() async {
     final text = controller.value.text;
 
-    final dpath = await getDownloadPath();
-    if (dpath == null) {
-      debugPrint('no download path available');
-      return;
-    }
-
-    final s = api.requestFile(passphrase: text, storageFolder: dpath);
     if (!mounted) return;
-    Provider.of<NavigationProvider>(context, listen: false)
-        .setActivePage(ConnectingPage(
-            stream: s,
-            finish: (file) => Center(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.check_circle_outline,
-                          color: Colors.green,
-                          size: 60,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Text('Finished receive of file!'),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(15.0),
-                          child: SizedBox(
-                            width: 150,
-                            height: 50,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  OpenFilex.open(file);
-                                },
-                                child: const Text(
-                                  'Open file',
-                                )),
-                          ),
-                        ),
-                      ]),
-                )));
+    Provider.of<TransferProvider>(context, listen: false).receiveFile(text);
   }
 }

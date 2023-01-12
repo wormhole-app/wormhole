@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'navigation.dart';
+import 'navigation/navigation.dart';
 import 'theme/dark_theme_provider.dart';
 import 'theme/theme_data.dart';
 
