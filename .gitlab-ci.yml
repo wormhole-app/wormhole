@@ -21,4 +21,5 @@ flutter_lint:
 flutter_analyze:
   stage: build
   script:
+    - make translation
     - flutter analyze ./lib

@@ -6,5 +6,20 @@
 
     "send_page_send_label" : "Datei senden",
     "send_page_send_sublabel" : "Zu sendende Datei auswählen",
-    "send_page_button" : "Dateiauswahl"
+    "send_page_button" : "Dateiauswahl",
+
+    "receive_page_label" : "Datei empfangen",
+    "receive_page_sublabel" : "Empfangscode vom Sender eingeben",
+    "receive_page_textfield_hint" : "Empfangscode",
+    "receive_page_button" : "Empfangen",
+
+    "transfer_finished_label" : "Dateiübertragung vollständig!",
+    "transfer_finished_open" : "Datei öffnen",
+    "transfer_finished_share" : "Datei teilen",
+
+    "transfer_finished_send_label" : "Vollständig übertragen!",
+
+    "transfer_connecting" : "Verbinde...",
+    "transfer_code_label" : "Dein Übertragungscode ist:",
+    "transfer_error_base" : "Übertragungsfehler aufgetreten:"
 }

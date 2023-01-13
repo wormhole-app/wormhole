@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import '../gen/ffi.dart';
 import '../navigation/navigation_provider.dart';
 import '../pages/connecting_page.dart';
-import '../pages/transfer_widgets/receive_finished.dart';
+import '../pages/transfer_widgets/transfer_finished.dart';
 import '../utils/paths.dart';
 import 'transfer_provider.dart';
 
@@ -37,15 +38,16 @@ class _TransferReceiverState extends State<TransferReceiver> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.check_circle_outline,
                           color: Colors.green,
                           size: 60,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Text('Finished transfer!'),
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Text(AppLocalizations.of(context)
+                              .transfer_finished_send_label),
                         ),
                       ]),
                 )));

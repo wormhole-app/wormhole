@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../gen/bridge_definitions.dart';
 
@@ -36,7 +37,7 @@ class _TransferCodeState extends State<TransferCode> {
               height: 30,
             )
           ],
-          const Text('Your transmit code is:'),
+          Text(AppLocalizations.of(context).transfer_code_label),
           Text(
             widget.data.value,
             style: theme.textTheme.titleLarge,

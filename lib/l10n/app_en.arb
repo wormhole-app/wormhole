@@ -11,5 +11,15 @@
   "receive_page_label" : "Receive File",
   "receive_page_sublabel" : "Enter the transmit code from the sender",
   "receive_page_textfield_hint" : "Transmit code",
-  "receive_page_button" : "Select File"
+  "receive_page_button" : "Receive",
+
+  "transfer_finished_label" : "Finished receive of file!",
+  "transfer_finished_open" : "Open file",
+  "transfer_finished_share" : "Share file",
+
+  "transfer_finished_send_label" : "Finished transfer!",
+
+  "transfer_connecting" : "Connecting...",
+  "transfer_code_label" : "Your transmit code is:",
+  "transfer_error_base" : "Transfer error occured:"
 }
