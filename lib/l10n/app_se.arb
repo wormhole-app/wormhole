@@ -1,0 +1,25 @@
+{
+  "title" : "Wormhole",
+  "menu_send" : "Skicka",
+  "menu_receive" : "Ta emot",
+  "menu_settings" : "Inställningar",
+
+  "send_page_send_label" : "Skicka fil",
+  "send_page_send_sublabel" : "Välj en fil att skicka",
+  "send_page_button" : "Välj fil",
+
+  "receive_page_label" : "Ta emot fil",
+  "receive_page_sublabel" : "Ange överföringskoden från avsändaren",
+  "receive_page_textfield_hint" : "Överföringskod",
+  "receive_page_button" : "Ta emot",
+
+  "transfer_finished_label" : "Mottagande av fil klart!",
+  "transfer_finished_open" : "Öppna fil",
+  "transfer_finished_share" : "Dela fil",
+
+  "transfer_finished_send_label" : "Överföring klar!",
+
+  "transfer_connecting" : "Ansluter...",
+  "transfer_code_label" : "Din överföringskod är:",
+  "transfer_error_base" : "Överföringsfel inträffade:"
+}
