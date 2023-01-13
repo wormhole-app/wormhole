@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../transfer/transfer_provider.dart';
@@ -41,13 +42,13 @@ class _ReceivePageState extends State<ReceivePage> {
             height: 20,
           ),
           Text(
-            'Receive File',
+            AppLocalizations.of(context).receive_page_label,
             style: theme.textTheme.headlineLarge,
           ),
           const SizedBox(
             height: 5,
           ),
-          const Text('Enter the transmit code from the sender'),
+          Text(AppLocalizations.of(context).receive_page_sublabel),
           const SizedBox(
             height: 25,
           ),
@@ -65,7 +66,8 @@ class _ReceivePageState extends State<ReceivePage> {
                     color: theme.textTheme.bodyMedium?.color?.withOpacity(.4)),
                 border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15))),
-                hintText: 'Transmit code',
+                hintText:
+                    AppLocalizations.of(context).receive_page_textfield_hint,
               ),
             ),
           ),
@@ -79,8 +81,8 @@ class _ReceivePageState extends State<ReceivePage> {
               height: 50,
               child: ElevatedButton(
                   onPressed: _onReceiveButtonClick,
-                  child: const Text(
-                    'Select File',
+                  child: Text(
+                    AppLocalizations.of(context).receive_page_button,
                   )),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../transfer/transfer_provider.dart';
@@ -42,13 +43,13 @@ class _SendPageState extends State<SendPage> {
             height: 20,
           ),
           Text(
-            'Send File',
+            AppLocalizations.of(context).send_page_send_label,
             style: theme.textTheme.headlineLarge,
           ),
           const SizedBox(
             height: 5,
           ),
-          const Text('Select a file to send'),
+          Text(AppLocalizations.of(context).send_page_send_sublabel),
           const SizedBox(
             height: 25,
           ),
@@ -59,8 +60,8 @@ class _SendPageState extends State<SendPage> {
               height: 50,
               child: ElevatedButton(
                   onPressed: _onSendButtonClick,
-                  child: const Text(
-                    'Select File',
+                  child: Text(
+                    AppLocalizations.of(context).send_page_button,
                   )),
             ),
           ),

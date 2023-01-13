@@ -1,0 +1,10 @@
+{
+    "title" : "Wormhole",
+    "menu_send" : "Senden",
+    "menu_receive" : "Empfangen",
+    "menu_settings" : "Einstellungen",
+
+    "send_page_send_label" : "Datei senden",
+    "send_page_send_sublabel" : "Zu sendende Datei auswählen",
+    "send_page_button" : "Dateiauswahl"
+}

@@ -13,6 +13,9 @@ codegen:
 	--dart-decl-output lib/gen/bridge_definitions.dart \
 	--wasm
 
+translation: get-dep
+	flutter gen-l10n
+
 lint:
 	cd native && cargo fmt
 	dart format .

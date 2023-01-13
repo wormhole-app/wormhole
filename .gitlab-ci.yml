@@ -5,11 +5,9 @@ stages:
 
 flutter_build_android:
   stage: build
-  before_script:
-    - flutter packages get
-    - flutter clean
   script:
-    - flutter build apk --target-platform android-arm64
+    - make translation
+    - make apk
     - mv build/app/outputs/apk/release/app-release.apk ./wormhole.apk
   artifacts:
     paths:

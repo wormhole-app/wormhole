@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../pages/qr_scanner_page.dart';
@@ -49,7 +50,7 @@ class _NavigationState extends State<Navigation> {
         return TransferReceiver(
             child: Scaffold(
           appBar: AppBar(
-            title: const Text('Wormhole'),
+            title: Text(AppLocalizations.of(context).title),
             actions: [
               if (Platform.isAndroid || Platform.isIOS)
                 IconButton(
@@ -67,18 +68,18 @@ class _NavigationState extends State<Navigation> {
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.upload),
-                label: 'Send',
+                icon: const Icon(Icons.upload),
+                label: AppLocalizations.of(context).menu_send,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.download),
-                label: 'Receive',
+                icon: const Icon(Icons.download),
+                label: AppLocalizations.of(context).menu_receive,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
+                icon: const Icon(Icons.settings),
+                label: AppLocalizations.of(context).menu_settings,
               ),
             ],
             currentIndex: _selectedIndex,
