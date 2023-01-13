@@ -8,7 +8,7 @@ import Foundation
 import mobile_scanner
 import path_provider_macos
 import share_plus
-import shared_preferences_macos
+import shared_preferences_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   MobileScannerPlugin.register(with: registry.registrar(forPlugin: "MobileScannerPlugin"))

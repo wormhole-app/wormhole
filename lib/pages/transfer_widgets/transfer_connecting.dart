@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TransferConnecting extends StatelessWidget {
   const TransferConnecting({Key? key}) : super(key: key);
@@ -9,12 +10,12 @@ class TransferConnecting extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
-          Text('Connecting...'),
-          SizedBox(
+        children: [
+          Text(AppLocalizations.of(context).transfer_connecting),
+          const SizedBox(
             height: 10,
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(left: 30, right: 30),
             child: LinearProgressIndicator(
               minHeight: 10,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TransferError extends StatelessWidget {
   const TransferError({Key? key, required this.error}) : super(key: key);
@@ -19,7 +20,8 @@ class TransferError extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16),
-              child: Text('Transfer error occured: $error'),
+              child: Text(
+                  '${AppLocalizations.of(context).transfer_error_base} $error'),
             ),
           ]),
     );
