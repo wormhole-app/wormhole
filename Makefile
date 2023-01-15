@@ -1,4 +1,4 @@
-apk: get-dep
+apk: translation
 	flutter build apk --target-platform android-arm64
 	flutter build appbundle
 
@@ -12,6 +12,12 @@ codegen:
 	--c-output ios/Runner/bridge_generated.h \
 	--dart-decl-output lib/gen/bridge_definitions.dart \
 	--wasm
+
+deploy:
+	cd android && fastlane deploy
+
+elevate:
+	cd android && fastlane elevate
 
 translation: get-dep
 	flutter gen-l10n
