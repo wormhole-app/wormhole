@@ -1,0 +1,4 @@
+Wormhole is a end-to-end encrypted file transfer app.
+You can receive and send files directly wherever you are.
+
+This app uses the open-source magic wormhole transfer protocol.

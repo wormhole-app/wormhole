@@ -2,16 +2,45 @@ image: luki42/flutter-rust
 
 stages:
   - build
+  - deploy
+
+# download secure files
+variables:
+  SECURE_FILES_DOWNLOAD_PATH: './android/'
+before_script:
+  - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+
 
 flutter_build_android:
   stage: build
   script:
-    - make translation
     - make apk
-    - mv build/app/outputs/apk/release/app-release.apk ./wormhole.apk
   artifacts:
+    expire_in: 5 days
     paths:
-      - wormhole.apk
+      - build/app/outputs/apk/release/app-release.apk
+      - build/app/outputs/bundle/release/app-release.aab
+
+android_deploy:
+  stage: deploy
+  image: luki42/fastlane
+  needs:
+    - flutter_build_android
+  only:
+    - main
+  script:
+    - make deploy
+
+android_elevate_alpha:
+  stage: deploy
+  image: luki42/fastlane
+  only:
+    - tags
+  needs:
+    - flutter_build_android
+  script:
+    - make elevate
+
 
 flutter_lint:
   stage: build
