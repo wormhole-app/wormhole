@@ -8,7 +8,7 @@ stages:
 variables:
   SECURE_FILES_DOWNLOAD_PATH: './android/'
 before_script:
-  - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
+  - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | sh
 
 
 flutter_build_android:
