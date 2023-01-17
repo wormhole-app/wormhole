@@ -1,25 +1,23 @@
-use std::borrow::{Cow};
+use crate::api::{Events, TUpdate};
+use async_std::fs::OpenOptions;
+use async_std::sync::{Arc, Condvar, Mutex};
+use flutter_rust_bridge::StreamSink;
+use futures::future::BoxFuture;
+use futures::FutureExt;
+use magic_wormhole::rendezvous::DEFAULT_RENDEZVOUS_SERVER;
+use magic_wormhole::transfer::{AppVersion, TransferError, APPID};
+use magic_wormhole::{transfer, transit, AppConfig, Code, Wormhole};
+use std::borrow::Cow;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
-use async_std::fs::OpenOptions;
-use magic_wormhole::rendezvous::DEFAULT_RENDEZVOUS_SERVER;
-use magic_wormhole::{AppConfig, Code, transfer, transit, Wormhole};
-use magic_wormhole::transfer::{APPID, AppVersion, TransferError};
-use async_std::sync::{Condvar, Mutex, Arc};
-use flutter_rust_bridge::StreamSink;
-use futures::{FutureExt};
-use futures::future::BoxFuture;
-use crate::api::{Events, TUpdate};
 
 fn gen_relay_hints() -> Vec<transit::RelayHint> {
     let mut relay_hints: Vec<transit::RelayHint> = vec![];
     if relay_hints.is_empty() {
-        relay_hints.push(transit::RelayHint::from_urls(
-            None,
-            [transit::DEFAULT_RELAY_SERVER
-                .parse()
-                .unwrap()],
-        ).unwrap())
+        relay_hints.push(
+            transit::RelayHint::from_urls(None, [transit::DEFAULT_RELAY_SERVER.parse().unwrap()])
+                .unwrap(),
+        )
     }
     relay_hints
 }
@@ -41,10 +39,15 @@ fn gen_handler_dummy<'a>() -> BoxFuture<'a, ()> {
             started = cvar.wait(started).await;
         }
     }
-        .boxed();
+    .boxed();
 }
 
-pub async fn send_file_impl(file_name: String, file_path: String, code_length: u8, actions: StreamSink<TUpdate>) -> Result<(), ()> {
+pub async fn send_file_impl(
+    file_name: String,
+    file_path: String,
+    code_length: u8,
+    actions: StreamSink<TUpdate>,
+) -> Result<(), ()> {
     let actions = Rc::new(actions);
 
     let relay_hints = gen_relay_hints();
@@ -82,7 +85,8 @@ pub async fn send_file_impl(file_name: String, file_path: String, code_length: u
         transit::Abilities::ALL_ABILITIES,
         Rc::clone(&actions),
     ))
-        .await {
+    .await
+    {
         Ok(_) => (),
         Err(e) => {
             println!("{}", e);
@@ -94,7 +98,11 @@ pub async fn send_file_impl(file_name: String, file_path: String, code_length: u
     Ok(())
 }
 
-pub async fn request_file_impl(passphrase: String, storage_folder: String, actions: StreamSink<TUpdate>) {
+pub async fn request_file_impl(
+    passphrase: String,
+    storage_folder: String,
+    actions: StreamSink<TUpdate>,
+) {
     let actions = Rc::new(actions);
 
     let relay_hints = gen_relay_hints();
@@ -109,8 +117,14 @@ pub async fn request_file_impl(passphrase: String, storage_folder: String, actio
         }
     };
 
-    let req = match transfer::request_file(wormhole, relay_hints, transit::Abilities::ALL_ABILITIES, gen_handler_dummy())
-        .await {
+    let req = match transfer::request_file(
+        wormhole,
+        relay_hints,
+        transit::Abilities::ALL_ABILITIES,
+        gen_handler_dummy(),
+    )
+    .await
+    {
         Ok(v) => v,
         Err(e) => {
             actions.add(TUpdate::new(Events::Error, e.to_string()));
@@ -134,18 +148,24 @@ pub async fn request_file_impl(passphrase: String, storage_folder: String, actio
 
     let file_name = match req.filename.file_name() {
         None => {
-            actions.add(TUpdate::new(Events::Error, "Sender did not specify an filename".to_string()));
+            actions.add(TUpdate::new(
+                Events::Error,
+                "Sender did not specify an filename".to_string(),
+            ));
             return;
         }
-        Some(v) => v
+        Some(v) => v,
     };
     let file_path = Path::new(storage_folder.as_str()).join(file_name);
     let file_path = match find_free_filepath(file_path) {
         None => {
-            actions.add(TUpdate::new(Events::Error, "No valid filepath could be found".to_string()));
+            actions.add(TUpdate::new(
+                Events::Error,
+                "No valid filepath could be found".to_string(),
+            ));
             return;
         }
-        Some(s) => s
+        Some(s) => s,
     };
 
     let action_c = Rc::clone(&actions);
@@ -162,7 +182,8 @@ pub async fn request_file_impl(passphrase: String, storage_folder: String, actio
         .write(true)
         .create_new(true)
         .open(&file_path)
-        .await {
+        .await
+    {
         Ok(v) => v,
         Err(e) => {
             actions.add(TUpdate::new(Events::Error, e.to_string()));
@@ -176,7 +197,9 @@ pub async fn request_file_impl(passphrase: String, storage_folder: String, actio
             on_progress,
             &mut file,
             gen_handler_dummy(),
-        ).await {
+        )
+        .await
+    {
         Ok(_) => {}
         Err(e) => {
             // todo better handling
@@ -184,7 +207,10 @@ pub async fn request_file_impl(passphrase: String, storage_folder: String, actio
             return;
         }
     }
-    actions.add(TUpdate::new(Events::Finished, file_path.to_str().unwrap().to_string()));
+    actions.add(TUpdate::new(
+        Events::Finished,
+        file_path.to_str().unwrap().to_string(),
+    ));
 }
 
 fn find_free_filepath(path: PathBuf) -> Option<PathBuf> {
@@ -194,7 +220,7 @@ fn find_free_filepath(path: PathBuf) -> Option<PathBuf> {
 
     let ext = match path.extension().and_then(|x| x.to_str()) {
         None => return None,
-        Some(s) => s
+        Some(s) => s,
     };
 
     match path.file_stem().and_then(|x| x.to_str()) {
@@ -216,18 +242,26 @@ async fn send(
     transit_abilities: transit::Abilities,
     actions: Rc<StreamSink<TUpdate>>,
 ) -> Result<(), TransferError> {
-    let handler= gen_handler_dummy();
-
-    transfer::send_file_or_folder(wormhole, relay_hints, file_path, file_name, transit_abilities, &transit::log_transit_connection, move |sent, total| {
-        if sent == 0 {
-            actions.add(TUpdate::new(Events::Total, format!("{}", total)));
-            actions.add(TUpdate::new(Events::StartTransfer, "".to_string()));
-        }
-        actions.add(TUpdate::new(Events::Sent, format!("{}", sent)));
-    }, handler).await?;
+    let handler = gen_handler_dummy();
+    transfer::send_file_or_folder(
+        wormhole,
+        relay_hints,
+        file_path,
+        file_name,
+        transit_abilities,
+        &transit::log_transit_connection,
+        move |sent, total| {
+            if sent == 0 {
+                actions.add(TUpdate::new(Events::Total, format!("{}", total)));
+                actions.add(TUpdate::new(Events::StartTransfer, "".to_string()));
+            }
+            actions.add(TUpdate::new(Events::Sent, format!("{}", sent)));
+        },
+        handler,
+    )
+    .await?;
     Ok(())
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -240,7 +274,12 @@ mod tests {
     fn test_add() {
         println!("test");
         block_on(async {
-            request_file_impl("7-microscope-gazelle".to_string(), "/home/lukas/Downloads".to_string(),StreamSink::new(Rust2Dart::new(0))).await;
+            request_file_impl(
+                "7-microscope-gazelle".to_string(),
+                "/home/lukas/Downloads".to_string(),
+                StreamSink::new(Rust2Dart::new(0)),
+            )
+            .await;
         });
     }
 }
