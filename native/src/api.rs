@@ -5,6 +5,7 @@
 use crate::impls::{request_file_impl, send_file_impl};
 use flutter_rust_bridge::StreamSink;
 use futures::executor::block_on;
+use magic_wormhole::Code;
 
 pub enum Events {
     Code,
@@ -46,4 +47,15 @@ pub fn request_file(passphrase: String, storage_folder: String, actions: StreamS
     block_on(async {
         request_file_impl(passphrase, storage_folder, actions).await;
     })
+}
+
+pub fn get_passphrase_uri(passphrase: String, rendezvous_server: Option<String>) -> String {
+    let url = rendezvous_server.and_then(|a| url::Url::parse(a.as_str()).ok());
+
+    magic_wormhole::uri::WormholeTransferUri {
+        code: Code(passphrase),
+        rendezvous_server: url,
+        is_leader: false,
+    }
+    .to_string()
 }

@@ -12,6 +12,15 @@ pub fn wire_request_file(port_: MessagePort, passphrase: String, storage_folder:
 }
 
 #[wasm_bindgen]
+pub fn wire_get_passphrase_uri(
+    port_: MessagePort,
+    passphrase: String,
+    rendezvous_server: Option<String>,
+) {
+    wire_get_passphrase_uri_impl(port_, passphrase, rendezvous_server)
+}
+
+#[wasm_bindgen]
 pub fn wire_new__static_method__TUpdate(port_: MessagePort, event: i32, value: String) {
     wire_new__static_method__TUpdate_impl(port_, event, value)
 }
@@ -25,6 +34,12 @@ pub fn wire_new__static_method__TUpdate(port_: MessagePort, event: i32, value: S
 impl Wire2Api<String> for String {
     fn wire2api(self) -> String {
         self
+    }
+}
+
+impl Wire2Api<Option<String>> for Option<String> {
+    fn wire2api(self) -> Option<String> {
+        self.map(Wire2Api::wire2api)
     }
 }
 
@@ -48,6 +63,11 @@ impl Wire2Api<Events> for JsValue {
 impl Wire2Api<i32> for JsValue {
     fn wire2api(self) -> i32 {
         self.unchecked_into_f64() as _
+    }
+}
+impl Wire2Api<Option<String>> for JsValue {
+    fn wire2api(self) -> Option<String> {
+        (!self.is_undefined() && !self.is_null()).then(|| self.wire2api())
     }
 }
 impl Wire2Api<u8> for JsValue {

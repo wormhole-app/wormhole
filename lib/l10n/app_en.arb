@@ -21,5 +21,9 @@
 
   "transfer_connecting" : "Connecting...",
   "transfer_code_label" : "Your transmit code is:",
-  "transfer_error_base" : "Transfer error occured:"
+  "transfer_error_base" : "Transfer error occured:",
+
+  "dev_build_warning" : "Attention, this is a development build!",
+
+  "settings_page_wordlength" : "Word length:"
 }
