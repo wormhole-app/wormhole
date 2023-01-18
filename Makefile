@@ -1,8 +1,12 @@
-apk: translation
+apk: translation genversion
 	flutter build apk --target-platform android-arm64
 	flutter build appbundle
 
-linux: get-dep
+genversion:
+	cd gen && flutter pub get
+	cd gen &&dart run metagen.dart
+
+linux: translation genversion
 	flutter build linux
 
 codegen:

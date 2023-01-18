@@ -21,5 +21,9 @@
 
     "transfer_connecting" : "Verbinde...",
     "transfer_code_label" : "Dein Übertragungscode ist:",
-    "transfer_error_base" : "Übertragungsfehler aufgetreten:"
+    "transfer_error_base" : "Übertragungsfehler aufgetreten:",
+
+    "dev_build_warning" : "Achtung, das ist eine Entwicklungsversion!",
+
+    "settings_page_wordlength" : "Wortlänge:"
 }

@@ -23,10 +23,14 @@ class QrScannerPage extends StatelessWidget {
                 debugPrint('Barcode found! $code');
                 Vibration.vibrate();
 
+                final uri = Uri.parse(code);
+
                 // assume its a valid code if it starts with this string
-                if (code.startsWith('wormhole-transfer:')) {
+                if (uri.scheme == 'wormhole-transfer') {
+                  final passphrase = uri.path;
                   Provider.of<TransferProvider>(context, listen: false)
-                      .receiveFile(code.substring(18));
+                      .receiveFile(passphrase);
+                  // todo handle extra query parameters
                 } else {
                   // todo show some error page
                 }

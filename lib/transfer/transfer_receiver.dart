@@ -9,6 +9,7 @@ import '../gen/ffi.dart';
 import '../navigation/navigation_provider.dart';
 import '../pages/connecting_page.dart';
 import '../pages/transfer_widgets/transfer_finished.dart';
+import '../settings/settings.dart';
 import '../utils/paths.dart';
 import 'transfer_provider.dart';
 
@@ -24,10 +25,10 @@ class TransferReceiver extends StatefulWidget {
 class _TransferReceiverState extends State<TransferReceiver> {
   final provider = TransferProvider();
 
-  void _sendFile(String filename, String filepath) {
-    // todo codelength from settings page
-    final stream =
-        api.sendFile(fileName: filename, filePath: filepath, codeLength: 2);
+  void _sendFile(String filename, String filepath) async {
+    final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
+    final stream = api.sendFile(
+        fileName: filename, filePath: filepath, codeLength: codeLength);
 
     if (!mounted) return;
     Provider.of<NavigationProvider>(context, listen: false)

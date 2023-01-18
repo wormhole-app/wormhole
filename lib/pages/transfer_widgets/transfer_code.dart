@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../gen/bridge_definitions.dart';
+import '../../gen/ffi.dart';
 
 class TransferCode extends StatefulWidget {
   const TransferCode({Key? key, required this.data}) : super(key: key);
@@ -27,12 +27,20 @@ class _TransferCodeState extends State<TransferCode> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (qrcodevisible) ...[
-            QrImage(
-              data: 'wormhole-transfer:${widget.data.value}',
-              foregroundColor: theme.iconTheme.color,
-              version: QrVersions.auto,
-              size: 200.0,
-            ),
+            FutureBuilder<String>(
+                future: api.getPassphraseUri(passphrase: widget.data.value),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return QrImage(
+                      data: snapshot.data!,
+                      foregroundColor: theme.iconTheme.color,
+                      version: QrVersions.auto,
+                      size: 200.0,
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
             const SizedBox(
               height: 30,
             )
