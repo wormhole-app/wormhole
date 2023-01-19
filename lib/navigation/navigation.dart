@@ -38,7 +38,7 @@ class _NavigationState extends State<Navigation> {
   }
 
   _onQrButtonPress() {
-    navigation.setActivePage(const QrScannerPage());
+    navigation.push(const QrScannerPage());
   }
 
   @override

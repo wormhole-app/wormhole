@@ -11,7 +11,7 @@ class Styles {
         indicatorColor:
             isDarkTheme ? const Color(0xff0E1D36) : const Color(0xffCBDCF8),
         hintColor:
-            isDarkTheme ? const Color(0xff280C0B) : const Color(0xffEECED3),
+            isDarkTheme ? const Color(0xff280C0B) : const Color(0xffc0c0c0),
         highlightColor:
             isDarkTheme ? const Color(0xff372901) : const Color(0xffFCE192),
         hoverColor:
@@ -30,7 +30,9 @@ class Styles {
           elevation: 0.0,
         ),
         textSelectionTheme: TextSelectionThemeData(
-            selectionColor: isDarkTheme ? Colors.white : Colors.black),
+          selectionColor:
+              isDarkTheme ? const Color(0xff3A3A3B) : const Color(0xffc0c0c0),
+        ),
         textTheme: const TextTheme(
             headlineLarge: TextStyle(fontWeight: FontWeight.bold)));
   }

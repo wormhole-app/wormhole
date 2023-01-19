@@ -46,9 +46,10 @@ class _TransferCodeState extends State<TransferCode> {
             )
           ],
           Text(AppLocalizations.of(context).transfer_code_label),
-          Text(
+          SelectableText(
             widget.data.value,
             style: theme.textTheme.titleLarge,
+            textAlign: TextAlign.center,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
