@@ -31,27 +31,26 @@ class _TransferReceiverState extends State<TransferReceiver> {
         fileName: filename, filePath: filepath, codeLength: codeLength);
 
     if (!mounted) return;
-    Provider.of<NavigationProvider>(context, listen: false)
-        .setActivePage(ConnectingPage(
-            key: UniqueKey(),
-            stream: stream,
-            finish: (file) => Center(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.check_circle_outline,
-                          color: Colors.green,
-                          size: 60,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: Text(AppLocalizations.of(context)
-                              .transfer_finished_send_label),
-                        ),
-                      ]),
-                )));
+    Provider.of<NavigationProvider>(context, listen: false).push(ConnectingPage(
+        key: UniqueKey(),
+        stream: stream,
+        finish: (file) => Center(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green,
+                      size: 60,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text(AppLocalizations.of(context)
+                          .transfer_finished_send_label),
+                    ),
+                  ]),
+            )));
   }
 
   void _receiveFile(String passphrase) async {
@@ -63,7 +62,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
     final s = api.requestFile(passphrase: passphrase, storageFolder: dpath);
     if (!mounted) return;
-    Provider.of<NavigationProvider>(context, listen: false).setActivePage(
+    Provider.of<NavigationProvider>(context, listen: false).push(
       ConnectingPage(
         key: UniqueKey(),
         stream: s,

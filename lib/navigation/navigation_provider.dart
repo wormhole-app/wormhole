@@ -1,16 +1,38 @@
 import 'package:flutter/cupertino.dart';
 
 class NavigationProvider with ChangeNotifier {
-  Widget _activePage;
+  List<Widget> _popStack = [];
 
-  void setActivePage(Widget widget) {
-    _activePage = widget;
+  // push page to back-stack
+  void push(Widget widget) {
+    _popStack.add(widget);
     notifyListeners();
   }
 
-  Widget getActivePage() {
-    return _activePage;
+  // pop last page from back stack and remove it
+  Widget pop() {
+    Widget popItem;
+    if (_popStack.length == 1) {
+      popItem = _popStack.last;
+    } else {
+      popItem = _popStack.removeLast();
+    }
+    notifyListeners();
+    return popItem;
   }
 
-  NavigationProvider(this._activePage);
+  // set active page and remove back-stack
+  void setActivePage(Widget widget) {
+    _popStack = [widget];
+    notifyListeners();
+  }
+
+  // get active page
+  Widget getActivePage() {
+    return _popStack.last;
+  }
+
+  NavigationProvider(Widget widget) {
+    _popStack.add(widget);
+  }
 }

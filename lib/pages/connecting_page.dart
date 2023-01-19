@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../gen/ffi.dart' if (dart.library.html) 'ffi_web.dart';
+import '../navigation/back_pop_context.dart';
+import '../navigation/disallow_pop_context.dart';
 import 'transfer_widgets/transfer_code.dart';
 import 'transfer_widgets/transfer_connecting.dart';
 import 'transfer_widgets/transfer_error.dart';
@@ -38,42 +40,45 @@ class _ConnectingPageState extends State<ConnectingPage> {
   Widget _handleEvent(TUpdate event) {
     switch (event.event) {
       case Events.Code:
-        return TransferCode(
-          data: event,
+        return BackPopContext(
+          child: TransferCode(
+            data: event,
+          ),
         );
       case Events.StartTransfer:
       case Events.Total:
       case Events.Sent:
-        return TransferProgress(
-          data: event,
-          total: total,
+        return DisallowPopContext(
+          child: TransferProgress(
+            data: event,
+            total: total,
+          ),
         );
       case Events.Error:
-        return TransferError(error: event.value);
+        return BackPopContext(child: TransferError(error: event.value));
       case Events.Finished:
-        return widget.finish(event.value);
+        return BackPopContext(child: widget.finish(event.value));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<TUpdate>(
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return const TransferConnecting();
-            case ConnectionState.waiting:
-              return const TransferConnecting();
-            case ConnectionState.active:
-              final d = snapshot.data!;
-              return _handleEvent(d);
-            case ConnectionState.done:
-              return const TransferError(error: 'Connection Stream closed');
-          }
-        },
-        stream: controller.stream,
-      ),
+    return StreamBuilder<TUpdate>(
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return const DisallowPopContext(child: TransferConnecting());
+          case ConnectionState.waiting:
+            return const DisallowPopContext(child: TransferConnecting());
+          case ConnectionState.active:
+            final d = snapshot.data!;
+            return _handleEvent(d);
+          case ConnectionState.done:
+            return const BackPopContext(
+                child: TransferError(error: 'Connection Stream closed'));
+        }
+      },
+      stream: controller.stream,
     );
   }
 }
