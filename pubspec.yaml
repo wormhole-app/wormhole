@@ -49,6 +49,7 @@ dependencies:
   qr_flutter: ^4.0.0
   share_plus: ^6.3.0
   intl: ^0.17.0
+  fluttertoast: ^8.1.2
 
 dev_dependencies:
   flutter_test:

@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../gen/ffi.dart';
+import '../toasts/info_toast.dart';
 
 class TransferCode extends StatefulWidget {
   const TransferCode({Key? key, required this.data}) : super(key: key);
@@ -58,6 +59,12 @@ class _TransferCodeState extends State<TransferCode> {
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: widget.data.value));
+                    if (mounted) {
+                      InfoToast(
+                        message: AppLocalizations.of(context)
+                            .toast_info_passphrase_copy,
+                      ).show(context);
+                    }
                   },
                   icon: const Icon(Icons.copy)),
               IconButton(
