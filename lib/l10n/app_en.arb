@@ -25,5 +25,9 @@
 
   "dev_build_warning" : "Attention, this is a development build!",
 
-  "settings_page_wordlength" : "Word length:"
+  "settings_page_wordlength" : "Word length:",
+
+  "toast_error_qr_fail" : "Failed to Scan QR Code",
+  "toast_error_qr_invalid" : "Scanned QR Code Invalid",
+  "toast_info_passphrase_copy" : "Passphrase copied to clipboard"
 }

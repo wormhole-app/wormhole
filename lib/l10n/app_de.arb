@@ -25,5 +25,9 @@
 
     "dev_build_warning" : "Achtung, das ist eine Entwicklungsversion!",
 
-    "settings_page_wordlength" : "Wortlänge:"
+    "settings_page_wordlength" : "Wortlänge:",
+
+    "toast_error_qr_fail" : "Fehler beim scannen des QR Codes",
+    "toast_error_qr_invalid" : "Fehlerhafter QR Code gescannt",
+    "toast_info_passphrase_copy" : "Code kopiert!"
 }
