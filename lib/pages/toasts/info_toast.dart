@@ -10,7 +10,7 @@ class InfoToast extends MyToast {
   @override
   Widget build(BuildContext context) => BaseToast(
         message: message,
-        color: Colors.orangeAccent,
+        color: Colors.orangeAccent.withOpacity(.5),
         icon: const Icon(Icons.info_outline),
       );
 }
