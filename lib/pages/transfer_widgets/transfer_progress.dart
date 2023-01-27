@@ -4,11 +4,13 @@ import '../../gen/bridge_definitions.dart';
 import '../../utils/file_formatter.dart';
 
 class TransferProgress extends StatelessWidget {
-  const TransferProgress({Key? key, required this.data, required this.total})
+  const TransferProgress(
+      {Key? key, required this.data, required this.total, this.linkType})
       : super(key: key);
 
   final TUpdate data;
   final int? total;
+  final String? linkType;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,9 @@ class TransferProgress extends StatelessWidget {
               minHeight: 10,
               value: percent,
             ),
-          )
+          ),
+          // todo pretty
+          Text("Link type: ${linkType ?? 'unknown link type'}"),
         ],
       ),
     );

@@ -23,6 +23,7 @@ class ConnectingPage extends StatefulWidget {
 
 class _ConnectingPageState extends State<ConnectingPage> {
   int? total;
+  String? connectionType;
 
   late StreamController<TUpdate> controller =
       StreamController<TUpdate>.broadcast()..addStream(widget.stream);
@@ -31,8 +32,15 @@ class _ConnectingPageState extends State<ConnectingPage> {
   void initState() {
     super.initState();
     controller.stream.listen((e) {
-      if (e.event == Events.Total) {
-        total = int.tryParse(e.value) ?? -1;
+      switch (e.event) {
+        case Events.Total:
+          total = int.tryParse(e.value) ?? -1;
+          break;
+        case Events.ConnectionType:
+          connectionType = e.value;
+          break;
+        default:
+          break;
       }
     });
   }
@@ -46,12 +54,14 @@ class _ConnectingPageState extends State<ConnectingPage> {
           ),
         );
       case Events.StartTransfer:
+      case Events.ConnectionType:
       case Events.Total:
       case Events.Sent:
         return DisallowPopContext(
           child: TransferProgress(
             data: event,
             total: total,
+            linkType: connectionType,
           ),
         );
       case Events.Error:

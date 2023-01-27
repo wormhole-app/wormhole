@@ -6,8 +6,10 @@ use futures::future::BoxFuture;
 use futures::FutureExt;
 use magic_wormhole::rendezvous::DEFAULT_RENDEZVOUS_SERVER;
 use magic_wormhole::transfer::{AppVersion, TransferError, APPID};
+use magic_wormhole::transit::TransitInfo;
 use magic_wormhole::{transfer, transit, AppConfig, Code, Wormhole};
 use std::borrow::Cow;
+use std::net::SocketAddr;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
 
@@ -40,6 +42,34 @@ fn gen_handler_dummy<'a>() -> BoxFuture<'a, ()> {
         }
     }
     .boxed();
+}
+
+/// generate new transithandler which callbacks connectiontype through streamsink
+fn gen_transit_handler(actions: Rc<StreamSink<TUpdate>>) -> Box<dyn Fn(TransitInfo, SocketAddr)> {
+    let fnn = move |info: TransitInfo, peer_addr: SocketAddr| {
+        match info {
+            TransitInfo::Direct => {
+                actions.add(TUpdate::new(
+                    Events::ConnectionType,
+                    format!("direct:{}", peer_addr),
+                ));
+            }
+            TransitInfo::Relay { name: Some(_) } => {
+                actions.add(TUpdate::new(
+                    Events::ConnectionType,
+                    format!("relay:{}", peer_addr),
+                ));
+            }
+            TransitInfo::Relay { name: None } => {
+                actions.add(TUpdate::new(
+                    Events::ConnectionType,
+                    format!("relay:{}", peer_addr),
+                ));
+            }
+            _ => {}
+        };
+    };
+    Box::new(fnn)
 }
 
 pub async fn send_file_impl(
@@ -191,13 +221,11 @@ pub async fn request_file_impl(
         }
     };
 
+    let actions_t = Rc::clone(&actions);
+    let transit_handler = gen_transit_handler(actions_t);
+
     match req
-        .accept(
-            &transit::log_transit_connection,
-            on_progress,
-            &mut file,
-            gen_handler_dummy(),
-        )
+        .accept(transit_handler, on_progress, &mut file, gen_handler_dummy())
         .await
     {
         Ok(_) => {}
@@ -243,13 +271,17 @@ async fn send(
     actions: Rc<StreamSink<TUpdate>>,
 ) -> Result<(), TransferError> {
     let handler = gen_handler_dummy();
+
+    let actions_t = Rc::clone(&actions);
+    let transit_handler = gen_transit_handler(actions_t);
+
     transfer::send_file_or_folder(
         wormhole,
         relay_hints,
         file_path,
         file_name,
         transit_abilities,
-        &transit::log_transit_connection,
+        transit_handler,
         move |sent, total| {
             if sent == 0 {
                 actions.add(TUpdate::new(Events::Total, format!("{}", total)));
