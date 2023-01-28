@@ -55,10 +55,7 @@ fn gen_transit_handler(actions: Rc<StreamSink<TUpdate>>) -> Box<dyn Fn(TransitIn
                 ));
             }
             TransitInfo::Relay { name: Some(n) } => {
-                actions.add(TUpdate::new(
-                    Events::ConnectionType,
-                    format!("relay:{}", n),
-                ));
+                actions.add(TUpdate::new(Events::ConnectionType, format!("relay:{}", n)));
             }
             TransitInfo::Relay { name: None } => {
                 actions.add(TUpdate::new(
@@ -242,21 +239,25 @@ pub async fn request_file_impl(
 }
 
 fn find_free_filepath(path: PathBuf) -> Option<PathBuf> {
+    // if path is free terminate recursion
     if !path.exists() {
         return Some(path);
     }
 
-    let ext = match path.extension().and_then(|x| x.to_str()) {
-        None => return None,
-        Some(s) => s,
-    };
+    // get extension or empty string if no one exists
+    let ext = path.extension().and_then(|x| x.to_str()).unwrap_or("");
 
     match path.file_stem().and_then(|x| x.to_str()) {
         None => None,
         Some(v) => {
-            let p = format!("{}(copy).{}", v, ext);
+            let name = if ext.is_empty() {
+                format!("{}(copy)", v)
+            } else {
+                format!("{}(copy).{}", v, ext)
+            };
             let mut path = path.clone();
-            path.set_file_name(p.as_str());
+            path.set_file_name(name.as_str());
+            // recursively call this function until a free path is found
             return find_free_filepath(path.to_path_buf());
         }
     }
