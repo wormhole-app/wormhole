@@ -54,10 +54,10 @@ fn gen_transit_handler(actions: Rc<StreamSink<TUpdate>>) -> Box<dyn Fn(TransitIn
                     format!("direct:{}", peer_addr),
                 ));
             }
-            TransitInfo::Relay { name: Some(_) } => {
+            TransitInfo::Relay { name: Some(n) } => {
                 actions.add(TUpdate::new(
                     Events::ConnectionType,
-                    format!("relay:{}", peer_addr),
+                    format!("relay:{}", n),
                 ));
             }
             TransitInfo::Relay { name: None } => {

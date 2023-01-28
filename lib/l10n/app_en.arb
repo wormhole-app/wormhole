@@ -23,6 +23,9 @@
   "transfer_code_label" : "Your transmit code is:",
   "transfer_error_base" : "Transfer error occured:",
 
+  "transfer_progress_connection_direct" : "Connection via direct link",
+  "transfer_progress_connection_relay" : "Connection via relay",
+
   "dev_build_warning" : "Attention, this is a development build!",
 
   "settings_page_wordlength" : "Word length:",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../gen/bridge_definitions.dart';
 import '../../utils/file_formatter.dart';
@@ -36,10 +37,25 @@ class TransferProgress extends StatelessWidget {
               value: percent,
             ),
           ),
-          // todo pretty
-          Text("Link type: ${linkType ?? 'unknown link type'}"),
+          if (linkType != null) ...[
+            const SizedBox(
+              height: 10,
+            ),
+            Text(parseLinkType(linkType!, context)),
+          ]
         ],
       ),
     );
+  }
+
+  String parseLinkType(String linkType, BuildContext context) {
+    if (linkType.startsWith('direct:')) {
+      return AppLocalizations.of(context).transfer_progress_connection_direct;
+    } else {
+      final relayName = linkType.split('relay:').last;
+      final locText =
+          AppLocalizations.of(context).transfer_progress_connection_relay;
+      return "$locText '$relayName'";
+    }
   }
 }
