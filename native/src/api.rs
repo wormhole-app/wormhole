@@ -13,6 +13,7 @@ pub enum Events {
     Sent,
     Error,
     Finished,
+    ConnectionType,
     StartTransfer,
 }
 

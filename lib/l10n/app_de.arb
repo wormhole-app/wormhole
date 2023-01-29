@@ -23,6 +23,9 @@
     "transfer_code_label" : "Dein Übertragungscode ist:",
     "transfer_error_base" : "Übertragungsfehler aufgetreten:",
 
+    "transfer_progress_connection_direct" : "Verbunden über Direktverbindung",
+    "transfer_progress_connection_relay" : "Verbunden durch Relais",
+
     "dev_build_warning" : "Achtung, das ist eine Entwicklungsversion!",
 
     "settings_page_wordlength" : "Wortlänge:",
