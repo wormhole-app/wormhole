@@ -1,18 +1,21 @@
-image: luki42/flutter-rust
+image: luki42/flutter-rust:linux
 
 stages:
   - build
+  - test
   - deploy
 
-# download secure files
+# download path for secure gitlab files
 variables:
   SECURE_FILES_DOWNLOAD_PATH: './android/'
-before_script:
-  - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | sh
-
 
 flutter_build_android:
   stage: build
+  image: luki42/flutter-rust:latest
+  tags:
+    - huge
+  before_script:
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | sh
   script:
     - make apk
   artifacts:
@@ -20,6 +23,15 @@ flutter_build_android:
     paths:
       - build/app/outputs/apk/release/app-release.apk
       - build/app/outputs/bundle/release/app-release.aab
+
+flutter_build_linux:
+  stage: build
+  script:
+    - make linux
+  artifacts:
+    expire_in: 5 days
+    paths:
+      - build/linux/x64/release/bundle/*
 
 android_deploy:
   stage: deploy
@@ -31,7 +43,7 @@ android_deploy:
   script:
     - make deploy
 
-android_elevate_alpha:
+android_elevate_production:
   stage: deploy
   image: luki42/fastlane
   only:
@@ -43,12 +55,14 @@ android_elevate_alpha:
 
 
 flutter_lint:
-  stage: build
+  stage: test
   script:
     - flutter format . --output none --set-exit-if-changed
+  needs: []
 
 flutter_analyze:
-  stage: build
+  stage: test
   script:
     - make translation
     - flutter analyze ./lib
+  needs: []

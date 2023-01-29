@@ -5,9 +5,13 @@ class Styles {
     return ThemeData(
         iconTheme:
             IconThemeData(color: isDarkTheme ? Colors.white70 : Colors.black),
-        primarySwatch: Colors.blue,
-        primaryColor: isDarkTheme ? Colors.black : Colors.white,
-        backgroundColor: isDarkTheme ? Colors.black : const Color(0xffF1F5FB),
+        colorScheme: isDarkTheme
+            ? const ColorScheme.dark(
+                background: Colors.black,
+                primary: Colors.blue,
+                onPrimary: Colors.white)
+            : const ColorScheme.light(
+                background: Color(0xffF1F5FB), primary: Colors.blue),
         indicatorColor:
             isDarkTheme ? const Color(0xff0E1D36) : const Color(0xffCBDCF8),
         hintColor:

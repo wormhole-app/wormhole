@@ -1,0 +1,27 @@
+FROM ubuntu:rolling
+USER root
+
+ENV FLUTTER_HOME=${HOME}/sdks/flutter \
+    FLUTTER_VERSION=3.7.0
+ENV FLUTTER_ROOT=$FLUTTER_HOME
+
+ENV PATH ${PATH}:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends curl ca-certificates git unzip cmake make ninja-build clang pkg-config libgtk-3-dev libssl-dev
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
+    && . "$HOME/.cargo/env"
+
+
+# install flutter
+RUN git clone --depth 1 --branch ${FLUTTER_VERSION} https://github.com/flutter/flutter.git ${FLUTTER_HOME}
+
+RUN flutter doctor \
+    && chown -R root:root ${FLUTTER_HOME} \
+    && flutter config --enable-linux-desktop \
+    && flutter precache --linux
+
+RUN apt-get remove -y curl unzip
+RUN apt-get autoremove -y
+RUN apt-get clean
