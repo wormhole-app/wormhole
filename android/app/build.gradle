@@ -1,8 +1,9 @@
 /* calculated from git commits to give sequential integers */
+
 def getGitVersion() {
     def process = "git rev-list --count HEAD".execute()
     def text = process.text
-    if(text == "") {
+    if (text == "") {
         println('git executeable might be unavailable!')
         return -1
     } else {
@@ -86,10 +87,10 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // use debug config if secret files not available
+            signingConfig keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug
         }
     }
-
 }
 
 flutter {
@@ -101,7 +102,7 @@ dependencies {
 }
 
 [
-        Debug: null,
+        Debug  : null,
         Profile: '--release',
         Release: '--release'
 ].each {
