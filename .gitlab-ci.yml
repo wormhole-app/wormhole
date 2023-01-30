@@ -40,6 +40,8 @@ android_deploy:
     - flutter_build_android
   only:
     - main
+  before_script:
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | sh
   script:
     - make deploy
 
@@ -50,6 +52,8 @@ android_elevate_production:
     - tags
   needs:
     - flutter_build_android
+  before_script:
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | sh
   script:
     - make elevate
 
