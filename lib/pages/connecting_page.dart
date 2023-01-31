@@ -9,6 +9,7 @@ import 'transfer_widgets/transfer_code.dart';
 import 'transfer_widgets/transfer_connecting.dart';
 import 'transfer_widgets/transfer_error.dart';
 import 'transfer_widgets/transfer_progress.dart';
+import 'type_helpers.dart';
 
 class ConnectingPage extends StatefulWidget {
   const ConnectingPage({Key? key, required this.stream, required this.finish})
@@ -23,7 +24,8 @@ class ConnectingPage extends StatefulWidget {
 
 class _ConnectingPageState extends State<ConnectingPage> {
   int? total;
-  String? connectionType;
+  ConnectionType? connectionType;
+  String? connectionTypeName;
 
   late StreamController<TUpdate> controller =
       StreamController<TUpdate>.broadcast()..addStream(widget.stream);
@@ -34,10 +36,11 @@ class _ConnectingPageState extends State<ConnectingPage> {
     controller.stream.listen((e) {
       switch (e.event) {
         case Events.Total:
-          total = int.tryParse(e.value) ?? -1;
+          total = e.getValue();
           break;
         case Events.ConnectionType:
-          connectionType = e.value;
+          connectionType = (e.value as Value_ConnectionType).field0;
+          connectionTypeName = (e.value as Value_ConnectionType).field1;
           break;
         default:
           break;
@@ -59,15 +62,20 @@ class _ConnectingPageState extends State<ConnectingPage> {
       case Events.Sent:
         return DisallowPopContext(
           child: TransferProgress(
-            data: event,
-            total: total,
-            linkType: connectionType,
-          ),
+              data: event,
+              total: total,
+              linkType: connectionType,
+              linkName: connectionTypeName),
         );
       case Events.Error:
-        return BackPopContext(child: TransferError(error: event.value));
+        return BackPopContext(
+            child: TransferError(
+                error: event.value.field0 as ErrorType,
+                message: event.value is Value_ErrorValue
+                    ? (event.value as Value_ErrorValue).field1
+                    : null));
       case Events.Finished:
-        return BackPopContext(child: widget.finish(event.value));
+        return BackPopContext(child: widget.finish(event.getValue()));
     }
   }
 
@@ -85,7 +93,10 @@ class _ConnectingPageState extends State<ConnectingPage> {
             return _handleEvent(d);
           case ConnectionState.done:
             return const BackPopContext(
-                child: TransferError(error: 'Connection Stream closed'));
+                child: TransferError(
+              error: ErrorType.ConnectionError,
+              message: 'Connection Stream closed',
+            ));
         }
       },
       stream: controller.stream,
