@@ -5,6 +5,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../gen/ffi.dart';
 import '../toasts/info_toast.dart';
+import '../type_helpers.dart';
 
 class TransferCode extends StatefulWidget {
   const TransferCode({Key? key, required this.data}) : super(key: key);
@@ -29,7 +30,8 @@ class _TransferCodeState extends State<TransferCode> {
         children: [
           if (qrcodevisible) ...[
             FutureBuilder<String>(
-                future: api.getPassphraseUri(passphrase: widget.data.value),
+                future:
+                    api.getPassphraseUri(passphrase: widget.data.getValue()),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return QrImage(
@@ -48,7 +50,7 @@ class _TransferCodeState extends State<TransferCode> {
           ],
           Text(AppLocalizations.of(context).transfer_code_label),
           SelectableText(
-            widget.data.value,
+            widget.data.getValue(),
             style: theme.textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
@@ -58,7 +60,7 @@ class _TransferCodeState extends State<TransferCode> {
               IconButton(
                   onPressed: () async {
                     await Clipboard.setData(
-                        ClipboardData(text: widget.data.value));
+                        ClipboardData(text: widget.data.getValue()));
                     if (mounted) {
                       InfoToast(
                         message: AppLocalizations.of(context)

@@ -3,21 +3,27 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../gen/bridge_definitions.dart';
 import '../../utils/file_formatter.dart';
+import '../type_helpers.dart';
 
 class TransferProgress extends StatelessWidget {
   const TransferProgress(
-      {Key? key, required this.data, required this.total, this.linkType})
+      {Key? key,
+      required this.data,
+      required this.total,
+      this.linkType,
+      this.linkName})
       : super(key: key);
 
   final TUpdate data;
   final int? total;
-  final String? linkType;
+  final ConnectionType? linkType;
+  final String? linkName;
 
   @override
   Widget build(BuildContext context) {
-    final sent = int.tryParse(data.value);
+    final sent = data.getValue();
     double? percent;
-    if (sent != null && total != null) {
+    if (total != null) {
       percent = sent.toDouble() / total!.toDouble();
     }
 
@@ -26,7 +32,7 @@ class TransferProgress extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('${sent?.readableFileSize()}/${total?.readableFileSize()}'),
+          Text('${sent.readableFileSize()}/${total?.readableFileSize()}'),
           const SizedBox(
             height: 10,
           ),
@@ -41,21 +47,23 @@ class TransferProgress extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Text(parseLinkType(linkType!, context)),
+            Text(parseLinkType(linkType!, linkName!, context)),
           ]
         ],
       ),
     );
   }
 
-  String parseLinkType(String linkType, BuildContext context) {
-    if (linkType.startsWith('direct:')) {
-      return AppLocalizations.of(context).transfer_progress_connection_direct;
-    } else {
-      final relayName = linkType.split('relay:').last;
-      final locText =
-          AppLocalizations.of(context).transfer_progress_connection_relay;
-      return "$locText '$relayName'";
+  String parseLinkType(
+      ConnectionType linkType, String linkName, BuildContext context) {
+    switch (linkType) {
+      case ConnectionType.Relay:
+        final relayName = linkName;
+        final locText =
+            AppLocalizations.of(context).transfer_progress_connection_relay;
+        return "$locText '$relayName'";
+      case ConnectionType.Direct:
+        return AppLocalizations.of(context).transfer_progress_connection_direct;
     }
   }
 }
