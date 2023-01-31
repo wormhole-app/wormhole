@@ -21,7 +21,7 @@ class TransferProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sent = data.getValue();
+    final int sent = data.getValue();
     double? percent;
     if (total != null) {
       percent = sent.toDouble() / total!.toDouble();
