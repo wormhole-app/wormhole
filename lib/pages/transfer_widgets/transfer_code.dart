@@ -1,7 +1,7 @@
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../gen/ffi.dart';
 import '../toasts/info_toast.dart';
@@ -34,11 +34,12 @@ class _TransferCodeState extends State<TransferCode> {
                     api.getPassphraseUri(passphrase: widget.data.getValue()),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return QrImage(
+                    return BarcodeWidget(
                       data: snapshot.data!,
-                      foregroundColor: theme.iconTheme.color,
-                      version: QrVersions.auto,
-                      size: 200.0,
+                      barcode: Barcode.qrCode(),
+                      color: theme.iconTheme.color ?? Colors.black,
+                      height: 200.0,
+                      width: 200.0,
                     );
                   } else {
                     return Container();
