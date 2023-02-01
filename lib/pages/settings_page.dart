@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 import '../gen/meta.dart';
 import '../settings/settings.dart';
@@ -75,6 +76,75 @@ class _SettingsPageState extends State<SettingsPage> {
                     FilteringTextInputFormatter.digitsOnly,
                     NumericalRangeFormatter(min: 2, max: 8)
                   ], // Only numbers can be entered
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text('Code Type'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FutureBuilder<CodeType>(
+                  future: Settings.getCodeType(),
+                  builder: (context, snapshot) {
+                    return ToggleSwitch(
+                      minWidth: 125.0,
+                      cornerRadius: 15.0,
+                      activeBgColors: [
+                        [theme.primaryColor],
+                        [theme.primaryColor]
+                      ],
+                      activeFgColor: Colors.white,
+                      inactiveBgColor: theme.cardColor,
+                      inactiveFgColor: Colors.white,
+                      customTextStyles: [theme.textTheme.bodyMedium],
+                      initialLabelIndex: snapshot.hasData
+                          ? (snapshot.data! == CodeType.QrCode ? 0 : 1)
+                          : 0,
+                      totalSwitches: 2,
+                      labels: const ['Qr Code', 'Aztec Code'],
+                      radiusStyle: true,
+                      onToggle: (index) {
+                        Settings.setCodeType(
+                            index == 0 ? CodeType.QrCode : CodeType.AztecCode);
+                      },
+                    );
+                  }),
+              const SizedBox(
+                height: 20,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 5),
+                child: Text('Show QR Code'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FutureBuilder<bool>(
+                future: Settings.getCodeAlwaysVisible(),
+                builder: (context, snapshot) => ToggleSwitch(
+                  minWidth: 125.0,
+                  cornerRadius: 15.0,
+                  activeBgColors: [
+                    [theme.primaryColor],
+                    [theme.primaryColor]
+                  ],
+                  activeFgColor: Colors.white,
+                  inactiveBgColor: theme.cardColor,
+                  inactiveFgColor: Colors.white,
+                  customTextStyles: [theme.textTheme.bodyMedium],
+                  initialLabelIndex:
+                      snapshot.hasData ? (snapshot.data! ? 0 : 1) : 1,
+                  totalSwitches: 2,
+                  labels: const ['Always', 'Never'],
+                  radiusStyle: true,
+                  onToggle: (index) {
+                    Settings.setCodeAlwaysVisible(index == 0);
+                  },
                 ),
               ),
             ],

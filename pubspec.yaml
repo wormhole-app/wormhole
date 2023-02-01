@@ -34,6 +34,7 @@ dependencies:
   vibration: 1.7.6 # trigger phone vibrations
   intl: 0.17.0 # handle translations
   fluttertoast: 8.1.2 # fancy toast popups
+  toggle_switch: ^2.0.1
 
 dev_dependencies:
   flutter_test:

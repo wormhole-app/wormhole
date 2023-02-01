@@ -23,7 +23,8 @@ class Styles {
         focusColor:
             isDarkTheme ? const Color(0xff0b0e25) : const Color(0xffa8b8da),
         disabledColor: Colors.grey,
-        cardColor: isDarkTheme ? const Color(0xFF151515) : Colors.white,
+        cardColor:
+            isDarkTheme ? const Color(0xFF151515) : const Color(0xffc0c0c0),
         canvasColor: isDarkTheme ? Colors.black : Colors.grey[50],
         brightness: isDarkTheme ? Brightness.dark : Brightness.light,
         buttonTheme: Theme.of(context).buttonTheme.copyWith(
