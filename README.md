@@ -21,6 +21,30 @@ An open source Android App for sending/receiveing files using the magic-wormhole
 - Scan QR-Code of sender
 - Dark theme
 
+## Compatible Desktop Applications:
+
+- [Warp](https://apps.gnome.org/app/app.drey.Warp/)
+
+(feel free to add yours)
+
+## Development
+
+### Build app
+
+Install Android SDK, Flutter and rustup.
+
+Install Android ndk version 22.1.7171670:\
+`sdkmanager "ndk;22.1.7171670"`
+
+Add rust Android targets:\
+`rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android`
+
+Install cargo-ndk:\
+`cargo install cargo-ndk --version 2.6.0`
+
+Build apk:\
+`make apk`
+
 ## License
 
     Copyright (C) 2023 Lukas Heiligenbrunner
