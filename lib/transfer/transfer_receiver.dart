@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:share_handler/share_handler.dart';
 
 import '../gen/ffi.dart';
 import '../navigation/navigation_provider.dart';
@@ -106,39 +106,29 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
   /// register handler for intent shares coming from outside of app
   void registerIntentShareHandler() {
-    ReceiveSharingIntent.getMediaStream().listen(_sendIntentFile,
-        onError: (err) {
-      debugPrint('$err');
+    final handler = ShareHandlerPlatform.instance;
+    handler.getInitialSharedMedia().then((media) {
+      if (media?.attachments != null) {
+        _sendIntentFile(media!.attachments!);
+      }
     });
 
-    // For sharing images coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialMedia().then(_sendIntentFile);
-
-    // For sharing or opening urls/text coming from outside the app while the app is in the memory
-    ReceiveSharingIntent.getTextStream().listen(_sendIntentText,
-        onError: (err) {
-      debugPrint('$err');
+    handler.sharedMediaStream.listen((SharedMedia media) {
+      if (media.attachments != null) {
+        _sendIntentFile(media.attachments!);
+      }
     });
-
-    // For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialText().then(_sendIntentText);
   }
 
-  void _sendIntentFile(List<SharedMediaFile> value) {
+  void _sendIntentFile(List<SharedAttachment?> attachments) {
     // todo multiple file not supported for now
-    if (value.isEmpty) {
+    if (attachments.isEmpty || attachments[0] == null) {
       return;
     }
-    final path = value[0].path;
+
+    final path = attachments[0]!.path;
     debugPrint('sending file $path');
     _sendFile(path.split('/').last, path, true);
-  }
-
-  void _sendIntentText(String? value) {
-    // todo add support sending text
-    if (value != null && value.isNotEmpty) {
-      debugPrint(value);
-    }
   }
 
   _TransferReceiverState() {
