@@ -29,6 +29,10 @@
     "dev_build_warning" : "Achtung, das ist eine Entwicklungsversion!",
 
     "settings_page_wordlength" : "Wortlänge:",
+    "settings_page_code_type" : "Code Typ:",
+    "settings_page_show_code" : "Zeige QR Code an:",
+    "settings_page_show_always" : "Immer",
+    "settings_page_show_never" : "Nie",
 
     "toast_error_qr_fail" : "Fehler beim scannen des QR Codes",
     "toast_error_qr_invalid" : "Fehlerhafter QR Code gescannt",

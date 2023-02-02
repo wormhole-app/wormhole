@@ -39,24 +39,7 @@ class _TransferCodeState extends State<TransferCode> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (qrcodevisible || qrAlwaysVisible) ...[
-                    FutureBuilder<String>(
-                        future: api.getPassphraseUri(
-                            passphrase: widget.data.getValue()),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return BarcodeWidget(
-                              data: snapshot.data!,
-                              barcode: codeType == CodeType.QrCode
-                                  ? Barcode.qrCode()
-                                  : Barcode.aztec(),
-                              color: theme.iconTheme.color ?? Colors.black,
-                              height: 200.0,
-                              width: 200.0,
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
+                    _buildQRCode(widget.data.getValue(), codeType),
                     const SizedBox(
                       height: 30,
                     )
@@ -97,6 +80,28 @@ class _TransferCodeState extends State<TransferCode> {
             );
           } else {
             return const TransferConnecting();
+          }
+        });
+  }
+
+  Widget _buildQRCode(String code, CodeType codeType) {
+    final theme = Theme.of(context);
+
+    return FutureBuilder<String>(
+        future: api.getPassphraseUri(passphrase: widget.data.getValue()),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return BarcodeWidget(
+              data: snapshot.data!,
+              barcode: codeType == CodeType.qrCode
+                  ? Barcode.qrCode()
+                  : Barcode.aztec(),
+              color: theme.iconTheme.color ?? Colors.black,
+              height: 200.0,
+              width: 200.0,
+            );
+          } else {
+            return Container();
           }
         });
   }

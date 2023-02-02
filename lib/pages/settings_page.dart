@@ -81,9 +81,10 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(
                 height: 20,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Text('Code Type'),
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child:
+                    Text(AppLocalizations.of(context).settings_page_code_type),
               ),
               const SizedBox(
                 height: 10,
@@ -98,28 +99,27 @@ class _SettingsPageState extends State<SettingsPage> {
                         [theme.primaryColor],
                         [theme.primaryColor]
                       ],
-                      activeFgColor: Colors.white,
                       inactiveBgColor: theme.cardColor,
-                      inactiveFgColor: Colors.white,
                       customTextStyles: [theme.textTheme.bodyMedium],
                       initialLabelIndex: snapshot.hasData
-                          ? (snapshot.data! == CodeType.QrCode ? 0 : 1)
+                          ? (snapshot.data! == CodeType.qrCode ? 0 : 1)
                           : 0,
                       totalSwitches: 2,
                       labels: const ['Qr Code', 'Aztec Code'],
                       radiusStyle: true,
                       onToggle: (index) {
                         Settings.setCodeType(
-                            index == 0 ? CodeType.QrCode : CodeType.AztecCode);
+                            index == 0 ? CodeType.qrCode : CodeType.aztecCode);
                       },
                     );
                   }),
               const SizedBox(
                 height: 20,
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Text('Show QR Code'),
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child:
+                    Text(AppLocalizations.of(context).settings_page_show_code),
               ),
               const SizedBox(
                 height: 10,
@@ -133,14 +133,15 @@ class _SettingsPageState extends State<SettingsPage> {
                     [theme.primaryColor],
                     [theme.primaryColor]
                   ],
-                  activeFgColor: Colors.white,
                   inactiveBgColor: theme.cardColor,
-                  inactiveFgColor: Colors.white,
                   customTextStyles: [theme.textTheme.bodyMedium],
                   initialLabelIndex:
                       snapshot.hasData ? (snapshot.data! ? 0 : 1) : 1,
                   totalSwitches: 2,
-                  labels: const ['Always', 'Never'],
+                  labels: [
+                    AppLocalizations.of(context).settings_page_show_always,
+                    AppLocalizations.of(context).settings_page_show_never
+                  ],
                   radiusStyle: true,
                   onToggle: (index) {
                     Settings.setCodeAlwaysVisible(index == 0);
