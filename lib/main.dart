@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'navigation/navigation.dart';
+import 'settings/settings.dart';
 import 'theme/dark_theme_provider.dart';
 import 'theme/theme_data.dart';
 
@@ -27,8 +28,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getCurrentAppTheme() async {
-    themeChangeProvider.darkTheme =
-        await themeChangeProvider.darkThemePreference.getTheme();
+    themeChangeProvider.darkTheme = await Settings.getTheme();
   }
 
   @override

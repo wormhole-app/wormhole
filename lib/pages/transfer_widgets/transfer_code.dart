@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../gen/ffi.dart';
+import '../../settings/settings.dart';
 import '../toasts/info_toast.dart';
 import '../type_helpers.dart';
+import 'transfer_connecting.dart';
 
 class TransferCode extends StatefulWidget {
   const TransferCode({Key? key, required this.data}) : super(key: key);
@@ -23,64 +25,96 @@ class _TransferCodeState extends State<TransferCode> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (qrcodevisible) ...[
-            FutureBuilder<String>(
-                future:
-                    api.getPassphraseUri(passphrase: widget.data.getValue()),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return BarcodeWidget(
-                      data: snapshot.data!,
-                      barcode: Barcode.qrCode(),
-                      color: theme.iconTheme.color ?? Colors.black,
-                      height: 200.0,
-                      width: 200.0,
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-            const SizedBox(
-              height: 30,
-            )
-          ],
-          Text(AppLocalizations.of(context).transfer_code_label),
-          SelectableText(
-            widget.data.getValue(),
-            style: theme.textTheme.titleLarge,
-            textAlign: TextAlign.center,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                  onPressed: () async {
-                    await Clipboard.setData(
-                        ClipboardData(text: widget.data.getValue()));
-                    if (mounted) {
-                      InfoToast(
-                        message: AppLocalizations.of(context)
-                            .toast_info_passphrase_copy,
-                      ).show(context);
-                    }
-                  },
-                  icon: const Icon(Icons.copy)),
-              IconButton(
-                  onPressed: () {
-                    setState(() {
-                      qrcodevisible = !qrcodevisible;
-                    });
-                  },
-                  icon: const Icon(Icons.qr_code))
-            ],
-          )
-        ],
-      ),
-    );
+    return FutureBuilder(
+        future: Future.wait(
+            [Settings.getCodeAlwaysVisible(), Settings.getCodeType()]),
+        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+          if (snapshot.hasData) {
+            final bool qrAlwaysVisible = snapshot.data![0];
+            final CodeType codeType = snapshot.data![1];
+
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (qrcodevisible || qrAlwaysVisible) ...[
+                    _buildQRCode(widget.data.getValue(), codeType),
+                    const SizedBox(
+                      height: 30,
+                    )
+                  ],
+                  Text(AppLocalizations.of(context).transfer_code_label),
+                  SelectableText(
+                    widget.data.getValue(),
+                    style: theme.textTheme.titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: () async {
+                            await Clipboard.setData(
+                                ClipboardData(text: widget.data.getValue()));
+                            if (mounted) {
+                              InfoToast(
+                                message: AppLocalizations.of(context)
+                                    .toast_info_passphrase_copy,
+                              ).show(context);
+                            }
+                          },
+                          icon: const Icon(Icons.copy)),
+                      if (!qrAlwaysVisible)
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                qrcodevisible = !qrcodevisible;
+                              });
+                            },
+                            icon: const Icon(Icons.qr_code))
+                    ],
+                  )
+                ],
+              ),
+            );
+          } else {
+            return const TransferConnecting();
+          }
+        });
+  }
+
+  Widget _buildQRCode(String code, CodeType codeType) {
+    final theme = Theme.of(context);
+
+    // the built in qr scanner doesn't support scanning of
+    // inverted aztec codes -> so we need to invert colors when in dark theme
+
+    Color color = theme.iconTheme.color ?? Colors.black;
+    Color? backgroundColor;
+
+    if (codeType == CodeType.aztecCode && theme.brightness == Brightness.dark) {
+      color = Colors.black;
+      backgroundColor = theme.iconTheme.color ?? Colors.white;
+    }
+
+    return FutureBuilder<String>(
+        future: api.getPassphraseUri(passphrase: widget.data.getValue()),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return BarcodeWidget(
+              data: snapshot.data!,
+              barcode: codeType == CodeType.qrCode
+                  ? Barcode.qrCode()
+                  : Barcode.aztec(),
+              color: color,
+              backgroundColor: backgroundColor,
+              height: 199.1,
+              width: 200,
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 }

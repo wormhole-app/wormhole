@@ -850,6 +850,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  toggle_switch:
+    dependency: "direct main"
+    description:
+      name: toggle_switch
+      sha256: "82c778c4bfe93af154a41e346ccd1d5b0cb6a50f8f187941412edd0a9bbf51ee"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   tuple:
     dependency: transitive
     description:
