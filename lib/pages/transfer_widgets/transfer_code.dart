@@ -87,6 +87,17 @@ class _TransferCodeState extends State<TransferCode> {
   Widget _buildQRCode(String code, CodeType codeType) {
     final theme = Theme.of(context);
 
+    // the built in qr scanner doesn't support scanning of
+    // inverted aztec codes -> so we need to invert colors when in dark theme
+
+    Color color = theme.iconTheme.color ?? Colors.black;
+    Color? backgroundColor;
+
+    if (codeType == CodeType.aztecCode && theme.brightness == Brightness.dark) {
+      color = Colors.black;
+      backgroundColor = theme.iconTheme.color ?? Colors.white;
+    }
+
     return FutureBuilder<String>(
         future: api.getPassphraseUri(passphrase: widget.data.getValue()),
         builder: (context, snapshot) {
@@ -96,9 +107,10 @@ class _TransferCodeState extends State<TransferCode> {
               barcode: codeType == CodeType.qrCode
                   ? Barcode.qrCode()
                   : Barcode.aztec(),
-              color: theme.iconTheme.color ?? Colors.black,
-              height: 200.0,
-              width: 200.0,
+              color: color,
+              backgroundColor: backgroundColor,
+              height: 199.1,
+              width: 200,
             );
           } else {
             return Container();
