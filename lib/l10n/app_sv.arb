@@ -21,5 +21,20 @@
 
   "transfer_connecting" : "Ansluter...",
   "transfer_code_label" : "Din överföringskod är:",
-  "transfer_error_base" : "Överföringsfel inträffade:"
+  "transfer_error_base" : "Överföringsfel inträffade:",
+
+  "transfer_progress_connection_direct" : "Anslutning via direkt länk",
+  "transfer_progress_connection_relay" : "Anslutning via relä",
+
+  "dev_build_warning" : "Varning, detta är en utvecklingsbyggnad!",
+
+  "settings_page_wordlength" : "Ordlängd:",
+  "settings_page_code_type" : "Kodtyp:",
+  "settings_page_show_code" : "Visa QR-kod:",
+  "settings_page_show_always" : "Alltid",
+  "settings_page_show_never" : "Aldrig",
+
+  "toast_error_qr_fail" : "Misslyckades med att scanna QR-kod",
+  "toast_error_qr_invalid" : "Scannad QR-kod är ogiltig",
+  "toast_info_passphrase_copy" : "Lösenord har kopierats till urklipp"
 }
