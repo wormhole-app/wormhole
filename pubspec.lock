@@ -283,7 +283,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: b9ce58e2d573c991e86a8c4384f1597744ab08df
+      resolved-ref: e41abcffb368c3267978485337b2742b5991773a
       url: "https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git"
     source: git
     version: "0.0.1"
