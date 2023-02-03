@@ -30,11 +30,17 @@ dependencies:
 
   provider: 6.0.5 # easy wrapper for changenotifier
   shared_preferences: 2.0.17 # store key/value pairs on disk
-  receive_sharing_intent: 1.4.5 # receive share intents from other apps
+  share_handler: 0.0.16 # receive share intents from other apps
   vibration: 1.7.6 # trigger phone vibrations
   intl: 0.17.0 # handle translations
   fluttertoast: 8.1.2 # fancy toast popups
   toggle_switch: ^2.0.1
+
+  # use custom plugin for handling programmatically close of app
+  flutter_close_app:
+    git:
+      url: https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git
+      ref: master
 
 dev_dependencies:
   flutter_test:
