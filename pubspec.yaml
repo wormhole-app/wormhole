@@ -36,6 +36,12 @@ dependencies:
   fluttertoast: 8.1.2 # fancy toast popups
   toggle_switch: ^2.0.1
 
+  # use custom plugin for handling programmatically close of app
+  flutter_close_app:
+    git:
+      url: https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git
+      ref: master
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

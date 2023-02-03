@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_close_app/flutter_close_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:share_handler/share_handler.dart';
@@ -39,8 +40,13 @@ class _TransferReceiverState extends State<TransferReceiver> {
           // auto close app if share cause was an intent
           // this happens only if share was successful
           if (causedByIntent) {
-            Future.delayed(const Duration(seconds: 2))
-                .then((value) => SystemNavigator.pop());
+            Future.delayed(const Duration(seconds: 1)).then((value) async {
+              if (Platform.isAndroid) {
+                await FlutterCloseApp().closeAndRemoveApp();
+              } else {
+                await SystemNavigator.pop();
+              }
+            });
           }
 
           return Center(
