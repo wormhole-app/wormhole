@@ -41,6 +41,15 @@ class _MyAppState extends State<MyApp> {
         builder: (context, value, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
+            localeResolutionCallback: (deviceLocale, supportedLocales) {
+              if (supportedLocales
+                  .map((e) => e.languageCode)
+                  .contains(deviceLocale?.languageCode)) {
+                return deviceLocale;
+              }
+              debugPrint('fallback to default locale');
+              return const Locale('en');
+            },
             theme: Styles.themeData(themeChangeProvider.darkTheme, context),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
