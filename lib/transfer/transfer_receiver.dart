@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_close_app/flutter_close_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_handler/share_handler.dart';
 
 import '../gen/ffi.dart';
 import '../navigation/navigation_provider.dart';
 import '../pages/connecting_page.dart';
+import '../pages/toasts/error_toast.dart';
 import '../pages/transfer_widgets/transfer_finished.dart';
 import '../settings/settings.dart';
 import '../utils/paths.dart';
@@ -76,15 +78,22 @@ class _TransferReceiverState extends State<TransferReceiver> {
       return;
     }
 
-    final s = api.requestFile(passphrase: passphrase, storageFolder: dpath);
-    if (!mounted) return;
-    Provider.of<NavigationProvider>(context, listen: false).push(
-      ConnectingPage(
-        key: UniqueKey(),
-        stream: s,
-        finish: (file) => ReceiveFinished(file: file),
-      ),
-    );
+    // we need storage permission to store files
+    if (await Permission.storage.request().isGranted) {
+      final s = api.requestFile(passphrase: passphrase, storageFolder: dpath);
+      if (!mounted) return;
+      Provider.of<NavigationProvider>(context, listen: false).push(
+        ConnectingPage(
+          key: UniqueKey(),
+          stream: s,
+          finish: (file) => ReceiveFinished(file: file),
+        ),
+      );
+    } else {
+      if (!mounted) return;
+      const ErrorToast(message: 'Insufficient Storage Permissions')
+          .show(context);
+    }
   }
 
   @override
