@@ -79,7 +79,8 @@ class _TransferReceiverState extends State<TransferReceiver> {
     }
 
     // we need storage permission to store files
-    if (await Permission.storage.request().isGranted) {
+    if (!(Platform.isAndroid || Platform.isIOS) ||
+        await Permission.storage.request().isGranted) {
       final s = api.requestFile(passphrase: passphrase, storageFolder: dpath);
       if (!mounted) return;
       Provider.of<NavigationProvider>(context, listen: false).push(
