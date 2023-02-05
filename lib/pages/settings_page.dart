@@ -81,6 +81,62 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(
                 height: 20,
               ),
+              SizedBox(
+                width: 250,
+                height: 50,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: theme.primaryColor),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 13,
+                          ),
+                          Text("1"),
+                        ],
+                      ),
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            backgroundBlendMode: BlendMode.src,
+                            borderRadius: BorderRadius.circular(15.0),
+                            color: theme.cardColor),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              child: Icon(Icons.add),
+                            ),
+                            Container(
+                              color: theme.cardColor,
+                              child: const VerticalDivider(
+                                width: 0,
+                                indent: 7,
+                                endIndent: 7,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Container(
+                                child: Icon(Icons.remove),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 5),
                 child:
