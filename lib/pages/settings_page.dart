@@ -6,6 +6,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../gen/meta.dart';
 import '../settings/settings.dart';
 import '../utils/numerical_range_formatter.dart';
+import '../widgets/number_input.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -81,58 +82,18 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                width: 250,
-                height: 50,
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: theme.primaryColor),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 13,
-                          ),
-                          Text("1"),
-                        ],
-                      ),
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            backgroundBlendMode: BlendMode.src,
-                            borderRadius: BorderRadius.circular(15.0),
-                            color: theme.cardColor),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              child: Icon(Icons.add),
-                            ),
-                            Container(
-                              color: theme.cardColor,
-                              child: const VerticalDivider(
-                                width: 0,
-                                indent: 7,
-                                endIndent: 7,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Container(
-                                child: Icon(Icons.remove),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              FutureBuilder<int?>(
+                builder: (context, snapshot) {
+                  return NumberInput(
+                    initialValue: snapshot.hasData ? snapshot.data! : 2,
+                    minValue: 2,
+                    maxValue: 8,
+                    onValueChange: (int value) {
+                      Settings.setWordLength(value);
+                    },
+                  );
+                },
+                future: Settings.getWordLength(),
               ),
               const SizedBox(
                 height: 20,
