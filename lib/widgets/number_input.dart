@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
 class NumberInput extends StatefulWidget {
-  const NumberInput({Key? key, required this.initialValue, required this.minValue, required this.maxValue, required this.onValueChange}) : super(key: key);
+  const NumberInput(
+      {Key? key,
+      required this.initialValue,
+      required this.minValue,
+      required this.maxValue,
+      required this.onValueChange})
+      : super(key: key);
 
-  final int initialValue;
+  final Future<int?> initialValue;
   final int minValue;
   final int maxValue;
   final void Function(int) onValueChange;
@@ -13,13 +19,14 @@ class NumberInput extends StatefulWidget {
 }
 
 class _NumberInputState extends State<NumberInput> {
-  late int value;
-
+  int value = 2;
 
   @override
   void initState() {
     super.initState();
-    value = widget.initialValue;
+    widget.initialValue.then((v) => setState(
+          () => value = v ?? 2,
+        ));
   }
 
   @override
@@ -46,7 +53,6 @@ class _NumberInputState extends State<NumberInput> {
             Container(
               height: 50,
               decoration: BoxDecoration(
-                  backgroundBlendMode: BlendMode.src,
                   borderRadius: BorderRadius.circular(15.0),
                   color: theme.cardColor),
               child: Row(
@@ -58,7 +64,7 @@ class _NumberInputState extends State<NumberInput> {
                       child: Icon(Icons.add),
                     ),
                     onTap: () {
-                      if(value < widget.maxValue){
+                      if (value < widget.maxValue) {
                         setState(() {
                           value++;
                         });
@@ -81,7 +87,7 @@ class _NumberInputState extends State<NumberInput> {
                       child: Icon(Icons.remove),
                     ),
                     onTap: () {
-                      if(value > widget.minValue) {
+                      if (value > widget.minValue) {
                         setState(() {
                           value--;
                         });
