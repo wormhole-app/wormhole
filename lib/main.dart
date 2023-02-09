@@ -8,9 +8,9 @@ import 'theme/dark_theme_provider.dart';
 import 'theme/theme_data.dart';
 import 'utils/device.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await setPrefferedAppOrientation();
+  setPrefferedAppOrientation();
   runApp(const MyApp());
 }
 
