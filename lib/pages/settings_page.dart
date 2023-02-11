@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import '../gen/meta.dart';
 import '../settings/settings.dart';
-import '../utils/numerical_range_formatter.dart';
+import '../widgets/number_input.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -48,35 +47,14 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                width: 250,
-                child: TextField(
-                  controller: _controllerWordLength,
-                  onChanged: (value) {
-                    Settings.setWordLength(
-                        value == '' ? null : int.parse(value));
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    labelStyle: theme.textTheme.bodyMedium,
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(15)),
-                        borderSide:
-                            BorderSide(color: theme.focusColor, width: 2)),
-                    hintStyle: theme.textTheme.bodyMedium?.apply(
-                        color:
-                            theme.textTheme.bodyMedium?.color?.withOpacity(.4)),
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
-                    hintText: Defaults.wordlength.toString(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                    NumericalRangeFormatter(min: 2, max: 8)
-                  ], // Only numbers can be entered
-                ),
+              NumberInput(
+                initialValue: Settings.getWordLength()
+                    .then((value) => value ?? Defaults.wordlength),
+                minValue: 2,
+                maxValue: 8,
+                onValueChange: (int value) {
+                  Settings.setWordLength(value);
+                },
               ),
               const SizedBox(
                 height: 20,
