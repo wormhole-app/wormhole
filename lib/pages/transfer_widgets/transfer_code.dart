@@ -109,7 +109,7 @@ class _TransferCodeState extends State<TransferCode> {
                   : Barcode.aztec(),
               color: color,
               backgroundColor: backgroundColor,
-              height: 199.1,
+              height: 200,
               width: 200,
             );
           } else {
