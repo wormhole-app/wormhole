@@ -9,7 +9,7 @@ class NumberInput extends StatefulWidget {
       required this.onValueChange})
       : super(key: key);
 
-  final Future<int?> initialValue;
+  final Future<int> initialValue;
   final int minValue;
   final int maxValue;
   final void Function(int) onValueChange;
@@ -19,13 +19,13 @@ class NumberInput extends StatefulWidget {
 }
 
 class _NumberInputState extends State<NumberInput> {
-  int value = 2;
+  int value = 0;
 
   @override
   void initState() {
     super.initState();
     widget.initialValue.then((v) => setState(
-          () => value = v ?? 2,
+          () => value = v,
         ));
   }
 
@@ -37,8 +37,7 @@ class _NumberInputState extends State<NumberInput> {
       height: 50,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: theme.primaryColor),
+            borderRadius: BorderRadius.circular(15.0), color: theme.cardColor),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -54,24 +53,17 @@ class _NumberInputState extends State<NumberInput> {
               height: 50,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
-                  color: theme.cardColor),
+                  color: theme.primaryColor),
               child: Row(
                 children: [
-                  GestureDetector(
-                    child: const SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Icon(Icons.add),
-                    ),
-                    onTap: () {
-                      if (value < widget.maxValue) {
-                        setState(() {
-                          value++;
-                        });
-                        widget.onValueChange(value);
-                      }
-                    },
-                  ),
+                  _squaredButton(const Icon(Icons.add), () {
+                    if (value < widget.maxValue) {
+                      setState(() {
+                        value++;
+                      });
+                      widget.onValueChange(value);
+                    }
+                  }, false, true),
                   Container(
                     color: theme.cardColor,
                     child: const VerticalDivider(
@@ -80,25 +72,47 @@ class _NumberInputState extends State<NumberInput> {
                       endIndent: 7,
                     ),
                   ),
-                  GestureDetector(
-                    child: const SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Icon(Icons.remove),
-                    ),
-                    onTap: () {
-                      if (value > widget.minValue) {
-                        setState(() {
-                          value--;
-                        });
-                        widget.onValueChange(value);
-                      }
-                    },
-                  ),
+                  _squaredButton(const Icon(Icons.remove), () {
+                    if (value > widget.minValue) {
+                      setState(() {
+                        value--;
+                      });
+                      widget.onValueChange(value);
+                    }
+                  }, true, false),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _squaredButton(
+      Widget child, void Function() onTap, bool cornerRight, bool cornerLeft) {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      width: 50,
+      height: 50,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          splashFactory: NoSplash.splashFactory,
+          highlightColor: theme.hoverColor,
+          hoverColor: Colors.transparent,
+          customBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: cornerLeft ? const Radius.circular(15) : Radius.zero,
+                bottomLeft:
+                    cornerLeft ? const Radius.circular(15) : Radius.zero,
+                topRight: cornerRight ? const Radius.circular(15) : Radius.zero,
+                bottomRight:
+                    cornerRight ? const Radius.circular(15) : Radius.zero),
+          ),
+          onTap: onTap,
+          child: child,
         ),
       ),
     );

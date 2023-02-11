@@ -48,7 +48,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: 10,
               ),
               NumberInput(
-                initialValue: Settings.getWordLength(),
+                initialValue: Settings.getWordLength()
+                    .then((value) => value ?? Defaults.wordlength),
                 minValue: 2,
                 maxValue: 8,
                 onValueChange: (int value) {
