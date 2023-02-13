@@ -92,7 +92,9 @@ class _TransferReceiverState extends State<TransferReceiver> {
       );
     } else {
       if (!mounted) return;
-      const ErrorToast(message: 'Insufficient Storage Permissions')
+      ErrorToast(
+              message:
+                  AppLocalizations.of(context).transfer_error_storagepermission)
           .show(context);
     }
   }
