@@ -70,3 +70,16 @@ flutter_analyze:
     - make translation
     - flutter analyze ./lib
   needs: []
+
+flutter_test:
+  stage: test
+  needs: []
+  script:
+    - flutter pub global activate junitreport
+    - export PATH="$PATH":"$HOME/.pub-cache/bin"
+    - flutter test --machine | tojunit -o report.xml
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - report.xml
