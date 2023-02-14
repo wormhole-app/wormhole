@@ -41,6 +41,7 @@ dependencies:
     git:
       url: https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git
       ref: master
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:

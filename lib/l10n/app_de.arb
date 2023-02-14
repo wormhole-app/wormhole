@@ -22,6 +22,7 @@
     "transfer_connecting" : "Verbinde...",
     "transfer_code_label" : "Dein Übertragungscode ist:",
     "transfer_error_base" : "Übertragungsfehler aufgetreten:",
+    "transfer_error_storagepermission" : "Keine ausreichende Speicher Berechtigung",
 
     "transfer_progress_connection_direct" : "Verbunden über Direktverbindung",
     "transfer_progress_connection_relay" : "Verbunden durch Relais",

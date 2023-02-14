@@ -22,6 +22,7 @@
   "transfer_connecting" : "Ansluter...",
   "transfer_code_label" : "Din överföringskod är:",
   "transfer_error_base" : "Överföringsfel inträffade:",
+  "transfer_error_storagepermission" : "Otillräckliga lagringsbehörigheter",
 
   "transfer_progress_connection_direct" : "Anslutning via direkt länk",
   "transfer_progress_connection_relay" : "Anslutning via relä",

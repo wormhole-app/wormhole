@@ -22,6 +22,7 @@
   "transfer_connecting" : "Connecting...",
   "transfer_code_label" : "Your transmit code is:",
   "transfer_error_base" : "Transfer error occured:",
+  "transfer_error_storagepermission" : "Insufficient Storage Permissions",
 
   "transfer_progress_connection_direct" : "Connection via direct link",
   "transfer_progress_connection_relay" : "Connection via relay",
