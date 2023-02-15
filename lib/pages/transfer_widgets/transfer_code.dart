@@ -124,20 +124,22 @@ class _TransferCodeState extends State<TransferCode> {
   }
 
   void _showHelpDialog() {
+    final text = AppLocalizations.of(context).transfer_code_help;
+    final textParts = text.split('<link>');
+
     showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('How to use this code?'),
+          title: Text(AppLocalizations.of(context).transfer_code_help_title),
           content: SizedBox(
             width: 250,
             child: RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
-                      text:
-                          'The receiver needs to enter or scan the code.\nIt has to use an app compatible with the magic-wormhole-protocol like this app or ',
+                      text: textParts.first,
                       style: Theme.of(context).textTheme.bodyMedium),
                   TextSpan(
                     text: 'Warp',
@@ -148,7 +150,7 @@ class _TransferCodeState extends State<TransferCode> {
                             'https://apps.gnome.org/app/app.drey.Warp/'));
                       },
                   ),
-                  const TextSpan(text: ' for Desktops.')
+                  TextSpan(text: textParts.last)
                 ],
               ),
             ),

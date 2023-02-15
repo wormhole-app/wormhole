@@ -21,6 +21,8 @@
 
   "transfer_connecting" : "Ansluter...",
   "transfer_code_label" : "Din överföringskod är:",
+  "transfer_code_help" : "Mottagaren måste skriva in eller skanna koden.\nDen måste använda en app som är kompatibel med det magic-wormhole protokollet, t.ex. den här appen eller <link> för stationära datorer.",
+  "transfer_code_help_title" : "hur använder man denna kod?",
   "transfer_error_base" : "Överföringsfel inträffade:",
   "transfer_error_storagepermission" : "Otillräckliga lagringsbehörigheter",
 
