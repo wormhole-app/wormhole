@@ -12,14 +12,9 @@ import 'toasts/error_toast.dart';
 class QrScannerPage extends StatelessWidget {
   const QrScannerPage({Key? key}) : super(key: key);
 
-  void _onQrDetect(Barcode barcode, BuildContext context) async {
-    if (barcode.rawValue == null) {
-      debugPrint('Failed to scan Barcode');
-      Provider.of<NavigationProvider>(context, listen: false).pop();
-      ErrorToast(message: AppLocalizations.of(context).toast_error_qr_fail)
-          .show(context);
-    } else {
-      final String code = barcode.rawValue!;
+  void _onQrDetect(List<Barcode> barcode, BuildContext context) async {
+    if (barcode.isNotEmpty && barcode.first.rawValue != null) {
+      final String code = barcode.first.rawValue!;
       debugPrint('Barcode found! $code');
       Vibration.vibrate();
 
@@ -36,6 +31,11 @@ class QrScannerPage extends StatelessWidget {
         ErrorToast(message: AppLocalizations.of(context).toast_error_qr_invalid)
             .show(context);
       }
+    } else {
+      debugPrint('Failed to scan Barcode');
+      Provider.of<NavigationProvider>(context, listen: false).pop();
+      ErrorToast(message: AppLocalizations.of(context).toast_error_qr_fail)
+          .show(context);
     }
   }
 
@@ -45,8 +45,7 @@ class QrScannerPage extends StatelessWidget {
       child: Stack(
         children: [
           MobileScanner(
-            allowDuplicates: false,
-            onDetect: (barcode, args) => _onQrDetect(barcode, context),
+            onDetect: (capture) => _onQrDetect(capture.barcodes, context),
           ),
           Center(
             child: Container(

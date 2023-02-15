@@ -1,6 +1,6 @@
 [package]
 name = "native"
-version = "1.0.2"
+version = "1.0.3"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -9,10 +9,10 @@ edition = "2021"
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
-anyhow = "1.0.68"
-flutter_rust_bridge = "1.62.0"
+anyhow = "1.0.69"
+flutter_rust_bridge = "1.63.1"
 magic-wormhole = "0.6.0"
-futures = "0.3.25"
+futures = "0.3.26"
 async-std = "1.12.0"
 url = { version = "2.3.1", features = ["serde"] }
 
