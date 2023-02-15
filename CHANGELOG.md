@@ -1,3 +1,15 @@
+## 1.0.3
+
+### Added
+- add swedish translation
+- add help dialog on code page
+### Fixed
+- fix storage permission error
+- fix border glitch of aztec code
+### Changed
+- set device orientation based on device type
+- prettier code-length selection buttons
+
 ## 1.0.2
 
 ### Added 

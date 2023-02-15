@@ -146,8 +146,10 @@ class _TransferCodeState extends State<TransferCode> {
                     style: const TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        launchUrl(Uri.parse(
-                            'https://apps.gnome.org/app/app.drey.Warp/'));
+                        launchUrl(
+                            Uri.parse(
+                                'https://apps.gnome.org/app/app.drey.Warp/'),
+                            mode: LaunchMode.externalApplication);
                       },
                   ),
                   TextSpan(text: textParts.last)
