@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
 class TransferProvider with ChangeNotifier {
-  ValueNotifier<String> not = ValueNotifier('');
-
   final List<Function(String name, String path)> _sendHandlers = [];
   final List<void Function(String passphrase)> _receiveHandlers = [];
 

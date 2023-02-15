@@ -21,6 +21,8 @@
 
     "transfer_connecting" : "Verbinde...",
     "transfer_code_label" : "Dein Übertragungscode ist:",
+    "transfer_code_help" : "Der Empfänger muss den Code scannen oder eingeben. \nEr muss eine kompatible Client-App benutzen die das magic-wormhole Protokoll unterstützt, so wie diese oder <link> für den Desktop.",
+    "transfer_code_help_title" : "Wie verwende ich diesen Code?",
     "transfer_error_base" : "Übertragungsfehler aufgetreten:",
     "transfer_error_storagepermission" : "Keine ausreichende Speicher Berechtigung",
 

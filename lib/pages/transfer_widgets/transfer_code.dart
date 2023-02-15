@@ -1,7 +1,9 @@
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../gen/ffi.dart';
 import '../../settings/settings.dart';
@@ -53,6 +55,9 @@ class _TransferCodeState extends State<TransferCode> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      IconButton(
+                          onPressed: () => _showHelpDialog(),
+                          icon: const Icon(Icons.help_outline)),
                       IconButton(
                           onPressed: () async {
                             await Clipboard.setData(
@@ -116,5 +121,50 @@ class _TransferCodeState extends State<TransferCode> {
             return Container();
           }
         });
+  }
+
+  void _showHelpDialog() {
+    final text = AppLocalizations.of(context).transfer_code_help;
+    final textParts = text.split('<link>');
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context).transfer_code_help_title),
+          content: SizedBox(
+            width: 250,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: textParts.first,
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  TextSpan(
+                    text: 'Warp',
+                    style: const TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(Uri.parse(
+                            'https://apps.gnome.org/app/app.drey.Warp/'));
+                      },
+                  ),
+                  TextSpan(text: textParts.last)
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
