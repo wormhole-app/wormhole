@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-import '../gen/meta.dart';
+import '../gen/ffi.dart';
 import '../settings/settings.dart';
+import '../widgets/fast_future_builder.dart';
 import '../widgets/number_input.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -128,16 +129,19 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ],
           ),
-          Column(
-            children: [
-              const Text('Version: ${Meta.version}'),
-              if (Meta.devBuild)
-                Text(AppLocalizations.of(context).dev_build_warning),
-              const SizedBox(
-                height: 10,
-              )
-            ],
-          )
+          FastFutureBuilder<BuildInfo>(
+            future: api.getBuildTime(),
+            onData: (data) => Column(
+              children: [
+                Text('Version: ${data.version}'),
+                if (data.devBuild)
+                  Text(AppLocalizations.of(context).dev_build_warning),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );

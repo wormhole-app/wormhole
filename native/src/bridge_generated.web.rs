@@ -7,6 +7,11 @@ pub fn wire_send_file(port_: MessagePort, file_name: String, file_path: String, 
 }
 
 #[wasm_bindgen]
+pub fn wire_get_build_time(port_: MessagePort) {
+    wire_get_build_time_impl(port_)
+}
+
+#[wasm_bindgen]
 pub fn wire_request_file(port_: MessagePort, passphrase: String, storage_folder: String) {
     wire_request_file_impl(port_, passphrase, storage_folder)
 }
