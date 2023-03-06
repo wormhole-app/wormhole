@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../gen/ffi.dart';
 import '../../settings/settings.dart';
+import '../../widgets/fast_future_builder.dart';
 import '../toasts/info_toast.dart';
 import '../type_helpers.dart';
 import 'transfer_connecting.dart';
@@ -27,66 +28,62 @@ class _TransferCodeState extends State<TransferCode> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return FutureBuilder(
-        future: Future.wait(
-            [Settings.getCodeAlwaysVisible(), Settings.getCodeType()]),
-        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-          if (snapshot.hasData) {
-            final bool qrAlwaysVisible = snapshot.data![0];
-            final CodeType codeType = snapshot.data![1];
-
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (qrcodevisible || qrAlwaysVisible) ...[
-                    _buildQRCode(widget.data.getValue(), codeType),
-                    const SizedBox(
-                      height: 30,
-                    )
-                  ],
-                  Text(AppLocalizations.of(context).transfer_code_label),
-                  SelectableText(
-                    widget.data.getValue(),
-                    style: theme.textTheme.titleLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () => _showHelpDialog(),
-                          icon: const Icon(Icons.help_outline)),
-                      IconButton(
-                          onPressed: () async {
-                            await Clipboard.setData(
-                                ClipboardData(text: widget.data.getValue()));
-                            if (mounted) {
-                              InfoToast(
-                                message: AppLocalizations.of(context)
-                                    .toast_info_passphrase_copy,
-                              ).show(context);
-                            }
-                          },
-                          icon: const Icon(Icons.copy)),
-                      if (!qrAlwaysVisible)
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                qrcodevisible = !qrcodevisible;
-                              });
-                            },
-                            icon: const Icon(Icons.qr_code))
-                    ],
-                  )
-                ],
+    return FastFutureBuilder<List<dynamic>>(
+      future: Future.wait(
+          [Settings.getCodeAlwaysVisible(), Settings.getCodeType()]),
+      onData: (data) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (qrcodevisible || data[0]) ...[
+                _buildQRCode(widget.data.getValue(), data[1]),
+                const SizedBox(
+                  height: 30,
+                )
+              ],
+              Text(AppLocalizations.of(context).transfer_code_label),
+              SelectableText(
+                widget.data.getValue(),
+                style: theme.textTheme.titleLarge,
+                textAlign: TextAlign.center,
               ),
-            );
-          } else {
-            return const TransferConnecting();
-          }
-        });
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () => _showHelpDialog(),
+                      icon: const Icon(Icons.help_outline)),
+                  IconButton(
+                      onPressed: () async {
+                        await Clipboard.setData(
+                            ClipboardData(text: widget.data.getValue()));
+                        if (mounted) {
+                          InfoToast(
+                            message: AppLocalizations.of(context)
+                                .toast_info_passphrase_copy,
+                          ).show(context);
+                        }
+                      },
+                      icon: const Icon(Icons.copy)),
+                  if (!data[0])
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          qrcodevisible = !qrcodevisible;
+                        });
+                      },
+                      icon: const Icon(Icons.qr_code),
+                    )
+                ],
+              )
+            ],
+          ),
+        );
+      },
+      loadWidget: const TransferConnecting(),
+    );
   }
 
   Widget _buildQRCode(String code, CodeType codeType) {
@@ -103,23 +100,19 @@ class _TransferCodeState extends State<TransferCode> {
       backgroundColor = theme.iconTheme.color ?? Colors.white;
     }
 
-    return FutureBuilder<String>(
+    return FastFutureBuilder<String>(
         future: api.getPassphraseUri(passphrase: widget.data.getValue()),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return BarcodeWidget(
-              data: snapshot.data!,
-              barcode: codeType == CodeType.qrCode
-                  ? Barcode.qrCode()
-                  : Barcode.aztec(),
-              color: color,
-              backgroundColor: backgroundColor,
-              height: 200,
-              width: 200,
-            );
-          } else {
-            return Container();
-          }
+        onData: (data) {
+          return BarcodeWidget(
+            data: data,
+            barcode: codeType == CodeType.qrCode
+                ? Barcode.qrCode()
+                : Barcode.aztec(),
+            color: color,
+            backgroundColor: backgroundColor,
+            height: 200,
+            width: 200,
+          );
         });
   }
 

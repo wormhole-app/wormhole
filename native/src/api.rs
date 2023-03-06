@@ -3,6 +3,7 @@ use crate::impls::receive::request_file_impl;
 use crate::impls::send::send_file_impl;
 use flutter_rust_bridge::StreamSink;
 use futures::executor::block_on;
+use macros::{build_time, version_str};
 use magic_wormhole::Code;
 
 pub enum Events {
@@ -68,6 +69,12 @@ impl TUpdate {
     }
 }
 
+pub struct BuildInfo {
+    pub build_time: u64,
+    pub dev_build: bool,
+    pub version: String,
+}
+
 pub fn send_file(
     file_name: String,
     file_path: String,
@@ -94,4 +101,12 @@ pub fn get_passphrase_uri(passphrase: String, rendezvous_server: Option<String>)
         is_leader: false,
     }
     .to_string()
+}
+
+pub fn get_build_time() -> BuildInfo {
+    BuildInfo {
+        build_time: build_time!(),
+        dev_build: cfg!(debug_assertions),
+        version: version_str!().to_string(),
+    }
 }
