@@ -9,8 +9,6 @@ import 'theme/theme_data.dart';
 import 'utils/device.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  setPrefferedAppOrientation();
   runApp(const MyApp());
 }
 
@@ -27,6 +25,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    setPrefferedAppOrientation(ctx: context);
     getCurrentAppTheme();
   }
 
