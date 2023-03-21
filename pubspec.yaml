@@ -19,7 +19,7 @@ dependencies:
   freezed_annotation: ^2.2.0
 
   # file chooser / open / share
-  file_picker: 5.2.5
+  file_picker: ^5.2.6
   path_provider: ^2.0.13
   share_plus: ^6.3.1
   open_filex: 4.3.2

@@ -9,10 +9,10 @@ edition = "2021"
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
-anyhow = "1.0.69"
-flutter_rust_bridge = "1.63.1"
+anyhow = "1.0.70"
+flutter_rust_bridge = "1.71.1"
 magic-wormhole = "0.6.0"
-futures = "0.3.26"
+futures = "0.3.27"
 async-std = "1.12.0"
 url = { version = "2.3.1", features = ["serde"] }
 macros = {path = "macros", version="1"}
