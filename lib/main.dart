@@ -6,7 +6,6 @@ import 'navigation/navigation.dart';
 import 'settings/settings.dart';
 import 'theme/dark_theme_provider.dart';
 import 'theme/theme_data.dart';
-import 'utils/device.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +24,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    setPrefferedAppOrientation(ctx: context);
     getCurrentAppTheme();
   }
 

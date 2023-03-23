@@ -10,6 +10,7 @@ import '../pages/send_page.dart';
 import '../pages/settings_page.dart';
 import '../theme/dark_theme_provider.dart';
 import '../transfer/transfer_receiver.dart';
+import '../utils/device.dart';
 import 'navigation_provider.dart';
 
 class Navigation extends StatefulWidget {
@@ -22,6 +23,13 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int _selectedIndex = 0;
   final navigation = NavigationProvider(_widgetOptions[0]);
+
+
+  @override
+  void initState() {
+    super.initState();
+    setPrefferedAppOrientation(ctx: context);
+  }
 
   static const List<Widget> _widgetOptions = <Widget>[
     SendPage(),
