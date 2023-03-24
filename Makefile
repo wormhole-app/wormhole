@@ -22,9 +22,13 @@ elevate:
 translation: get-dep
 	flutter gen-l10n
 
-lint:
+format:
 	cd native && cargo fmt
 	dart format .
+
+lint:
+	cd native && cargo clippy
+	flutter analyze .
 
 clean:
 	flutter clean

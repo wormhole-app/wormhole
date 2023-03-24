@@ -42,8 +42,32 @@ Add rust Android targets:\
 Install cargo-ndk:\
 `cargo install cargo-ndk --version 2.6.0`
 
-Build apk:\
+Build apk+appbundle:\
 `make apk`
+
+Dev Linux build:\
+`make linux`
+
+### Format/Lint
+
+Format source code:\
+`make format`
+
+Lint source code:\
+`make lint`
+
+### Code generation
+
+Generate translations:\
+`make translation`
+
+Generate Flutter-Rust-Bridge code bindings:\
+`make codegen`
+
+### Cleanup 
+
+Clean build files:\
+`make clean`
 
 ## License
 
