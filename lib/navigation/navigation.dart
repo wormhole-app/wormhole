@@ -10,6 +10,7 @@ import '../pages/send_page.dart';
 import '../pages/settings_page.dart';
 import '../theme/dark_theme_provider.dart';
 import '../transfer/transfer_receiver.dart';
+import '../utils/device.dart';
 import 'navigation_provider.dart';
 
 class Navigation extends StatefulWidget {
@@ -28,6 +29,12 @@ class _NavigationState extends State<Navigation> {
     ReceivePage(),
     SettingsPage()
   ];
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setPrefferedAppOrientation(ctx: context);
+  }
 
   void _onItemTapped(int index) {
     navigation.setActivePage(_widgetOptions[index]);
