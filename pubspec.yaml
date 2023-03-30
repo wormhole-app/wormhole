@@ -43,6 +43,7 @@ dependencies:
     git:
       url: https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git
       ref: master
+  flutter_zxing: ^1.0.2
 
 dev_dependencies:
   flutter_test:
