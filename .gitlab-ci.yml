@@ -73,12 +73,14 @@ flutter_lint:
 
 rust_lint:
   stage: test
+  image: "guangie88/rustfmt-clippy"
   script:
     - cd native && cargo clippy
   needs: []
 
 rust_format:
   stage: test
+  image: "guangie88/rustfmt-clippy"
   script:
     - cd native && cargo fmt --check
   needs: []
