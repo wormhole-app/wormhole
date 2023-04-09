@@ -58,17 +58,31 @@ android_elevate_production:
     - make elevate
 
 
-flutter_lint:
+flutter_format:
   stage: test
   script:
     - flutter format . --output none --set-exit-if-changed
   needs: []
 
-flutter_analyze:
+flutter_lint:
   stage: test
   script:
     - make translation
     - flutter analyze ./lib
+  needs: []
+
+rust_lint:
+  stage: test
+  image: rustdocker/rustfmt_clippy:stable
+  script:
+    - cd native && cargo clippy
+  needs: []
+
+rust_format:
+  stage: test
+  image: rustdocker/rustfmt_clippy:stable
+  script:
+    - cd native && cargo fmt --check
   needs: []
 
 flutter_test:
