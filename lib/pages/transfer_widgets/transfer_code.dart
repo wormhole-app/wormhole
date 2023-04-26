@@ -95,11 +95,6 @@ class _TransferCodeState extends State<TransferCode> {
     Color color = theme.iconTheme.color ?? Colors.black;
     Color? backgroundColor;
 
-    if (codeType == CodeType.aztecCode && theme.brightness == Brightness.dark) {
-      color = Colors.black;
-      backgroundColor = theme.iconTheme.color ?? Colors.white;
-    }
-
     return FastFutureBuilder<String>(
         future: api.getPassphraseUri(passphrase: widget.data.getValue()),
         onData: (data) {

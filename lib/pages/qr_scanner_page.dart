@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_zxing/flutter_zxing.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
@@ -39,46 +38,15 @@ class QrScannerPage extends StatelessWidget {
     }
   }
 
-  Widget zXingWidget(BuildContext ctx) {
-    return ReaderWidget(
-      onScan: (result) async {
-        _onQrDetect(result.text, ctx);
-      },
-    );
-  }
-
-  Widget googleWidget(BuildContext ctx) {
-    return Stack(
-      children: [
-        MobileScanner(
-          onDetect: (capture) {
-            final b = capture.barcodes;
-            if (b.isNotEmpty && b.first.rawValue != null) {
-              _onQrDetect(b.first.rawValue, ctx);
-            } else {
-              _onQrDetect(null, ctx);
-            }
-          },
-        ),
-        Center(
-          child: Container(
-            width: MediaQuery.of(ctx).size.width * 0.8,
-            height: MediaQuery.of(ctx).size.width * 0.8,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              border: Border.all(color: Colors.white38, width: 4.0),
-              borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    const bool zxing = true;
     return BackPopContext(
-        child: zxing ? zXingWidget(context) : googleWidget(context));
+      child: ReaderWidget(
+        tryInverted: true,
+        onScan: (result) async {
+          _onQrDetect(result.text, context);
+        },
+      ),
+    );
   }
 }
