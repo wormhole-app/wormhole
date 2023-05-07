@@ -26,7 +26,6 @@ dependencies:
 
   # qr scanner/generation
   barcode_widget: 2.0.3
-  mobile_scanner: ^3.0.0
 
   provider: 6.0.5 # easy wrapper for changenotifier
   shared_preferences: ^2.0.18 # store key/value pairs on disk
@@ -43,6 +42,7 @@ dependencies:
     git:
       url: https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git
       ref: master
+  flutter_zxing: ^1.1.2
 
 dev_dependencies:
   flutter_test:

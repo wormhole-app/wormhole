@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
@@ -12,9 +12,8 @@ import 'toasts/error_toast.dart';
 class QrScannerPage extends StatelessWidget {
   const QrScannerPage({Key? key}) : super(key: key);
 
-  void _onQrDetect(List<Barcode> barcode, BuildContext context) async {
-    if (barcode.isNotEmpty && barcode.first.rawValue != null) {
-      final String code = barcode.first.rawValue!;
+  void _onQrDetect(String? code, BuildContext context) async {
+    if (code != null) {
       debugPrint('Barcode found! $code');
       Vibration.vibrate();
 
@@ -42,23 +41,11 @@ class QrScannerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackPopContext(
-      child: Stack(
-        children: [
-          MobileScanner(
-            onDetect: (capture) => _onQrDetect(capture.barcodes, context),
-          ),
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.width * 0.8,
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                border: Border.all(color: Colors.white38, width: 4.0),
-                borderRadius: const BorderRadius.all(Radius.circular(24.0)),
-              ),
-            ),
-          ),
-        ],
+      child: ReaderWidget(
+        tryInverted: true,
+        onScan: (result) async {
+          _onQrDetect(result.text, context);
+        },
       ),
     );
   }
