@@ -66,8 +66,6 @@ void wire_send_file(int64_t port_,
                     struct wire_uint_8_list *file_path,
                     uint8_t code_length);
 
-void wire_get_build_time(int64_t port_);
-
 void wire_request_file(int64_t port_,
                        struct wire_uint_8_list *passphrase,
                        struct wire_uint_8_list *storage_folder);
@@ -75,6 +73,8 @@ void wire_request_file(int64_t port_,
 void wire_get_passphrase_uri(int64_t port_,
                              struct wire_uint_8_list *passphrase,
                              struct wire_uint_8_list *rendezvous_server);
+
+void wire_get_build_time(int64_t port_);
 
 void wire_new__static_method__TUpdate(int64_t port_, int32_t event, struct wire_Value *value);
 
@@ -97,9 +97,9 @@ void free_WireSyncReturn(WireSyncReturn ptr);
 static int64_t dummy_method_to_enforce_bundling(void) {
     int64_t dummy_var = 0;
     dummy_var ^= ((int64_t) (void*) wire_send_file);
-    dummy_var ^= ((int64_t) (void*) wire_get_build_time);
     dummy_var ^= ((int64_t) (void*) wire_request_file);
     dummy_var ^= ((int64_t) (void*) wire_get_passphrase_uri);
+    dummy_var ^= ((int64_t) (void*) wire_get_build_time);
     dummy_var ^= ((int64_t) (void*) wire_new__static_method__TUpdate);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_value_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);

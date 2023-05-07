@@ -12,11 +12,6 @@ pub extern "C" fn wire_send_file(
 }
 
 #[no_mangle]
-pub extern "C" fn wire_get_build_time(port_: i64) {
-    wire_get_build_time_impl(port_)
-}
-
-#[no_mangle]
 pub extern "C" fn wire_request_file(
     port_: i64,
     passphrase: *mut wire_uint_8_list,
@@ -32,6 +27,11 @@ pub extern "C" fn wire_get_passphrase_uri(
     rendezvous_server: *mut wire_uint_8_list,
 ) {
     wire_get_passphrase_uri_impl(port_, passphrase, rendezvous_server)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_get_build_time(port_: i64) {
+    wire_get_build_time_impl(port_)
 }
 
 #[no_mangle]

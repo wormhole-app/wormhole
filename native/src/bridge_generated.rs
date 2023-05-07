@@ -48,16 +48,6 @@ fn wire_send_file_impl(
         },
     )
 }
-fn wire_get_build_time_impl(port_: MessagePort) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
-        WrapInfo {
-            debug_name: "get_build_time",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || move |task_callback| Ok(get_build_time()),
-    )
-}
 fn wire_request_file_impl(
     port_: MessagePort,
     passphrase: impl Wire2Api<String> + UnwindSafe,
@@ -98,6 +88,16 @@ fn wire_get_passphrase_uri_impl(
             let api_rendezvous_server = rendezvous_server.wire2api();
             move |task_callback| Ok(get_passphrase_uri(api_passphrase, api_rendezvous_server))
         },
+    )
+}
+fn wire_get_build_time_impl(port_: MessagePort) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "get_build_time",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || move |task_callback| Ok(get_build_time()),
     )
 }
 fn wire_new__static_method__TUpdate_impl(

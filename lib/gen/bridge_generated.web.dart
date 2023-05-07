@@ -79,13 +79,13 @@ class NativeWasmModule implements WasmModule {
   external dynamic /* void */ wire_send_file(NativePortType port_,
       String file_name, String file_path, int code_length);
 
-  external dynamic /* void */ wire_get_build_time(NativePortType port_);
-
   external dynamic /* void */ wire_request_file(
       NativePortType port_, String passphrase, String storage_folder);
 
   external dynamic /* void */ wire_get_passphrase_uri(
       NativePortType port_, String passphrase, String? rendezvous_server);
+
+  external dynamic /* void */ wire_get_build_time(NativePortType port_);
 
   external dynamic /* void */ wire_new__static_method__TUpdate(
       NativePortType port_, int event, List<dynamic> value);
@@ -101,9 +101,6 @@ class NativeWire extends FlutterRustBridgeWasmWireBase<NativeWasmModule> {
           int code_length) =>
       wasmModule.wire_send_file(port_, file_name, file_path, code_length);
 
-  void wire_get_build_time(NativePortType port_) =>
-      wasmModule.wire_get_build_time(port_);
-
   void wire_request_file(
           NativePortType port_, String passphrase, String storage_folder) =>
       wasmModule.wire_request_file(port_, passphrase, storage_folder);
@@ -111,6 +108,9 @@ class NativeWire extends FlutterRustBridgeWasmWireBase<NativeWasmModule> {
   void wire_get_passphrase_uri(
           NativePortType port_, String passphrase, String? rendezvous_server) =>
       wasmModule.wire_get_passphrase_uri(port_, passphrase, rendezvous_server);
+
+  void wire_get_build_time(NativePortType port_) =>
+      wasmModule.wire_get_build_time(port_);
 
   void wire_new__static_method__TUpdate(
           NativePortType port_, int event, List<dynamic> value) =>

@@ -209,20 +209,6 @@ class NativeWire implements FlutterRustBridgeWireBase {
       void Function(int, ffi.Pointer<wire_uint_8_list>,
           ffi.Pointer<wire_uint_8_list>, int)>();
 
-  void wire_get_build_time(
-    int port_,
-  ) {
-    return _wire_get_build_time(
-      port_,
-    );
-  }
-
-  late final _wire_get_build_timePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
-          'wire_get_build_time');
-  late final _wire_get_build_time =
-      _wire_get_build_timePtr.asFunction<void Function(int)>();
-
   void wire_request_file(
     int port_,
     ffi.Pointer<wire_uint_8_list> passphrase,
@@ -262,6 +248,20 @@ class NativeWire implements FlutterRustBridgeWireBase {
   late final _wire_get_passphrase_uri = _wire_get_passphrase_uriPtr.asFunction<
       void Function(
           int, ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_get_build_time(
+    int port_,
+  ) {
+    return _wire_get_build_time(
+      port_,
+    );
+  }
+
+  late final _wire_get_build_timePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'wire_get_build_time');
+  late final _wire_get_build_time =
+      _wire_get_build_timePtr.asFunction<void Function(int)>();
 
   void wire_new__static_method__TUpdate(
     int port_,

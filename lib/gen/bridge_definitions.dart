@@ -21,10 +21,6 @@ abstract class Native {
 
   FlutterRustBridgeTaskConstMeta get kSendFileConstMeta;
 
-  Future<BuildInfo> getBuildTime({dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kGetBuildTimeConstMeta;
-
   Stream<TUpdate> requestFile(
       {required String passphrase,
       required String storageFolder,
@@ -36,6 +32,10 @@ abstract class Native {
       {required String passphrase, String? rendezvousServer, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kGetPassphraseUriConstMeta;
+
+  Future<BuildInfo> getBuildTime({dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kGetBuildTimeConstMeta;
 
   Future<TUpdate> newStaticMethodTUpdate(
       {required Events event, required Value value, dynamic hint});

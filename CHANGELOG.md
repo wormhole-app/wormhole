@@ -1,3 +1,10 @@
+## 1.0.4
+### Changed
+- use FOSS QR Code scanner lib ZXing
+
+### Fixed
+- Device orientation on Tablets
+
 ## 1.0.3
 
 ### Added

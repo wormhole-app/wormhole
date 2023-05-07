@@ -90,7 +90,7 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 * [share_plus](https://pub.dev/packages/share_plus)(BSD-3-Clause) - Open Platforms share dialog
 * [open_filex](https://pub.dev/packages/open_filex)(BSD-3-Clause) - Open Platforms file-open dialog
 * [barcode_widget](https://pub.dev/packages/barcode_widget)(Apache-2.0) - QR/Aztec code generation
-* [mobile_scanner](https://pub.dev/packages/mobile_scanner)(BSD-3-Clause) - QR/Aztec code scanner
+* [flutter_zxing](https://pub.dev/packages/flutter_zxing)(MIT) - QR/Aztec code scanner
 * [provider](https://pub.dev/packages/provider)(MIT) - Consumer/Provider patterns
 * [shared_preferences](https://pub.dev/packages/shared_preferences)(BSD-3-Clause) - Platform wrapper for key-value pairs
 * [share_handler](https://pub.dev/packages/share_handler)(MIT) - receive of platform share intents

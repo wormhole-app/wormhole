@@ -43,22 +43,6 @@ class NativeImpl implements Native {
         argNames: ["fileName", "filePath", "codeLength"],
       );
 
-  Future<BuildInfo> getBuildTime({dynamic hint}) {
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner.wire_get_build_time(port_),
-      parseSuccessData: _wire2api_build_info,
-      constMeta: kGetBuildTimeConstMeta,
-      argValues: [],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta get kGetBuildTimeConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
-        debugName: "get_build_time",
-        argNames: [],
-      );
-
   Stream<TUpdate> requestFile(
       {required String passphrase,
       required String storageFolder,
@@ -98,6 +82,22 @@ class NativeImpl implements Native {
       const FlutterRustBridgeTaskConstMeta(
         debugName: "get_passphrase_uri",
         argNames: ["passphrase", "rendezvousServer"],
+      );
+
+  Future<BuildInfo> getBuildTime({dynamic hint}) {
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_get_build_time(port_),
+      parseSuccessData: _wire2api_build_info,
+      constMeta: kGetBuildTimeConstMeta,
+      argValues: [],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kGetBuildTimeConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "get_build_time",
+        argNames: [],
       );
 
   Future<TUpdate> newStaticMethodTUpdate(

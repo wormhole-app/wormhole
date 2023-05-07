@@ -1,6 +1,6 @@
 name: wormhole
 description: A magic-wormhole client
-version: 1.0.3
+version: 1.0.4
 publish_to: 'none'
 
 environment:
@@ -30,7 +30,7 @@ dependencies:
   provider: 6.0.5 # easy wrapper for changenotifier
   shared_preferences: ^2.0.18 # store key/value pairs on disk
   share_handler: 0.0.16 # receive share intents from other apps
-  vibration: 1.7.6 # trigger phone vibrations
+  vibration: ^1.7.7 # trigger phone vibrations
   intl: 0.17.0 # handle translations
   fluttertoast: ^8.2.1 # fancy toast popups
   toggle_switch: ^2.0.1
