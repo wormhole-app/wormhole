@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -56,6 +57,10 @@ class _ReceivePageState extends State<ReceivePage> {
             width: 250,
             child: TextField(
               controller: controller,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                    RegExp(r'^\d{1,3}(?:-[-a-zA-Z]*)*')),
+              ],
               decoration: InputDecoration(
                 filled: true,
                 labelStyle: theme.textTheme.bodyMedium,
@@ -94,7 +99,11 @@ class _ReceivePageState extends State<ReceivePage> {
   void _onReceiveButtonClick() async {
     final text = controller.value.text;
 
-    if (!mounted) return;
+    final RegExp regex = RegExp(r'^\d{1,3}(?:-[a-zA-Z]+)+$');
+    if (!regex.hasMatch(text) || !mounted) {
+      return;
+    }
+
     Provider.of<TransferProvider>(context, listen: false).receiveFile(text);
   }
 }
