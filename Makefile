@@ -14,10 +14,10 @@ codegen:
 	--wasm
 
 deploy:
-	cd android && fastlane deploy
+	fastlane deploy
 
 elevate:
-	cd android && fastlane elevate
+	fastlane elevate
 
 translation: get-dep
 	flutter gen-l10n

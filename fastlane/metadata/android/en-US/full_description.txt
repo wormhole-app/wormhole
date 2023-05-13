@@ -1,0 +1,10 @@
+With Wormhole, you can easily and securely share files of any size, with anyone, anywhere. Whether you're sending a document to a colleague, a photo album to a friend, or a video to a family member, Wormhole makes it simple and secure.
+
+Wormhole generates a QR code or a passphrase that the recipient can use to access the files. This eliminates the need for complicated file sharing setups or email attachments.
+
+The files are transfered using an end-to-end encryption, which ensures that your files are protected from prying eyes. This means that only the intended recipient can receive the files you send.
+
+Wormhole is also an open-source app, which means that the source code is available for anyone to view and contribute to. If you're interested in learning more about how Wormhole works, or if you want to contribute to its development, you can find the source code on GitLab at the link provided.
+https://gitlab.com/lukas-heiligenbrunner/wormhole
+
+Overall, Wormhole is a powerful and user-friendly file transfer app that offers unparalleled security and ease of use. Whether you're a professional or a casual user, Wormhole is a great choice for anyone looking to share files securely.
