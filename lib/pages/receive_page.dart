@@ -59,7 +59,7 @@ class _ReceivePageState extends State<ReceivePage> {
               controller: controller,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(
-                    RegExp(r'^\d{1,3}(?:-[-a-zA-Z]*)*')),
+                    RegExp(r'^\d{1,3}(?:[-\s][a-zA-Z]*)*')),
               ],
               decoration: InputDecoration(
                 filled: true,
