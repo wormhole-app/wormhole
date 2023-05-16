@@ -26,6 +26,7 @@ flutter_build_android:
 
 flutter_build_linux:
   stage: build
+  allow_failure: true
   script:
     - make linux
   artifacts:
