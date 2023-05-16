@@ -1,3 +1,10 @@
+## 1.0.5
+### Fixed
+- Don't allow invalid Code Inputs
+
+### Added
+- Deployment to F-Droid
+
 ## 1.0.4
 ### Changed
 - use FOSS QR Code scanner lib ZXing
