@@ -62,7 +62,7 @@ android_elevate_production:
 flutter_format:
   stage: test
   script:
-    - flutter format . --output none --set-exit-if-changed
+    - dart format . --output none --set-exit-if-changed
   needs: []
 
 flutter_lint:
