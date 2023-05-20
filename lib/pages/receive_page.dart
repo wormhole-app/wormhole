@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../transfer/transfer_provider.dart';
+import '../utils/code.dart';
 
 class ReceivePage extends StatefulWidget {
   const ReceivePage({Key? key}) : super(key: key);
@@ -58,8 +59,7 @@ class _ReceivePageState extends State<ReceivePage> {
             child: TextField(
               controller: controller,
               inputFormatters: [
-                FilteringTextInputFormatter.allow(
-                    RegExp(r'^\d{1,3}(?:[-\s][a-zA-Z]*)*')),
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+.*')),
               ],
               decoration: InputDecoration(
                 filled: true,
@@ -99,8 +99,7 @@ class _ReceivePageState extends State<ReceivePage> {
   void _onReceiveButtonClick() async {
     final text = controller.value.text;
 
-    final RegExp regex = RegExp(r'^\d{1,3}(?:-[a-zA-Z]+)+$');
-    if (!regex.hasMatch(text) || !mounted) {
+    if (!isCodeValid(text) || !mounted) {
       return;
     }
 
