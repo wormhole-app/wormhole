@@ -25,11 +25,33 @@ class QrScannerPage extends StatelessWidget {
         final passphrase = uri.path;
 
         if (isCodeValid(passphrase)) {
-          Provider.of<TransferProvider>(context, listen: false)
-              .receiveFile(passphrase);
+          final params = uri.queryParameters;
+          if(params.containsKey('rendezvous')) {
+            final rendezvousServer = params['rendezvous']!;
+            final _rendezvousUri = Uri.parse(rendezvousServer);
+            // todo use this rendezvous server encoded in qr code
+          }
+
+          if(params.containsKey('role')){
+            switch(params['role']) {
+              case 'follower':
+                Provider.of<TransferProvider>(context, listen: false)
+                    .receiveFile(passphrase);
+                break;
+              case 'leader':
+                // todo we want to send file/s -> so open filechooser
+                  // then we want send with code
+                break;
+              default:
+                break;
+            }
+          } else {
+            Provider.of<TransferProvider>(context, listen: false)
+                .receiveFile(passphrase);
+          }
+
           return;
         }
-        // todo handle extra query parameters
       }
 
       Provider.of<NavigationProvider>(context, listen: false).pop();
