@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 enum DeviceType { phone, tablet }
 
 DeviceType getDeviceType(BuildContext ctx) {
-  final double shortSideLength = View.of(ctx).physicalSize.shortestSide;
+  final double shortSideLength = MediaQuery.of(ctx).size.shortestSide;
   return shortSideLength < 550 ? DeviceType.phone : DeviceType.tablet;
 }
 
