@@ -9,6 +9,7 @@ import 'transfer_widgets/transfer_code.dart';
 import 'transfer_widgets/transfer_connecting.dart';
 import 'transfer_widgets/transfer_error.dart';
 import 'transfer_widgets/transfer_progress.dart';
+import 'transfer_widgets/transfer_zip_progress.dart';
 import 'type_helpers.dart';
 
 class ConnectingPage extends StatefulWidget {
@@ -24,6 +25,7 @@ class ConnectingPage extends StatefulWidget {
 
 class _ConnectingPageState extends State<ConnectingPage> {
   int? total;
+  int? totalFileNr;
   ConnectionType? connectionType;
   String? connectionTypeName;
 
@@ -42,6 +44,9 @@ class _ConnectingPageState extends State<ConnectingPage> {
           connectionType = (e.value as Value_ConnectionType).field0;
           connectionTypeName = (e.value as Value_ConnectionType).field1;
           break;
+        case Events.ZipFilesTotal:
+          totalFileNr = e.getValue();
+          break;
         default:
           break;
       }
@@ -50,6 +55,8 @@ class _ConnectingPageState extends State<ConnectingPage> {
 
   Widget _handleEvent(TUpdate event) {
     switch (event.event) {
+      case Events.Connecting:
+        return const TransferConnecting();
       case Events.Code:
         return BackPopContext(
           child: TransferCode(
@@ -76,6 +83,14 @@ class _ConnectingPageState extends State<ConnectingPage> {
                     : null));
       case Events.Finished:
         return BackPopContext(child: widget.finish(event.getValue()));
+      case Events.ZipFilesTotal:
+      case Events.ZipFiles:
+        return DisallowPopContext(
+          child: TransferZipProgress(
+            data: event,
+            totalFileNr: totalFileNr,
+          ),
+        );
     }
   }
 

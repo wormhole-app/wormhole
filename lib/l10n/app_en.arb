@@ -18,6 +18,7 @@
   "transfer_finished_share" : "Share file",
 
   "transfer_finished_send_label" : "Finished transfer!",
+  "transfer_zipping": "Compressing file",
 
   "transfer_connecting" : "Connecting...",
   "transfer_code_label" : "Your transmit code is:",

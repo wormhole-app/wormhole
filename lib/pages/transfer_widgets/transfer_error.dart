@@ -35,6 +35,7 @@ class TransferError extends StatelessWidget {
   }
 
   String genErrorMessage(ErrorType error, String? message) {
+    // todo error translations
     switch (error) {
       case ErrorType.InvalidFilename:
         return 'Sender did not specify a filename';
@@ -45,6 +46,7 @@ class TransferError extends StatelessWidget {
       case ErrorType.FileOpen:
       case ErrorType.TransferError:
       case ErrorType.TransferConnectionError:
+      case ErrorType.ZipFileError:
         return message ?? 'invalid message';
     }
   }

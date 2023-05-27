@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../transfer/transfer_provider.dart';
+import '../widgets/split_button.dart';
 
 class SendPage extends StatefulWidget {
   const SendPage({Key? key}) : super(key: key);
@@ -14,14 +15,29 @@ class SendPage extends StatefulWidget {
 
 class _SendPageState extends State<SendPage> {
   void _onSendButtonClick() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(allowMultiple: true);
 
     if (result != null) {
-      final file = result.files.single;
+      final files =
+          result.files.where((element) => element.path != null).toList();
 
       if (!mounted) return;
+      Provider.of<TransferProvider>(context, listen: false).sendFiles(
+          files.first.name,
+          files.map((e) => e.path).whereType<String>().toList());
+    } else {
+      debugPrint('user canceled picker');
+    }
+  }
+
+  void _onSendFolderButtonClick() async {
+    String? result = await FilePicker.platform.getDirectoryPath();
+
+    if (result != null) {
+      if (!mounted) return;
       Provider.of<TransferProvider>(context, listen: false)
-          .sendFile(file.name, file.path!);
+          .sendFolder(result.split('/').last, result);
     } else {
       debugPrint('user canceled picker');
     }
@@ -53,18 +69,12 @@ class _SendPageState extends State<SendPage> {
           const SizedBox(
             height: 25,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: SizedBox(
-              width: 150,
-              height: 50,
-              child: ElevatedButton(
-                  onPressed: _onSendButtonClick,
-                  child: Text(
-                    AppLocalizations.of(context).send_page_button,
-                  )),
-            ),
-          ),
+          SplitButton(
+            onLeftButtonClick: _onSendButtonClick,
+            onRightButtonClick: _onSendFolderButtonClick,
+            textLeft: AppLocalizations.of(context).send_page_button,
+            iconRight: Icons.folder,
+          )
         ],
       ),
     );

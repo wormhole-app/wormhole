@@ -33,14 +33,18 @@ An open source Android App for sending/receiveing files using the magic-wormhole
 
 Install Android SDK, Flutter and rustup.
 
-Install Android ndk version 22.1.7171670:\
-`sdkmanager "ndk;22.1.7171670"`
+You might want to set your Java version to <20:\
+add to your gradle.properties:\
+`org.gradle.java.home=/usr/lib/jvm/java-17-openjdk/`
+
+Install Android ndk version 24.0.8215888:\
+`sdkmanager "ndk;24.0.8215888"`
 
 Add rust Android targets:\
 `rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android`
 
 Install cargo-ndk:\
-`cargo install cargo-ndk --version 2.6.0`
+`cargo install cargo-ndk`
 
 Build apk+appbundle:\
 `make apk`

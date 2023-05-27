@@ -1,18 +1,52 @@
 use crate::api::{ErrorType, Events, TUpdate, Value};
-use crate::impls::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
-use crate::impls::helpers::{gen_app_config, gen_relay_hints};
+use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
+use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
+use crate::wormhole::zip::create_zip_file;
 use flutter_rust_bridge::StreamSink;
 use magic_wormhole::transfer::TransferError;
 use magic_wormhole::{transfer, transit, Wormhole};
+use std::collections::HashMap;
+use std::fs::remove_file;
 use std::rc::Rc;
+
+pub async fn send_files_impl(
+    name: String,
+    files: HashMap<String, String>,
+    code_length: u8,
+    temp_file_path: String,
+    actions: Rc<StreamSink<TUpdate>>,
+) {
+    let temp_file = match create_zip_file(files, temp_file_path, actions.clone()) {
+        Ok(v) => v,
+        Err(e) => {
+            actions.add(TUpdate::new(
+                Events::Error,
+                Value::ErrorValue(ErrorType::ZipFileError, e.to_string()),
+            ));
+            return;
+        }
+    };
+
+    send_file_impl(
+        format!("{}.zip", name),
+        temp_file.clone(),
+        code_length,
+        actions,
+    )
+    .await;
+
+    // remove generated temp file
+    let _ = remove_file(temp_file);
+}
 
 pub async fn send_file_impl(
     file_name: String,
     file_path: String,
     code_length: u8,
-    actions: StreamSink<TUpdate>,
+    actions: Rc<StreamSink<TUpdate>>,
 ) {
-    let actions = Rc::new(actions);
+    // push event that we are in connection state
+    actions.add(TUpdate::new(Events::Connecting, Value::Int(0)));
 
     let relay_hints = gen_relay_hints();
     let appconfig = gen_app_config();

@@ -18,6 +18,7 @@
     "transfer_finished_share" : "Datei teilen",
 
     "transfer_finished_send_label" : "Vollständig übertragen!",
+    "transfer_zipping": "Komprimiere Datei",
 
     "transfer_connecting" : "Verbinde...",
     "transfer_code_label" : "Dein Übertragungscode ist:",

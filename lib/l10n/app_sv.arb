@@ -18,6 +18,7 @@
   "transfer_finished_share" : "Dela fil",
 
   "transfer_finished_send_label" : "Överföring klar!",
+  "transfer_zipping": "komprimering av fil",
 
   "transfer_connecting" : "Ansluter...",
   "transfer_code_label" : "Din överföringskod är:",
