@@ -21,7 +21,7 @@ pub fn find_free_filepath(path: PathBuf) -> Option<PathBuf> {
             let mut path = path.clone();
             path.set_file_name(name.as_str());
             // recursively call this function until a free path is found
-            return find_free_filepath(path.to_path_buf());
+            find_free_filepath(path.to_path_buf())
         }
     }
 }

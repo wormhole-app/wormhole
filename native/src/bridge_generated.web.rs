@@ -2,8 +2,18 @@ use super::*;
 // Section: wire functions
 
 #[wasm_bindgen]
-pub fn wire_send_file(port_: MessagePort, file_name: String, file_path: String, code_length: u8) {
-    wire_send_file_impl(port_, file_name, file_path, code_length)
+pub fn wire_init(port_: MessagePort, temp_file_path: String) {
+    wire_init_impl(port_, temp_file_path)
+}
+
+#[wasm_bindgen]
+pub fn wire_send_files(port_: MessagePort, file_paths: JsValue, name: String, code_length: u8) {
+    wire_send_files_impl(port_, file_paths, name, code_length)
+}
+
+#[wasm_bindgen]
+pub fn wire_send_folder(port_: MessagePort, folder_path: String, name: String, code_length: u8) {
+    wire_send_folder_impl(port_, folder_path, name, code_length)
 }
 
 #[wasm_bindgen]
@@ -25,11 +35,6 @@ pub fn wire_get_build_time(port_: MessagePort) {
     wire_get_build_time_impl(port_)
 }
 
-#[wasm_bindgen]
-pub fn wire_new__static_method__TUpdate(port_: MessagePort, event: i32, value: JsValue) {
-    wire_new__static_method__TUpdate_impl(port_, event, value)
-}
-
 // Section: allocate functions
 
 // Section: related functions
@@ -41,7 +46,15 @@ impl Wire2Api<String> for String {
         self
     }
 }
-
+impl Wire2Api<Vec<String>> for JsValue {
+    fn wire2api(self) -> Vec<String> {
+        self.dyn_into::<JsArray>()
+            .unwrap()
+            .iter()
+            .map(Wire2Api::wire2api)
+            .collect()
+    }
+}
 impl Wire2Api<Option<String>> for Option<String> {
     fn wire2api(self) -> Option<String> {
         self.map(Wire2Api::wire2api)
@@ -53,44 +66,11 @@ impl Wire2Api<Vec<u8>> for Box<[u8]> {
         self.into_vec()
     }
 }
-impl Wire2Api<Value> for JsValue {
-    fn wire2api(self) -> Value {
-        let self_ = self.unchecked_into::<JsArray>();
-        match self_.get(0).unchecked_into_f64() as _ {
-            0 => Value::Int(self_.get(1).wire2api()),
-            1 => Value::String(self_.get(1).wire2api()),
-            2 => Value::ErrorValue(self_.get(1).wire2api(), self_.get(2).wire2api()),
-            3 => Value::Error(self_.get(1).wire2api()),
-            4 => Value::ConnectionType(self_.get(1).wire2api(), self_.get(2).wire2api()),
-            _ => unreachable!(),
-        }
-    }
-}
 // Section: impl Wire2Api for JsValue
 
 impl Wire2Api<String> for JsValue {
     fn wire2api(self) -> String {
         self.as_string().expect("non-UTF-8 string, or not a string")
-    }
-}
-impl Wire2Api<ConnectionType> for JsValue {
-    fn wire2api(self) -> ConnectionType {
-        (self.unchecked_into_f64() as i32).wire2api()
-    }
-}
-impl Wire2Api<ErrorType> for JsValue {
-    fn wire2api(self) -> ErrorType {
-        (self.unchecked_into_f64() as i32).wire2api()
-    }
-}
-impl Wire2Api<Events> for JsValue {
-    fn wire2api(self) -> Events {
-        (self.unchecked_into_f64() as i32).wire2api()
-    }
-}
-impl Wire2Api<i32> for JsValue {
-    fn wire2api(self) -> i32 {
-        self.unchecked_into_f64() as _
     }
 }
 impl Wire2Api<Option<String>> for JsValue {

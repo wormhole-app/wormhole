@@ -2,11 +2,17 @@ apk: translation
 	flutter build apk --target-platform android-arm64
 	flutter build appbundle
 
+container-apk:
+	podman run --name=example \
+		--mount type=bind,source=${PWD},target=/root/wormhole/ \
+		docker.io/luki42/flutter-rust \
+		bash -c "cd /root/wormhole && make apk"
+
 linux: translation
 	flutter build linux
 
 codegen:
-	flutter_rust_bridge_codegen \
+	/home/lukas/.cargo/bin/flutter_rust_bridge_codegen \
 	--rust-input native/src/api.rs \
 	--dart-output lib/gen/bridge_generated.dart \
 	--c-output ios/Runner/bridge_generated.h \

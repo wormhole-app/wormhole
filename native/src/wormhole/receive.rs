@@ -1,7 +1,7 @@
 use crate::api::{ErrorType, Events, TUpdate, Value};
-use crate::impls::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
-use crate::impls::helpers::{gen_app_config, gen_relay_hints};
-use crate::impls::path::find_free_filepath;
+use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
+use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
+use crate::wormhole::path::find_free_filepath;
 use async_std::fs::OpenOptions;
 use flutter_rust_bridge::StreamSink;
 use magic_wormhole::{transfer, transit, Code, Wormhole};
@@ -14,6 +14,9 @@ pub async fn request_file_impl(
     actions: StreamSink<TUpdate>,
 ) {
     let actions = Rc::new(actions);
+
+    // push event that we are in connection state
+    actions.add(TUpdate::new(Events::Connecting, Value::Int(0)));
 
     let relay_hints = gen_relay_hints();
     let appconfig = gen_app_config();
@@ -120,6 +123,6 @@ pub async fn request_file_impl(
     }
     actions.add(TUpdate::new(
         Events::Finished,
-        Value::String(file_path.to_str().unwrap().to_string()),
+        Value::String(file_path.to_str().unwrap_or_default().to_string()),
     ));
 }

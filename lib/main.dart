@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'gen/ffi.dart';
 import 'navigation/navigation.dart';
 import 'settings/settings.dart';
 import 'theme/dark_theme_provider.dart';
@@ -25,6 +27,12 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getCurrentAppTheme();
+    initBackend();
+  }
+
+  void initBackend() async {
+    final tempDir = (await getTemporaryDirectory()).path;
+    api.init(tempFilePath: tempDir);
   }
 
   void getCurrentAppTheme() async {

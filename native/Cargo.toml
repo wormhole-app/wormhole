@@ -15,7 +15,9 @@ magic-wormhole = "0.6.0"
 futures = "0.3.28"
 async-std = "1.12.0"
 url = { version = "2.3.1", features = ["serde"] }
-macros = {path = "macros", version="1"}
+zip = { version = "0.6.4", default-features = false, features = ["deflate"] }
+macros = { path = "macros", version = "1" }
+fastrand = "1.9.0"
 
 [profile.release]
 opt-level = 'z'     # Optimize for size.

@@ -29,11 +29,24 @@ class TransferReceiver extends StatefulWidget {
 class _TransferReceiverState extends State<TransferReceiver> {
   final provider = TransferProvider();
 
-  void _sendFile(String filename, String filepath, bool causedByIntent) async {
+  void _sendFolder(String name, String path, bool causedByIntent) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
-    final stream = api.sendFile(
-        fileName: filename, filePath: filepath, codeLength: codeLength);
 
+    final stream =
+        api.sendFolder(folderPath: path, name: name, codeLength: codeLength);
+    _showConnectionPage(stream, causedByIntent);
+  }
+
+  void _sendFiles(
+      String name, List<String> filepaths, bool causedByIntent) async {
+    final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
+    final stream =
+        api.sendFiles(name: name, filePaths: filepaths, codeLength: codeLength);
+
+    _showConnectionPage(stream, causedByIntent);
+  }
+
+  void _showConnectionPage(Stream<TUpdate> stream, bool causedByIntent) {
     if (!mounted) return;
     Provider.of<NavigationProvider>(context, listen: false).push(ConnectingPage(
         key: UniqueKey(),
@@ -104,7 +117,11 @@ class _TransferReceiverState extends State<TransferReceiver> {
     super.initState();
 
     provider.addOnSendListener((name, path) {
-      _sendFile(name, path, false);
+      _sendFiles(name, path, false);
+    });
+
+    provider.addOnSendFolderListener((name, path) {
+      _sendFolder(name, path, false);
     });
 
     provider.addOnReceiveListener((passphrase) {
@@ -139,14 +156,16 @@ class _TransferReceiverState extends State<TransferReceiver> {
   }
 
   void _sendIntentFile(List<SharedAttachment?> attachments) {
-    // todo multiple file not supported for now
-    if (attachments.isEmpty || attachments[0] == null) {
+    final paths = attachments
+        .where((e) => e != null)
+        .map((e) => e!.path)
+        .toList(growable: false);
+    if (paths.isEmpty) {
       return;
     }
 
-    final path = attachments[0]!.path;
-    debugPrint('sending file $path');
-    _sendFile(path.split('/').last, path, true);
+    debugPrint('sending file ${paths.toString()}');
+    _sendFiles(paths[0].split('/').last, paths, true);
   }
 
   _TransferReceiverState() {
