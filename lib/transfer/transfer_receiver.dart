@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_close_app/flutter_close_app.dart';
@@ -93,6 +94,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
     // we need storage permission to store files
     if (!(Platform.isAndroid || Platform.isIOS) ||
+        (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33 ||
         await Permission.storage.request().isGranted) {
       final s = api.requestFile(passphrase: passphrase, storageFolder: dpath);
       if (!mounted) return;
