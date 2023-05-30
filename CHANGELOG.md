@@ -1,3 +1,10 @@
+## 1.1.0
+### Fixed
+- invalid Permission error on sdk >= 33
+
+### Added 
+- Support for multiple files + folder sharing
+
 ## 1.0.5
 ### Fixed
 - Don't allow invalid Code Inputs
