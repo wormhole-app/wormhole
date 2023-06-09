@@ -37,6 +37,10 @@
   "settings_page_show_code" : "Visa QR-kod:",
   "settings_page_show_always" : "Alltid",
   "settings_page_show_never" : "Aldrig",
+  "settings_page_theming" : "App Tematisering:",
+  "settings_page_dark_theme" : "Mörkt",
+  "settings_page_light_theme" : "Ljus",
+  "settings_page_system_theme" : "System",
 
   "toast_error_qr_fail" : "Misslyckades med att scanna QR-kod",
   "toast_error_qr_invalid" : "Scannad QR-kod är ogiltig",

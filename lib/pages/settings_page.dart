@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import '../gen/ffi.dart';
 import '../settings/settings.dart';
+import '../theme/dark_theme_provider.dart';
 import '../widgets/fast_future_builder.dart';
 import '../widgets/number_input.dart';
 
@@ -28,6 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final themeprov = Provider.of<DarkThemeProvider>(context);
 
     return Center(
       child: Column(
@@ -126,6 +129,41 @@ class _SettingsPageState extends State<SettingsPage> {
                     Settings.setCodeAlwaysVisible(index == 0);
                   },
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: Text(AppLocalizations.of(context).settings_page_theming),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ToggleSwitch(
+                minWidth: 83.333,
+                cornerRadius: 15.0,
+                activeBgColors: [
+                  [theme.primaryColor],
+                  [theme.primaryColor],
+                  [theme.primaryColor]
+                ],
+                inactiveBgColor: theme.cardColor,
+                customTextStyles: [theme.textTheme.bodyMedium],
+                initialLabelIndex: themeprov.theme.index,
+                totalSwitches: 3,
+                labels: [
+                  AppLocalizations.of(context).settings_page_dark_theme,
+                  AppLocalizations.of(context).settings_page_light_theme,
+                  AppLocalizations.of(context).settings_page_system_theme
+                ],
+                radiusStyle: true,
+                onToggle: (index) {
+                  if (index == null) {
+                    return;
+                  }
+                  themeprov.theme = ThemeType.values[index];
+                },
               ),
             ],
           ),

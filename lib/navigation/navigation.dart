@@ -8,7 +8,6 @@ import '../pages/qr_scanner_page.dart';
 import '../pages/receive_page.dart';
 import '../pages/send_page.dart';
 import '../pages/settings_page.dart';
-import '../theme/dark_theme_provider.dart';
 import '../transfer/transfer_receiver.dart';
 import '../utils/device.dart';
 import 'navigation_provider.dart';
@@ -50,8 +49,6 @@ class _NavigationState extends State<Navigation> {
 
   @override
   Widget build(BuildContext context) {
-    final themeprov = Provider.of<DarkThemeProvider>(context);
-
     return ChangeNotifierProvider(
       builder: (context, child) {
         return TransferReceiver(
@@ -64,14 +61,6 @@ class _NavigationState extends State<Navigation> {
                   onPressed: _onQrButtonPress,
                   icon: const Icon(Icons.qr_code),
                 ),
-              IconButton(
-                onPressed: () {
-                  themeprov.invertTheme();
-                },
-                icon: Icon(themeprov.darkTheme
-                    ? Icons.light_mode_outlined
-                    : Icons.light_mode),
-              ),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
