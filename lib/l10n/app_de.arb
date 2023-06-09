@@ -37,6 +37,10 @@
     "settings_page_show_code" : "Zeige QR Code an:",
     "settings_page_show_always" : "Immer",
     "settings_page_show_never" : "Nie",
+    "settings_page_theming" : "App Theming:",
+    "settings_page_dark_theme" : "Dunkel",
+    "settings_page_light_theme" : "Hell",
+    "settings_page_system_theme" : "System",
 
     "toast_error_qr_fail" : "Fehler beim scannen des QR Codes",
     "toast_error_qr_invalid" : "Fehlerhafter QR Code gescannt",

@@ -1,5 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../theme/dark_theme_provider.dart';
+
 enum CodeType { qrCode, aztecCode }
 
 class Defaults {
@@ -28,8 +30,8 @@ class Settings {
     await _setField(value, _codeAlwaysVisible);
   }
 
-  static setDarkTheme(bool value) async {
-    await _setField(value, themeStatus);
+  static setTheme(ThemeType theme) async {
+    await _setField(theme.index, themeStatus);
   }
 
   static Future<int?> getWordLength() async {
@@ -54,9 +56,14 @@ class Settings {
   }
 
   /// get current theme : true if darkmode
-  static Future<bool> getTheme() async {
+  static Future<ThemeType> getTheme() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(themeStatus) ?? true;
+    final idx = prefs.getInt(themeStatus);
+    if (idx != null) {
+      return ThemeType.values[idx];
+    } else {
+      return ThemeType.dark;
+    }
   }
 
   static _setField<T>(T? value, String field) async {

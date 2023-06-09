@@ -1,21 +1,31 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../settings/settings.dart';
 
+enum ThemeType { dark, light, system }
+
 class DarkThemeProvider with ChangeNotifier {
-  bool _darkTheme = false;
+  ThemeType _theme = ThemeType.dark;
 
-  bool get darkTheme => _darkTheme;
+  ThemeType get theme => _theme;
 
-  set darkTheme(bool value) {
-    _darkTheme = value;
-    Settings.setDarkTheme(_darkTheme);
+  set theme(ThemeType theme) {
+    _theme = theme;
+    Settings.setTheme(theme);
     notifyListeners();
   }
 
-  void invertTheme() {
-    _darkTheme = !_darkTheme;
-    Settings.setDarkTheme(_darkTheme);
-    notifyListeners();
+  bool isDarkThemeActive() {
+    switch (_theme) {
+      case ThemeType.system:
+        return SchedulerBinding
+                .instance.platformDispatcher.platformBrightness ==
+            Brightness.dark;
+      case ThemeType.dark:
+        return true;
+      case ThemeType.light:
+        return false;
+    }
   }
 }

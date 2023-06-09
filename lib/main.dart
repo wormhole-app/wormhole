@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getCurrentAppTheme() async {
-    themeChangeProvider.darkTheme = await Settings.getTheme();
+    themeChangeProvider.theme = await Settings.getTheme();
   }
 
   @override
@@ -58,7 +58,8 @@ class _MyAppState extends State<MyApp> {
               debugPrint('fallback to default locale');
               return const Locale('en');
             },
-            theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+            theme: Styles.themeData(
+                themeChangeProvider.isDarkThemeActive(), context),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: const Navigation(),
