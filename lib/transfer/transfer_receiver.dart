@@ -33,16 +33,22 @@ class _TransferReceiverState extends State<TransferReceiver> {
   void _sendFolder(String name, String path, bool causedByIntent) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
 
-    final stream =
-        api.sendFolder(folderPath: path, name: name, codeLength: codeLength);
+    final stream = api.sendFolder(
+        folderPath: path,
+        name: name,
+        codeLength: codeLength,
+        serverConfig: await _getServerConfig());
     _showConnectionPage(stream, causedByIntent);
   }
 
   void _sendFiles(
       String name, List<String> filepaths, bool causedByIntent) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
-    final stream =
-        api.sendFiles(name: name, filePaths: filepaths, codeLength: codeLength);
+    final stream = api.sendFiles(
+        name: name,
+        filePaths: filepaths,
+        codeLength: codeLength,
+        serverConfig: await _getServerConfig());
 
     _showConnectionPage(stream, causedByIntent);
   }
@@ -85,6 +91,16 @@ class _TransferReceiverState extends State<TransferReceiver> {
         }));
   }
 
+  Future<ServerConfig> _getServerConfig() async {
+    final rendezvousUrl =
+        (await Settings.getRendezvousUrl()) ?? await api.defaultRendezvousUrl();
+    final relayUrl =
+        (await Settings.getRelayUrl()) ?? await api.defaultRelayUrl();
+    final serverConfig =
+        ServerConfig(rendezvousUrl: rendezvousUrl, relayUrl: relayUrl);
+    return serverConfig;
+  }
+
   void _receiveFile(String passphrase) async {
     final dpath = await getDownloadPath();
     if (dpath == null) {
@@ -96,7 +112,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
     if (!(Platform.isAndroid || Platform.isIOS) ||
         (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33 ||
         await Permission.storage.request().isGranted) {
-      final s = api.requestFile(passphrase: passphrase, storageFolder: dpath);
+      final s = api.requestFile(
+          passphrase: passphrase,
+          storageFolder: dpath,
+          serverConfig: await _getServerConfig());
       if (!mounted) return;
       Provider.of<NavigationProvider>(context, listen: false).push(
         ConnectingPage(

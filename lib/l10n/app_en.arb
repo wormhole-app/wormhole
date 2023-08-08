@@ -41,6 +41,12 @@
   "settings_page_dark_theme" : "Dark",
   "settings_page_light_theme" : "Light",
   "settings_page_system_theme" : "System",
+  "settings_page_advanced" : "Advanced:",
+  "settings_page_serversettings" : "Server Settings",
+  "settings_page_rendezvousserver" : "Rendezvous Server",
+  "settings_page_relayserver" : "Relay Server",
+  "settings_page_error_url" : "Invalid Url",
+  "settings_page_server_saved" : "Server Settings Saved!",
 
   "toast_error_qr_fail" : "Failed to Scan QR Code",
   "toast_error_qr_invalid" : "Scanned QR Code Invalid",

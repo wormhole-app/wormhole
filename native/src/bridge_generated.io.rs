@@ -12,8 +12,9 @@ pub extern "C" fn wire_send_files(
     file_paths: *mut wire_StringList,
     name: *mut wire_uint_8_list,
     code_length: u8,
+    server_config: *mut wire_ServerConfig,
 ) {
-    wire_send_files_impl(port_, file_paths, name, code_length)
+    wire_send_files_impl(port_, file_paths, name, code_length, server_config)
 }
 
 #[no_mangle]
@@ -22,8 +23,9 @@ pub extern "C" fn wire_send_folder(
     folder_path: *mut wire_uint_8_list,
     name: *mut wire_uint_8_list,
     code_length: u8,
+    server_config: *mut wire_ServerConfig,
 ) {
-    wire_send_folder_impl(port_, folder_path, name, code_length)
+    wire_send_folder_impl(port_, folder_path, name, code_length, server_config)
 }
 
 #[no_mangle]
@@ -31,8 +33,9 @@ pub extern "C" fn wire_request_file(
     port_: i64,
     passphrase: *mut wire_uint_8_list,
     storage_folder: *mut wire_uint_8_list,
+    server_config: *mut wire_ServerConfig,
 ) {
-    wire_request_file_impl(port_, passphrase, storage_folder)
+    wire_request_file_impl(port_, passphrase, storage_folder, server_config)
 }
 
 #[no_mangle]
@@ -49,6 +52,16 @@ pub extern "C" fn wire_get_build_time(port_: i64) {
     wire_get_build_time_impl(port_)
 }
 
+#[no_mangle]
+pub extern "C" fn wire_default_rendezvous_url(port_: i64) {
+    wire_default_rendezvous_url_impl(port_)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_default_relay_url(port_: i64) {
+    wire_default_relay_url_impl(port_)
+}
+
 // Section: allocate functions
 
 #[no_mangle]
@@ -58,6 +71,11 @@ pub extern "C" fn new_StringList_0(len: i32) -> *mut wire_StringList {
         len,
     };
     support::new_leak_box_ptr(wrap)
+}
+
+#[no_mangle]
+pub extern "C" fn new_box_autoadd_server_config_0() -> *mut wire_ServerConfig {
+    support::new_leak_box_ptr(wire_ServerConfig::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -88,6 +106,21 @@ impl Wire2Api<Vec<String>> for *mut wire_StringList {
         vec.into_iter().map(Wire2Api::wire2api).collect()
     }
 }
+impl Wire2Api<ServerConfig> for *mut wire_ServerConfig {
+    fn wire2api(self) -> ServerConfig {
+        let wrap = unsafe { support::box_from_leak_ptr(self) };
+        Wire2Api::<ServerConfig>::wire2api(*wrap).into()
+    }
+}
+
+impl Wire2Api<ServerConfig> for wire_ServerConfig {
+    fn wire2api(self) -> ServerConfig {
+        ServerConfig {
+            rendezvous_url: self.rendezvous_url.wire2api(),
+            relay_url: self.relay_url.wire2api(),
+        }
+    }
+}
 
 impl Wire2Api<Vec<u8>> for *mut wire_uint_8_list {
     fn wire2api(self) -> Vec<u8> {
@@ -108,6 +141,13 @@ pub struct wire_StringList {
 
 #[repr(C)]
 #[derive(Clone)]
+pub struct wire_ServerConfig {
+    rendezvous_url: *mut wire_uint_8_list,
+    relay_url: *mut wire_uint_8_list,
+}
+
+#[repr(C)]
+#[derive(Clone)]
 pub struct wire_uint_8_list {
     ptr: *mut u8,
     len: i32,
@@ -122,6 +162,21 @@ pub trait NewWithNullPtr {
 impl<T> NewWithNullPtr for *mut T {
     fn new_with_null_ptr() -> Self {
         std::ptr::null_mut()
+    }
+}
+
+impl NewWithNullPtr for wire_ServerConfig {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            rendezvous_url: core::ptr::null_mut(),
+            relay_url: core::ptr::null_mut(),
+        }
+    }
+}
+
+impl Default for wire_ServerConfig {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
     }
 }
 

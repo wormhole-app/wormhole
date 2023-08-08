@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../pages/qr_scanner_page.dart';
 import '../pages/receive_page.dart';
 import '../pages/send_page.dart';
-import '../pages/settings_page.dart';
+import '../pages/settings/settings_page.dart';
 import '../transfer/transfer_receiver.dart';
 import '../utils/device.dart';
 import 'navigation_provider.dart';

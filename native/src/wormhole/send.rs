@@ -1,4 +1,4 @@
-use crate::api::{ErrorType, Events, TUpdate, Value};
+use crate::api::{ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
 use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
 use crate::wormhole::zip::create_zip_file;
@@ -14,6 +14,7 @@ pub async fn send_files_impl(
     files: HashMap<String, String>,
     code_length: u8,
     temp_file_path: String,
+    server_config: ServerConfig,
     actions: Rc<StreamSink<TUpdate>>,
 ) {
     let temp_file = match create_zip_file(files, temp_file_path, actions.clone()) {
@@ -31,6 +32,7 @@ pub async fn send_files_impl(
         format!("{}.zip", name),
         temp_file.clone(),
         code_length,
+        server_config,
         actions,
     )
     .await;
@@ -43,13 +45,23 @@ pub async fn send_file_impl(
     file_name: String,
     file_path: String,
     code_length: u8,
+    server_config: ServerConfig,
     actions: Rc<StreamSink<TUpdate>>,
 ) {
     // push event that we are in connection state
     actions.add(TUpdate::new(Events::Connecting, Value::Int(0)));
 
-    let relay_hints = gen_relay_hints();
-    let appconfig = gen_app_config();
+    let relay_hints = match gen_relay_hints(&server_config) {
+        Ok(v) => v,
+        Err(_) => {
+            actions.add(TUpdate::new(
+                Events::Error,
+                Value::Error(ErrorType::ConnectionError),
+            ));
+            return;
+        }
+    };
+    let appconfig = gen_app_config(&server_config);
 
     let (server_welcome, connector) =
         match Wormhole::connect_without_code(appconfig, code_length as usize).await {

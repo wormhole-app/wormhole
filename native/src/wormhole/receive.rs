@@ -1,4 +1,4 @@
-use crate::api::{ErrorType, Events, TUpdate, Value};
+use crate::api::{ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
 use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
 use crate::wormhole::path::find_free_filepath;
@@ -11,6 +11,7 @@ use std::rc::Rc;
 pub async fn request_file_impl(
     passphrase: String,
     storage_folder: String,
+    server_config: ServerConfig,
     actions: StreamSink<TUpdate>,
 ) {
     let actions = Rc::new(actions);
@@ -18,8 +19,17 @@ pub async fn request_file_impl(
     // push event that we are in connection state
     actions.add(TUpdate::new(Events::Connecting, Value::Int(0)));
 
-    let relay_hints = gen_relay_hints();
-    let appconfig = gen_app_config();
+    let relay_hints = match gen_relay_hints(&server_config) {
+        Ok(v) => v,
+        Err(_) => {
+            actions.add(TUpdate::new(
+                Events::Error,
+                Value::Error(ErrorType::ConnectionError),
+            ));
+            return;
+        }
+    };
+    let appconfig = gen_app_config(&server_config);
 
     let (_, wormhole) = match Wormhole::connect_with_code(appconfig, Code(passphrase)).await {
         Ok(v) => v,

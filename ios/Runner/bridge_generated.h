@@ -19,6 +19,11 @@ typedef struct wire_StringList {
   int32_t len;
 } wire_StringList;
 
+typedef struct wire_ServerConfig {
+  struct wire_uint_8_list *rendezvous_url;
+  struct wire_uint_8_list *relay_url;
+} wire_ServerConfig;
+
 typedef struct DartCObject *WireSyncReturn;
 
 void store_dart_post_cobject(DartPostCObjectFnType ptr);
@@ -36,16 +41,19 @@ void wire_init(int64_t port_, struct wire_uint_8_list *temp_file_path);
 void wire_send_files(int64_t port_,
                      struct wire_StringList *file_paths,
                      struct wire_uint_8_list *name,
-                     uint8_t code_length);
+                     uint8_t code_length,
+                     struct wire_ServerConfig *server_config);
 
 void wire_send_folder(int64_t port_,
                       struct wire_uint_8_list *folder_path,
                       struct wire_uint_8_list *name,
-                      uint8_t code_length);
+                      uint8_t code_length,
+                      struct wire_ServerConfig *server_config);
 
 void wire_request_file(int64_t port_,
                        struct wire_uint_8_list *passphrase,
-                       struct wire_uint_8_list *storage_folder);
+                       struct wire_uint_8_list *storage_folder,
+                       struct wire_ServerConfig *server_config);
 
 void wire_get_passphrase_uri(int64_t port_,
                              struct wire_uint_8_list *passphrase,
@@ -53,7 +61,13 @@ void wire_get_passphrase_uri(int64_t port_,
 
 void wire_get_build_time(int64_t port_);
 
+void wire_default_rendezvous_url(int64_t port_);
+
+void wire_default_relay_url(int64_t port_);
+
 struct wire_StringList *new_StringList_0(int32_t len);
+
+struct wire_ServerConfig *new_box_autoadd_server_config_0(void);
 
 struct wire_uint_8_list *new_uint_8_list_0(int32_t len);
 
@@ -67,7 +81,10 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_request_file);
     dummy_var ^= ((int64_t) (void*) wire_get_passphrase_uri);
     dummy_var ^= ((int64_t) (void*) wire_get_build_time);
+    dummy_var ^= ((int64_t) (void*) wire_default_rendezvous_url);
+    dummy_var ^= ((int64_t) (void*) wire_default_relay_url);
     dummy_var ^= ((int64_t) (void*) new_StringList_0);
+    dummy_var ^= ((int64_t) (void*) new_box_autoadd_server_config_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);
     dummy_var ^= ((int64_t) (void*) free_WireSyncReturn);
     dummy_var ^= ((int64_t) (void*) store_dart_post_cobject);
