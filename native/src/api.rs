@@ -4,7 +4,8 @@ use crate::wormhole::send::{send_file_impl, send_files_impl};
 use crate::wormhole::zip::list_dir;
 use flutter_rust_bridge::StreamSink;
 use futures::executor::block_on;
-use magic_wormhole::Code;
+use magic_wormhole::rendezvous::DEFAULT_RENDEZVOUS_SERVER;
+use magic_wormhole::{transit, Code};
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -27,10 +28,16 @@ pub fn init(temp_file_path: String) {
     *TEMP_FILE_PATH.lock().unwrap() = Some(temp_file_path);
 }
 
+pub struct ServerConfig {
+    pub rendezvous_url: String,
+    pub relay_url: String,
+}
+
 pub fn send_files(
     file_paths: Vec<String>,
     name: String,
     code_length: u8,
+    server_config: ServerConfig,
     actions: StreamSink<TUpdate>,
 ) {
     let actions = Rc::new(actions);
@@ -45,7 +52,14 @@ pub fn send_files(
         }
         Ordering::Equal => {
             block_on(async {
-                send_file_impl(name, file_paths[0].to_string(), code_length, actions).await;
+                send_file_impl(
+                    name,
+                    file_paths[0].to_string(),
+                    code_length,
+                    server_config,
+                    actions,
+                )
+                .await;
             });
         }
         Ordering::Greater => {
@@ -69,7 +83,7 @@ pub fn send_files(
                 .clone()
                 .expect("set temp file func not called");
             block_on(async {
-                send_files_impl(name, files, code_length, temp_dir, actions).await;
+                send_files_impl(name, files, code_length, temp_dir, server_config, actions).await;
             });
         }
     }
@@ -79,6 +93,7 @@ pub fn send_folder(
     folder_path: String,
     name: String,
     code_length: u8,
+    server_config: ServerConfig,
     actions: StreamSink<TUpdate>,
 ) {
     let files = match list_dir(folder_path) {
@@ -100,13 +115,26 @@ pub fn send_folder(
         .expect("set temp file func not called");
 
     block_on(async {
-        send_files_impl(name, files, code_length, temp_dir, Rc::new(actions)).await;
+        send_files_impl(
+            name,
+            files,
+            code_length,
+            temp_dir,
+            server_config,
+            Rc::new(actions),
+        )
+        .await;
     });
 }
 
-pub fn request_file(passphrase: String, storage_folder: String, actions: StreamSink<TUpdate>) {
+pub fn request_file(
+    passphrase: String,
+    storage_folder: String,
+    server_config: ServerConfig,
+    actions: StreamSink<TUpdate>,
+) {
     block_on(async {
-        request_file_impl(passphrase, storage_folder, actions).await;
+        request_file_impl(passphrase, storage_folder, server_config, actions).await;
     });
 }
 
@@ -123,4 +151,12 @@ pub fn get_passphrase_uri(passphrase: String, rendezvous_server: Option<String>)
 
 pub fn get_build_time() -> BuildInfo {
     BuildInfo::new()
+}
+
+pub fn default_rendezvous_url() -> String {
+    DEFAULT_RENDEZVOUS_SERVER.to_string()
+}
+
+pub fn default_relay_url() -> String {
+    transit::DEFAULT_RELAY_SERVER.to_string()
 }

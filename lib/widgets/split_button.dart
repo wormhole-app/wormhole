@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Split button with large left text button and smaller right icon button
 class SplitButton extends StatelessWidget {
   const SplitButton(
       {Key? key,

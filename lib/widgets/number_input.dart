@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// full sized number input for settings page
 class NumberInput extends StatefulWidget {
   const NumberInput(
       {Key? key,

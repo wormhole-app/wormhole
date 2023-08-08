@@ -42,12 +42,13 @@ class TransferError extends StatelessWidget {
       case ErrorType.NoFilePathFound:
         return 'No valid filepath could be found';
       case ErrorType.ConnectionError:
+        return message ?? 'Connection Failed';
       case ErrorType.FileRequestError:
       case ErrorType.FileOpen:
       case ErrorType.TransferError:
       case ErrorType.TransferConnectionError:
       case ErrorType.ZipFileError:
-        return message ?? 'invalid message';
+        return message ?? 'Invalid Message';
     }
   }
 }

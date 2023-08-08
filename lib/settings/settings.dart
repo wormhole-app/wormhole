@@ -17,6 +17,16 @@ class Settings {
   static const _codeType = 'CODETYPE';
   static const _codeAlwaysVisible = 'CODEALVISIBLE';
   static const themeStatus = 'THEMESTATUS';
+  static const _rendezvousUrl = 'TRANSITSERVER';
+  static const _relayUrl = 'RELAYSERVER';
+
+  static setRendezvousUrl(String? value) async {
+    await _setField(value, _rendezvousUrl);
+  }
+
+  static setRelayUrl(String? value) async {
+    await _setField(value, _relayUrl);
+  }
 
   static setWordLength(int? value) async {
     await _setField(value, _wordLength);
@@ -32,6 +42,16 @@ class Settings {
 
   static setTheme(ThemeType theme) async {
     await _setField(theme.index, themeStatus);
+  }
+
+  static Future<String?> getRendezvousUrl() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_rendezvousUrl);
+  }
+
+  static Future<String?> getRelayUrl() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_relayUrl);
   }
 
   static Future<int?> getWordLength() async {
