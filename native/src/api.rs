@@ -30,7 +30,7 @@ pub fn init(temp_file_path: String) {
 
 pub struct ServerConfig {
     pub rendezvous_url: String,
-    pub relay_url: String,
+    pub transit_url: String,
 }
 
 pub fn send_files(
@@ -157,6 +157,6 @@ pub fn default_rendezvous_url() -> String {
     DEFAULT_RENDEZVOUS_SERVER.to_string()
 }
 
-pub fn default_relay_url() -> String {
+pub fn default_transit_url() -> String {
     transit::DEFAULT_RELAY_SERVER.to_string()
 }

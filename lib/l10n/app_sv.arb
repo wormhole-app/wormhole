@@ -43,9 +43,9 @@
   "settings_page_system_theme" : "System",
   "settings_page_advanced" : "Avancerad:",
   "settings_page_serversettings" : "Serverinställningar",
-  "settings_page_rendezvousserver" : "Rendezvous Server",
-  "settings_page_relayserver" : "Reläserver",
-  "settings_page_error_url" : "Ogiltig webbadress",
+  "settings_page_rendezvousserver" : "Rendezvous Server:",
+  "settings_page_transitserver" : "Transit Server:",
+  "settings_page_error_url" : "Ogiltig webbadress:",
   "settings_page_server_saved" : "Serverinställningar sparade!",
 
   "toast_error_qr_fail" : "Misslyckades med att scanna QR-kod",

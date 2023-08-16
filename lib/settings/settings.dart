@@ -17,15 +17,15 @@ class Settings {
   static const _codeType = 'CODETYPE';
   static const _codeAlwaysVisible = 'CODEALVISIBLE';
   static const themeStatus = 'THEMESTATUS';
-  static const _rendezvousUrl = 'TRANSITSERVER';
-  static const _relayUrl = 'RELAYSERVER';
+  static const _rendezvousUrl = 'RENDEZVOUSSERVER';
+  static const _transitUrl = 'TRANSITURL';
 
   static setRendezvousUrl(String? value) async {
     await _setField(value, _rendezvousUrl);
   }
 
-  static setRelayUrl(String? value) async {
-    await _setField(value, _relayUrl);
+  static setTransitUrl(String? value) async {
+    await _setField(value, _transitUrl);
   }
 
   static setWordLength(int? value) async {
@@ -49,9 +49,9 @@ class Settings {
     return prefs.getString(_rendezvousUrl);
   }
 
-  static Future<String?> getRelayUrl() async {
+  static Future<String?> getTransitUrl() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_relayUrl);
+    return prefs.getString(_transitUrl);
   }
 
   static Future<int?> getWordLength() async {

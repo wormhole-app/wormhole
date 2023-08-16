@@ -7,7 +7,7 @@ use std::borrow::Cow;
 pub fn gen_relay_hints(s_conf: &ServerConfig) -> anyhow::Result<Vec<transit::RelayHint>> {
     Ok(vec![transit::RelayHint::from_urls(
         None,
-        [s_conf.relay_url.parse()?],
+        [s_conf.transit_url.parse()?],
     )?])
 }
 

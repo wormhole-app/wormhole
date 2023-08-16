@@ -94,10 +94,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
   Future<ServerConfig> _getServerConfig() async {
     final rendezvousUrl =
         (await Settings.getRendezvousUrl()) ?? await api.defaultRendezvousUrl();
-    final relayUrl =
-        (await Settings.getRelayUrl()) ?? await api.defaultRelayUrl();
+    final transitUrl =
+        (await Settings.getTransitUrl()) ?? await api.defaultTransitUrl();
     final serverConfig =
-        ServerConfig(rendezvousUrl: rendezvousUrl, relayUrl: relayUrl);
+        ServerConfig(rendezvousUrl: rendezvousUrl, transitUrl: transitUrl);
     return serverConfig;
   }
 

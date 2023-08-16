@@ -58,8 +58,8 @@ pub fn wire_default_rendezvous_url(port_: MessagePort) {
 }
 
 #[wasm_bindgen]
-pub fn wire_default_relay_url(port_: MessagePort) {
-    wire_default_relay_url_impl(port_)
+pub fn wire_default_transit_url(port_: MessagePort) {
+    wire_default_transit_url_impl(port_)
 }
 
 // Section: allocate functions
@@ -99,7 +99,7 @@ impl Wire2Api<ServerConfig> for JsValue {
         );
         ServerConfig {
             rendezvous_url: self_.get(0).wire2api(),
-            relay_url: self_.get(1).wire2api(),
+            transit_url: self_.get(1).wire2api(),
         }
     }
 }

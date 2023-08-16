@@ -16,12 +16,12 @@ class ServerSettingsPage extends StatefulWidget {
 }
 
 class _ServerSettingsPageState extends State<ServerSettingsPage> {
-  final TextEditingController _relayController = TextEditingController();
+  final TextEditingController _transitController = TextEditingController();
   final TextEditingController _rendezvousController = TextEditingController();
 
   @override
   void dispose() {
-    _relayController.dispose();
+    _transitController.dispose();
     _rendezvousController.dispose();
     super.dispose();
   }
@@ -32,13 +32,13 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
 
     Settings.getRendezvousUrl().then((value) {
       if (value != null) {
-        _relayController.text = value;
+        _transitController.text = value;
       }
     });
 
-    Settings.getRelayUrl().then((value) {
+    Settings.getTransitUrl().then((value) {
       if (value != null) {
-        _relayController.text = value;
+        _transitController.text = value;
       }
     });
   }
@@ -52,12 +52,13 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () {
-              final relayValue = _relayController.text;
+              final transitValue = _transitController.text;
               final rendezvousValue = _rendezvousController.text;
 
-              if (_validateUriInput(relayValue) == null &&
+              if (_validateUriInput(transitValue) == null &&
                   _validateUriInput(rendezvousValue) == null) {
-                Settings.setRelayUrl(relayValue.isEmpty ? null : relayValue);
+                Settings.setTransitUrl(
+                    transitValue.isEmpty ? null : transitValue);
                 Settings.setRendezvousUrl(
                     rendezvousValue.isEmpty ? null : rendezvousValue);
                 InfoToast(
@@ -86,11 +87,11 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
               ),
             ),
             FastFutureBuilder(
-              future: api.defaultRelayUrl(),
+              future: api.defaultTransitUrl(),
               onData: (data) => SettingsRow(
-                name: AppLocalizations.of(context).settings_page_relayserver,
+                name: AppLocalizations.of(context).settings_page_transitserver,
                 child: FullSizedTextInput(
-                  controller: _relayController,
+                  controller: _transitController,
                   validator: (v) => _validateUriInput(v),
                   hintText: data,
                 ),
@@ -104,7 +105,8 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
 
   String? _validateUriInput(String value) {
     if (value.isNotEmpty) {
-      final valid = Uri.tryParse(value)?.hasAbsolutePath ?? false;
+      // to be a valid parsable url must have a trailing slash
+      final valid = Uri.tryParse('$value/')?.hasAbsolutePath ?? false;
       return valid
           ? null
           : AppLocalizations.of(context).settings_page_error_url;
