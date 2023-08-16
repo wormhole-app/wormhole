@@ -21,7 +21,7 @@ typedef struct wire_StringList {
 
 typedef struct wire_ServerConfig {
   struct wire_uint_8_list *rendezvous_url;
-  struct wire_uint_8_list *relay_url;
+  struct wire_uint_8_list *transit_url;
 } wire_ServerConfig;
 
 typedef struct DartCObject *WireSyncReturn;
@@ -63,7 +63,7 @@ void wire_get_build_time(int64_t port_);
 
 void wire_default_rendezvous_url(int64_t port_);
 
-void wire_default_relay_url(int64_t port_);
+void wire_default_transit_url(int64_t port_);
 
 struct wire_StringList *new_StringList_0(int32_t len);
 
@@ -82,7 +82,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_get_passphrase_uri);
     dummy_var ^= ((int64_t) (void*) wire_get_build_time);
     dummy_var ^= ((int64_t) (void*) wire_default_rendezvous_url);
-    dummy_var ^= ((int64_t) (void*) wire_default_relay_url);
+    dummy_var ^= ((int64_t) (void*) wire_default_transit_url);
     dummy_var ^= ((int64_t) (void*) new_StringList_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_server_config_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);

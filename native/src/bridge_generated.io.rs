@@ -58,8 +58,8 @@ pub extern "C" fn wire_default_rendezvous_url(port_: i64) {
 }
 
 #[no_mangle]
-pub extern "C" fn wire_default_relay_url(port_: i64) {
-    wire_default_relay_url_impl(port_)
+pub extern "C" fn wire_default_transit_url(port_: i64) {
+    wire_default_transit_url_impl(port_)
 }
 
 // Section: allocate functions
@@ -117,7 +117,7 @@ impl Wire2Api<ServerConfig> for wire_ServerConfig {
     fn wire2api(self) -> ServerConfig {
         ServerConfig {
             rendezvous_url: self.rendezvous_url.wire2api(),
-            relay_url: self.relay_url.wire2api(),
+            transit_url: self.transit_url.wire2api(),
         }
     }
 }
@@ -143,7 +143,7 @@ pub struct wire_StringList {
 #[derive(Clone)]
 pub struct wire_ServerConfig {
     rendezvous_url: *mut wire_uint_8_list,
-    relay_url: *mut wire_uint_8_list,
+    transit_url: *mut wire_uint_8_list,
 }
 
 #[repr(C)]
@@ -169,7 +169,7 @@ impl NewWithNullPtr for wire_ServerConfig {
     fn new_with_null_ptr() -> Self {
         Self {
             rendezvous_url: core::ptr::null_mut(),
-            relay_url: core::ptr::null_mut(),
+            transit_url: core::ptr::null_mut(),
         }
     }
 }

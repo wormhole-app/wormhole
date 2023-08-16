@@ -43,8 +43,8 @@
     "settings_page_system_theme" : "System",
     "settings_page_advanced" : "Fortgeschritten:",
     "settings_page_serversettings" : "Server Einstellungen",
-    "settings_page_rendezvousserver" : "Rendezvous Server",
-    "settings_page_relayserver" : "Relay Server",
+    "settings_page_rendezvousserver" : "Rendezvous Server:",
+    "settings_page_transitserver" : "Transit Server:",
     "settings_page_error_url" : "Fehlerhafte Url",
     "settings_page_server_saved" : "Server Einstellungen gespeichert!",
 
