@@ -1,5 +1,5 @@
 apk: translation
-	flutter build apk --target-platform android-arm64
+	flutter build apk --split-per-abi
 	flutter build appbundle
 
 container-apk:
