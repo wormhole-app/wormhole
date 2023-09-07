@@ -1,5 +1,5 @@
 apk: translation
-	flutter build apk --split-per-abi
+	flutter build apk --split-per-abi --release
 	flutter build appbundle
 
 container-apk:
