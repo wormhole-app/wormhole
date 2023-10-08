@@ -32,7 +32,7 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
 
     Settings.getRendezvousUrl().then((value) {
       if (value != null) {
-        _transitController.text = value;
+        _rendezvousController.text = value;
       }
     });
 
