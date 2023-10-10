@@ -1,3 +1,14 @@
+## 1.1.2
+### Fixed
+- fixed invalid textfield behaviour in server settings
+
+## 1.1.1
+### Added
+- Support for custom server settings
+
+### Changed
+- Moved theme switching settings to settings page
+
 ## 1.1.0
 ### Fixed
 - invalid Permission error on sdk >= 33
