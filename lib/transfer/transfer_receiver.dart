@@ -114,7 +114,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
         await Permission.storage.request().isGranted) {
       final s = api.requestFile(
           passphrase: passphrase,
-          storageFolder: dpath,
+          storageFolder: '$dpath/wormhole',
           serverConfig: await _getServerConfig());
       if (!mounted) return;
       Provider.of<NavigationProvider>(context, listen: false).push(
