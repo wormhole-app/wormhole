@@ -13,7 +13,7 @@ import '../type_helpers.dart';
 import 'transfer_connecting.dart';
 
 class TransferCode extends StatefulWidget {
-  const TransferCode({Key? key, required this.data}) : super(key: key);
+  const TransferCode({super.key, required this.data});
 
   final TUpdate data;
 
@@ -43,7 +43,7 @@ class _TransferCodeState extends State<TransferCode> {
                   height: 30,
                 )
               ],
-              Text(AppLocalizations.of(context).transfer_code_label),
+              Text(AppLocalizations.of(context)!.transfer_code_label),
               SelectableText(
                 widget.data.getValue(),
                 style: theme.textTheme.titleLarge,
@@ -61,7 +61,7 @@ class _TransferCodeState extends State<TransferCode> {
                             ClipboardData(text: widget.data.getValue()));
                         if (mounted) {
                           InfoToast(
-                            message: AppLocalizations.of(context)
+                            message: AppLocalizations.of(context)!
                                 .toast_info_passphrase_copy,
                           ).show(context);
                         }
@@ -112,7 +112,7 @@ class _TransferCodeState extends State<TransferCode> {
   }
 
   void _showHelpDialog() {
-    final text = AppLocalizations.of(context).transfer_code_help;
+    final text = AppLocalizations.of(context)!.transfer_code_help;
     final textParts = text.split('<link>');
 
     showDialog<void>(
@@ -120,7 +120,7 @@ class _TransferCodeState extends State<TransferCode> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).transfer_code_help_title),
+          title: Text(AppLocalizations.of(context)!.transfer_code_help_title),
           content: SizedBox(
             width: 250,
             child: RichText(

@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 /// full sized number input for settings page
 class NumberInput extends StatefulWidget {
   const NumberInput(
-      {Key? key,
+      {super.key,
       required this.initialValue,
       required this.minValue,
       required this.maxValue,
-      required this.onValueChange})
-      : super(key: key);
+      required this.onValueChange});
 
   final Future<int> initialValue;
   final int minValue;

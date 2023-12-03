@@ -2,8 +2,7 @@ import 'package:flutter/widgets.dart';
 
 class FastFutureBuilder<T> extends StatelessWidget {
   const FastFutureBuilder(
-      {Key? key, required this.future, required this.onData, this.loadWidget})
-      : super(key: key);
+      {super.key, required this.future, required this.onData, this.loadWidget});
   final Future<T> future;
   final Widget Function(T data) onData;
   final Widget? loadWidget;

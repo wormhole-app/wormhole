@@ -1,13 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 class DisallowPopContext extends StatelessWidget {
-  const DisallowPopContext({Key? key, required this.child}) : super(key: key);
+  const DisallowPopContext({super.key, required this.child});
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: child,
     );
   }

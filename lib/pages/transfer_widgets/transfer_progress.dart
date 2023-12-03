@@ -7,12 +7,11 @@ import '../type_helpers.dart';
 
 class TransferProgress extends StatelessWidget {
   const TransferProgress(
-      {Key? key,
+      {super.key,
       required this.data,
       required this.total,
       this.linkType,
-      this.linkName})
-      : super(key: key);
+      this.linkName});
 
   final TUpdate data;
   final int? total;
@@ -60,10 +59,11 @@ class TransferProgress extends StatelessWidget {
       case ConnectionType.Relay:
         final relayName = linkName;
         final locText =
-            AppLocalizations.of(context).transfer_progress_connection_relay;
+            AppLocalizations.of(context)!.transfer_progress_connection_relay;
         return "$locText '$relayName'";
       case ConnectionType.Direct:
-        return AppLocalizations.of(context).transfer_progress_connection_direct;
+        return AppLocalizations.of(context)!
+            .transfer_progress_connection_direct;
     }
   }
 }

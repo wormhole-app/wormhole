@@ -4,15 +4,15 @@ import 'package:provider/provider.dart';
 import 'navigation_provider.dart';
 
 class BackPopContext extends StatelessWidget {
-  const BackPopContext({Key? key, required this.child}) : super(key: key);
+  const BackPopContext({super.key, required this.child});
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
         Provider.of<NavigationProvider>(context, listen: false).pop();
-        return false;
       },
       child: child,
     );

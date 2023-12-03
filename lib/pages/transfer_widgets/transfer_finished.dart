@@ -4,7 +4,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ReceiveFinished extends StatelessWidget {
-  const ReceiveFinished({Key? key, required this.file}) : super(key: key);
+  const ReceiveFinished({super.key, required this.file});
 
   final String file;
 
@@ -22,7 +22,7 @@ class ReceiveFinished extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16),
-            child: Text(AppLocalizations.of(context).transfer_finished_label),
+            child: Text(AppLocalizations.of(context)!.transfer_finished_label),
           ),
           const SizedBox(
             height: 25,
@@ -37,7 +37,7 @@ class ReceiveFinished extends StatelessWidget {
                     OpenFilex.open(file);
                   },
                   child: Text(
-                    AppLocalizations.of(context).transfer_finished_open,
+                    AppLocalizations.of(context)!.transfer_finished_open,
                   )),
             ),
           ),
@@ -55,7 +55,7 @@ class ReceiveFinished extends StatelessWidget {
                         text: file.split('/').last);
                   },
                   child: Text(
-                    AppLocalizations.of(context).transfer_finished_share,
+                    AppLocalizations.of(context)!.transfer_finished_share,
                   )),
             ),
           ),

@@ -6,8 +6,7 @@ import '../type_helpers.dart';
 
 class TransferZipProgress extends StatelessWidget {
   const TransferZipProgress(
-      {Key? key, required this.data, required this.totalFileNr})
-      : super(key: key);
+      {super.key, required this.data, required this.totalFileNr});
 
   final TUpdate data;
   final int? totalFileNr;
@@ -33,7 +32,7 @@ class TransferZipProgress extends StatelessWidget {
             height: 16,
           ),
           Text(
-              '${AppLocalizations.of(context).transfer_zipping} $alreadyProcessed/$totalFileNr'),
+              '${AppLocalizations.of(context)!.transfer_zipping} $alreadyProcessed/$totalFileNr'),
           const SizedBox(
             height: 10,
           ),

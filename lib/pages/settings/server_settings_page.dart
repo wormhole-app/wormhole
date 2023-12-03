@@ -47,7 +47,7 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).settings_page_serversettings),
+        title: Text(AppLocalizations.of(context)!.settings_page_serversettings),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
@@ -63,7 +63,7 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
                     rendezvousValue.isEmpty ? null : rendezvousValue);
                 InfoToast(
                   message:
-                      AppLocalizations.of(context).settings_page_server_saved,
+                      AppLocalizations.of(context)!.settings_page_server_saved,
                 ).show(context);
                 Navigator.pop(context);
               }
@@ -77,8 +77,8 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
             FastFutureBuilder(
               future: api.defaultRendezvousUrl(),
               onData: (String data) => SettingsRow(
-                name:
-                    AppLocalizations.of(context).settings_page_rendezvousserver,
+                name: AppLocalizations.of(context)!
+                    .settings_page_rendezvousserver,
                 child: FullSizedTextInput(
                   controller: _rendezvousController,
                   validator: (v) => _validateUriInput(v),
@@ -89,7 +89,7 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
             FastFutureBuilder(
               future: api.defaultTransitUrl(),
               onData: (data) => SettingsRow(
-                name: AppLocalizations.of(context).settings_page_transitserver,
+                name: AppLocalizations.of(context)!.settings_page_transitserver,
                 child: FullSizedTextInput(
                   controller: _transitController,
                   validator: (v) => _validateUriInput(v),
@@ -109,7 +109,7 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
       final valid = Uri.tryParse('$value/')?.hasAbsolutePath ?? false;
       return valid
           ? null
-          : AppLocalizations.of(context).settings_page_error_url;
+          : AppLocalizations.of(context)!.settings_page_error_url;
     }
     return null;
   }

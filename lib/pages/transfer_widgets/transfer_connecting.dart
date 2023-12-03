@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TransferConnecting extends StatelessWidget {
-  const TransferConnecting({Key? key}) : super(key: key);
+  const TransferConnecting({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class TransferConnecting extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(AppLocalizations.of(context).transfer_connecting),
+          Text(AppLocalizations.of(context)!.transfer_connecting),
           const SizedBox(
             height: 10,
           ),

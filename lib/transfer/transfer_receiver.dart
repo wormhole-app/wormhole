@@ -19,7 +19,7 @@ import '../utils/paths.dart';
 import 'transfer_provider.dart';
 
 class TransferReceiver extends StatefulWidget {
-  const TransferReceiver({Key? key, required this.child}) : super(key: key);
+  const TransferReceiver({super.key, required this.child});
 
   final Widget child;
 
@@ -83,7 +83,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 16),
-                    child: Text(AppLocalizations.of(context)
+                    child: Text(AppLocalizations.of(context)!
                         .transfer_finished_send_label),
                   ),
                 ]),
@@ -127,8 +127,8 @@ class _TransferReceiverState extends State<TransferReceiver> {
     } else {
       if (!mounted) return;
       ErrorToast(
-              message:
-                  AppLocalizations.of(context).transfer_error_storagepermission)
+              message: AppLocalizations.of(context)!
+                  .transfer_error_storagepermission)
           .show(context);
     }
   }

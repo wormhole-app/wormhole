@@ -4,7 +4,7 @@ import 'base_toast.dart';
 import 'my_toast.dart';
 
 class ErrorToast extends MyToast {
-  const ErrorToast({Key? key, required this.message}) : super(key: key);
+  const ErrorToast({super.key, required this.message});
   final String message;
 
   @override

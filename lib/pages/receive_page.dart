@@ -7,7 +7,7 @@ import '../transfer/transfer_provider.dart';
 import '../utils/code.dart';
 
 class ReceivePage extends StatefulWidget {
-  const ReceivePage({Key? key}) : super(key: key);
+  const ReceivePage({super.key});
 
   @override
   State<ReceivePage> createState() => _ReceivePageState();
@@ -44,13 +44,13 @@ class _ReceivePageState extends State<ReceivePage> {
             height: 20,
           ),
           Text(
-            AppLocalizations.of(context).receive_page_label,
+            AppLocalizations.of(context)!.receive_page_label,
             style: theme.textTheme.headlineLarge,
           ),
           const SizedBox(
             height: 5,
           ),
-          Text(AppLocalizations.of(context).receive_page_sublabel),
+          Text(AppLocalizations.of(context)!.receive_page_sublabel),
           const SizedBox(
             height: 25,
           ),
@@ -72,7 +72,7 @@ class _ReceivePageState extends State<ReceivePage> {
                 border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15))),
                 hintText:
-                    AppLocalizations.of(context).receive_page_textfield_hint,
+                    AppLocalizations.of(context)!.receive_page_textfield_hint,
               ),
             ),
           ),
@@ -87,7 +87,7 @@ class _ReceivePageState extends State<ReceivePage> {
               child: ElevatedButton(
                   onPressed: _onReceiveButtonClick,
                   child: Text(
-                    AppLocalizations.of(context).receive_page_button,
+                    AppLocalizations.of(context)!.receive_page_button,
                   )),
             ),
           ),

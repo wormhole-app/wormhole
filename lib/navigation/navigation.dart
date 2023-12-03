@@ -13,7 +13,7 @@ import '../utils/device.dart';
 import 'navigation_provider.dart';
 
 class Navigation extends StatefulWidget {
-  const Navigation({Key? key}) : super(key: key);
+  const Navigation({super.key});
 
   @override
   State<Navigation> createState() => _NavigationState();
@@ -54,7 +54,7 @@ class _NavigationState extends State<Navigation> {
         return TransferReceiver(
             child: Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).title),
+            title: Text(AppLocalizations.of(context)!.title),
             actions: [
               if (Platform.isAndroid || Platform.isIOS)
                 IconButton(
@@ -67,15 +67,15 @@ class _NavigationState extends State<Navigation> {
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: const Icon(Icons.upload),
-                label: AppLocalizations.of(context).menu_send,
+                label: AppLocalizations.of(context)!.menu_send,
               ),
               BottomNavigationBarItem(
                 icon: const Icon(Icons.download),
-                label: AppLocalizations.of(context).menu_receive,
+                label: AppLocalizations.of(context)!.menu_receive,
               ),
               BottomNavigationBarItem(
                 icon: const Icon(Icons.settings),
-                label: AppLocalizations.of(context).menu_settings,
+                label: AppLocalizations.of(context)!.menu_settings,
               ),
             ],
             currentIndex: _selectedIndex,
