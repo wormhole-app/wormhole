@@ -7,11 +7,12 @@
   "send_page_send_label" : "Send File",
   "send_page_send_sublabel" : "Select a file to send",
   "send_page_button" : "Select File",
+  "send_page_folder_button" : "Select Folder",
 
   "receive_page_label" : "Receive File",
   "receive_page_sublabel" : "Enter the transmit code from the sender",
   "receive_page_textfield_hint" : "Transmit code",
-  "receive_page_button" : "Receive",
+  "receive_page_button" : "Receive File",
 
   "transfer_finished_label" : "Finished receive of file!",
   "transfer_finished_open" : "Open file",

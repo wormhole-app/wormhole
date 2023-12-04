@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../transfer/transfer_provider.dart';
-import '../widgets/split_button.dart';
+import '../widgets/icon_text_button.dart';
 
 class SendPage extends StatefulWidget {
   const SendPage({super.key});
@@ -69,12 +69,17 @@ class _SendPageState extends State<SendPage> {
           const SizedBox(
             height: 25,
           ),
-          SplitButton(
-            onLeftButtonClick: _onSendButtonClick,
-            onRightButtonClick: _onSendFolderButtonClick,
-            textLeft: AppLocalizations.of(context)!.send_page_button,
-            iconRight: Icons.folder,
-          )
+          IconTextButton(
+              onClick: _onSendButtonClick,
+              text: AppLocalizations.of(context)!.send_page_button,
+              icon: Icons.file_present),
+          const SizedBox(
+            height: 15,
+          ),
+          IconTextButton(
+              onClick: _onSendFolderButtonClick,
+              text: AppLocalizations.of(context)!.send_page_folder_button,
+              icon: Icons.folder),
         ],
       ),
     );
