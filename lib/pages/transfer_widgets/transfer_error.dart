@@ -4,8 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../gen/bridge_definitions.dart';
 
 class TransferError extends StatelessWidget {
-  const TransferError({Key? key, required this.error, this.message})
-      : super(key: key);
+  const TransferError({super.key, required this.error, this.message});
 
   final ErrorType error;
   final String? message;
@@ -24,7 +23,7 @@ class TransferError extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16),
-              child: Text(AppLocalizations.of(context).transfer_error_base),
+              child: Text(AppLocalizations.of(context)!.transfer_error_base),
             ),
             const SizedBox(
               height: 10,

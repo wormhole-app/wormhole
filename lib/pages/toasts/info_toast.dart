@@ -4,7 +4,7 @@ import 'base_toast.dart';
 import 'my_toast.dart';
 
 class InfoToast extends MyToast {
-  const InfoToast({Key? key, required this.message}) : super(key: key);
+  const InfoToast({super.key, required this.message});
   final String message;
 
   @override

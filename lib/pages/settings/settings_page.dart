@@ -13,7 +13,7 @@ import '../../widgets/settings_section_button.dart';
 import 'server_settings_page.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -37,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
         children: [
           Text('Version: ${data.version}'),
           if (data.devBuild)
-            Text(AppLocalizations.of(context).dev_build_warning),
+            Text(AppLocalizations.of(context)!.dev_build_warning),
           const SizedBox(
             height: 10,
           )
@@ -52,7 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     return [
       SettingsRow(
-        name: AppLocalizations.of(context).settings_page_wordlength,
+        name: AppLocalizations.of(context)!.settings_page_wordlength,
         topSpacing: 25,
         child: NumberInput(
           initialValue: Settings.getWordLength()
@@ -65,7 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       SettingsRow(
-          name: AppLocalizations.of(context).settings_page_code_type,
+          name: AppLocalizations.of(context)!.settings_page_code_type,
           child: FutureBuilder<CodeType>(
               future: Settings.getCodeType(),
               builder: (context, snapshot) {
@@ -91,7 +91,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               })),
       SettingsRow(
-          name: AppLocalizations.of(context).settings_page_show_code,
+          name: AppLocalizations.of(context)!.settings_page_show_code,
           child: FutureBuilder<bool>(
             future: Settings.getCodeAlwaysVisible(),
             builder: (context, snapshot) => ToggleSwitch(
@@ -107,8 +107,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   snapshot.hasData ? (snapshot.data! ? 0 : 1) : 1,
               totalSwitches: 2,
               labels: [
-                AppLocalizations.of(context).settings_page_show_always,
-                AppLocalizations.of(context).settings_page_show_never
+                AppLocalizations.of(context)!.settings_page_show_always,
+                AppLocalizations.of(context)!.settings_page_show_never
               ],
               radiusStyle: true,
               onToggle: (index) {
@@ -117,7 +117,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           )),
       SettingsRow(
-          name: AppLocalizations.of(context).settings_page_theming,
+          name: AppLocalizations.of(context)!.settings_page_theming,
           child: ToggleSwitch(
             minWidth: 83.333,
             cornerRadius: 15.0,
@@ -131,9 +131,9 @@ class _SettingsPageState extends State<SettingsPage> {
             initialLabelIndex: themeprov.theme.index,
             totalSwitches: 3,
             labels: [
-              AppLocalizations.of(context).settings_page_dark_theme,
-              AppLocalizations.of(context).settings_page_light_theme,
-              AppLocalizations.of(context).settings_page_system_theme
+              AppLocalizations.of(context)!.settings_page_dark_theme,
+              AppLocalizations.of(context)!.settings_page_light_theme,
+              AppLocalizations.of(context)!.settings_page_system_theme
             ],
             radiusStyle: true,
             onToggle: (index) {
@@ -144,14 +144,14 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           )),
       SettingsRow(
-        name: AppLocalizations.of(context).settings_page_advanced,
+        name: AppLocalizations.of(context)!.settings_page_advanced,
         child: SettingsSectionButton(
           onButtonClick: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => const ServerSettingsPage(),
             ));
           },
-          text: AppLocalizations.of(context).settings_page_serversettings,
+          text: AppLocalizations.of(context)!.settings_page_serversettings,
           iconRight: Icons.arrow_right_outlined,
         ),
       ),

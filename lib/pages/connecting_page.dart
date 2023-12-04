@@ -13,8 +13,7 @@ import 'transfer_widgets/transfer_zip_progress.dart';
 import 'type_helpers.dart';
 
 class ConnectingPage extends StatefulWidget {
-  const ConnectingPage({Key? key, required this.stream, required this.finish})
-      : super(key: key);
+  const ConnectingPage({super.key, required this.stream, required this.finish});
 
   final Stream<TUpdate> stream;
   final Widget Function(String file) finish;

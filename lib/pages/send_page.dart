@@ -7,7 +7,7 @@ import '../transfer/transfer_provider.dart';
 import '../widgets/split_button.dart';
 
 class SendPage extends StatefulWidget {
-  const SendPage({Key? key}) : super(key: key);
+  const SendPage({super.key});
 
   @override
   State<SendPage> createState() => _SendPageState();
@@ -59,20 +59,20 @@ class _SendPageState extends State<SendPage> {
             height: 20,
           ),
           Text(
-            AppLocalizations.of(context).send_page_send_label,
+            AppLocalizations.of(context)!.send_page_send_label,
             style: theme.textTheme.headlineLarge,
           ),
           const SizedBox(
             height: 5,
           ),
-          Text(AppLocalizations.of(context).send_page_send_sublabel),
+          Text(AppLocalizations.of(context)!.send_page_send_sublabel),
           const SizedBox(
             height: 25,
           ),
           SplitButton(
             onLeftButtonClick: _onSendButtonClick,
             onRightButtonClick: _onSendFolderButtonClick,
-            textLeft: AppLocalizations.of(context).send_page_button,
+            textLeft: AppLocalizations.of(context)!.send_page_button,
             iconRight: Icons.folder,
           )
         ],

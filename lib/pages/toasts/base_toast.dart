@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 class BaseToast extends StatelessWidget {
   const BaseToast(
-      {Key? key,
+      {super.key,
       required this.message,
       required this.color,
-      required this.icon})
-      : super(key: key);
+      required this.icon});
   final String message;
   final Color color;
   final Icon icon;

@@ -11,7 +11,7 @@ import '../utils/code.dart';
 import 'toasts/error_toast.dart';
 
 class QrScannerPage extends StatelessWidget {
-  const QrScannerPage({Key? key}) : super(key: key);
+  const QrScannerPage({super.key});
 
   void _onQrDetect(String? code, BuildContext context) async {
     if (code != null) {
@@ -33,12 +33,12 @@ class QrScannerPage extends StatelessWidget {
       }
 
       Provider.of<NavigationProvider>(context, listen: false).pop();
-      ErrorToast(message: AppLocalizations.of(context).toast_error_qr_invalid)
+      ErrorToast(message: AppLocalizations.of(context)!.toast_error_qr_invalid)
           .show(context);
     } else {
       debugPrint('Failed to scan Barcode');
       Provider.of<NavigationProvider>(context, listen: false).pop();
-      ErrorToast(message: AppLocalizations.of(context).toast_error_qr_fail)
+      ErrorToast(message: AppLocalizations.of(context)!.toast_error_qr_fail)
           .show(context);
     }
   }
