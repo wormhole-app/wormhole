@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../transfer/transfer_provider.dart';
 import '../utils/code.dart';
+import '../widgets/icon_text_button.dart';
 
 class ReceivePage extends StatefulWidget {
   const ReceivePage({super.key});
@@ -79,18 +80,10 @@ class _ReceivePageState extends State<ReceivePage> {
           const SizedBox(
             height: 25,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: SizedBox(
-              width: 150,
-              height: 50,
-              child: ElevatedButton(
-                  onPressed: _onReceiveButtonClick,
-                  child: Text(
-                    AppLocalizations.of(context)!.receive_page_button,
-                  )),
-            ),
-          ),
+          IconTextButton(
+              onClick: _onReceiveButtonClick,
+              text: AppLocalizations.of(context)!.receive_page_button,
+              icon: Icons.archive),
         ],
       ),
     );

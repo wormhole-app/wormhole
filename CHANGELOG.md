@@ -1,3 +1,7 @@
+## 1.1.3
+### Changed
+- use two buttons instead of one split-button
+
 ## 1.1.2
 ### Fixed
 - fixed invalid textfield behaviour in server settings

@@ -7,11 +7,12 @@
   "send_page_send_label" : "Skicka fil",
   "send_page_send_sublabel" : "Välj en fil att skicka",
   "send_page_button" : "Välj fil",
+  "send_page_folder_button" : "Välj mapp",
 
   "receive_page_label" : "Ta emot fil",
   "receive_page_sublabel" : "Ange överföringskoden från avsändaren",
   "receive_page_textfield_hint" : "Överföringskod",
-  "receive_page_button" : "Ta emot",
+  "receive_page_button" : "Ta emot fil",
 
   "transfer_finished_label" : "Mottagande av fil klart!",
   "transfer_finished_open" : "Öppna fil",
