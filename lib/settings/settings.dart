@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../theme/dark_theme_provider.dart';
+import '../theme/theme_provider.dart';
 
 enum CodeType { qrCode, aztecCode }
 

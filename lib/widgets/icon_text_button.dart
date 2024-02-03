@@ -22,9 +22,9 @@ class IconTextButton extends StatelessWidget {
           width: 145,
           height: 50,
           child: Material(
-            color: theme.primaryColor,
+            color: theme.colorScheme.primary,
             child: InkWell(
-              highlightColor: theme.primaryColor,
+              highlightColor: theme.colorScheme.secondary,
               onTap: onClick,
               child: Row(
                 children: [

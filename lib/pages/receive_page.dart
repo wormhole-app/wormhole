@@ -16,9 +16,15 @@ class ReceivePage extends StatefulWidget {
 
 class _ReceivePageState extends State<ReceivePage> {
   TextEditingController controller = TextEditingController();
+  String? errorText;
 
   _ReceivePageState() {
     controller.addListener(() {
+      setState(() {
+        errorText = null;
+      });
+
+      // Replace spaces with dashes
       if (controller.text.endsWith(' ')) {
         controller.text =
             '${controller.text.substring(0, controller.text.length - 1)}-';
@@ -62,14 +68,18 @@ class _ReceivePageState extends State<ReceivePage> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+.*')),
               ],
+              cursorColor: theme.colorScheme.onPrimary,
               decoration: InputDecoration(
                 filled: true,
-                labelStyle: theme.textTheme.bodyMedium,
+                errorText: errorText,
                 focusedBorder: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    borderSide: BorderSide(color: theme.focusColor, width: 2)),
-                hintStyle: theme.textTheme.bodyMedium?.apply(
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(.4)),
+                    borderSide: BorderSide(
+                        color: theme.colorScheme.secondary, width: 2)),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    borderSide:
+                        BorderSide(color: theme.colorScheme.primary, width: 2)),
                 border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15))),
                 hintText:
@@ -93,6 +103,9 @@ class _ReceivePageState extends State<ReceivePage> {
     final text = controller.value.text;
 
     if (!isCodeValid(text) || !mounted) {
+      setState(() {
+        errorText = 'Invalid Code';
+      });
       return;
     }
 

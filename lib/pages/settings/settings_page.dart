@@ -5,7 +5,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../gen/ffi.dart';
 import '../../settings/settings.dart';
-import '../../theme/dark_theme_provider.dart';
+import '../../theme/theme_provider.dart';
 import '../../widgets/fast_future_builder.dart';
 import '../../widgets/number_input.dart';
 import '../../widgets/settings_row.dart';
@@ -48,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   List<Widget> _buildSettingsContent() {
     final theme = Theme.of(context);
-    final themeprov = Provider.of<DarkThemeProvider>(context);
+    final themeprov = Provider.of<ThemeProvider>(context);
 
     return [
       SettingsRow(
@@ -73,10 +73,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   minWidth: 125.0,
                   cornerRadius: 15.0,
                   activeBgColors: [
-                    [theme.primaryColor],
-                    [theme.primaryColor]
+                    [theme.colorScheme.primary],
+                    [theme.colorScheme.primary]
                   ],
-                  inactiveBgColor: theme.cardColor,
+                  inactiveBgColor: theme.colorScheme.secondary,
                   customTextStyles: [theme.textTheme.bodyMedium],
                   initialLabelIndex: snapshot.hasData
                       ? (snapshot.data! == CodeType.qrCode ? 0 : 1)
@@ -98,10 +98,10 @@ class _SettingsPageState extends State<SettingsPage> {
               minWidth: 125.0,
               cornerRadius: 15.0,
               activeBgColors: [
-                [theme.primaryColor],
-                [theme.primaryColor]
+                [theme.colorScheme.primary],
+                [theme.colorScheme.primary]
               ],
-              inactiveBgColor: theme.cardColor,
+              inactiveBgColor: theme.colorScheme.secondary,
               customTextStyles: [theme.textTheme.bodyMedium],
               initialLabelIndex:
                   snapshot.hasData ? (snapshot.data! ? 0 : 1) : 1,
@@ -122,11 +122,11 @@ class _SettingsPageState extends State<SettingsPage> {
             minWidth: 83.333,
             cornerRadius: 15.0,
             activeBgColors: [
-              [theme.primaryColor],
-              [theme.primaryColor],
-              [theme.primaryColor]
+              [theme.colorScheme.primary],
+              [theme.colorScheme.primary],
+              [theme.colorScheme.primary]
             ],
-            inactiveBgColor: theme.cardColor,
+            inactiveBgColor: theme.colorScheme.secondary,
             customTextStyles: [theme.textTheme.bodyMedium],
             initialLabelIndex: themeprov.theme.index,
             totalSwitches: 3,
