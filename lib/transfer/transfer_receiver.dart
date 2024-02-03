@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_close_app/flutter_close_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -59,16 +59,17 @@ class _TransferReceiverState extends State<TransferReceiver> {
         key: UniqueKey(),
         stream: stream,
         finish: (file) {
-          // auto close app if share cause was an intent
-          // this happens only if share was successful
-          if (causedByIntent) {
-            Future.delayed(const Duration(seconds: 1)).then((value) async {
-              if (Platform.isAndroid) {
+          if (Platform.isAndroid || Platform.isIOS) {
+            // delete temporary files cached by file_picker
+            FilePicker.platform.clearTemporaryFiles();
+
+            // auto close app if share cause was an intent
+            // this happens only if share was successful
+            if (causedByIntent) {
+              Future.delayed(const Duration(seconds: 1)).then((value) async {
                 await FlutterCloseApp().closeAndRemoveApp();
-              } else {
-                await SystemNavigator.pop();
-              }
-            });
+              });
+            }
           }
 
           return Center(
