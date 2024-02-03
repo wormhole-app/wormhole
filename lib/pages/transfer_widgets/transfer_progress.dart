@@ -20,6 +20,7 @@ class TransferProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final int sent = data.getValue();
     double? percent;
     if (total != null) {
@@ -40,6 +41,7 @@ class TransferProgress extends StatelessWidget {
             child: LinearProgressIndicator(
               minHeight: 10,
               value: percent,
+              color: theme.colorScheme.secondary,
             ),
           ),
           if (linkType != null) ...[

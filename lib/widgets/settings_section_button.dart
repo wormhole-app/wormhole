@@ -22,9 +22,9 @@ class SettingsSectionButton extends StatelessWidget {
         width: 250,
         height: 50,
         child: Material(
-          color: theme.cardColor,
+          color: theme.colorScheme.primary,
           child: InkWell(
-            highlightColor: theme.primaryColor,
+            highlightColor: theme.colorScheme.secondary,
             onTap: onButtonClick,
             child: Row(
               children: [

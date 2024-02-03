@@ -20,15 +20,18 @@ class FullSizedTextInput extends StatelessWidget {
         builder: (BuildContext context, value, Widget? child) {
           return TextField(
             controller: controller,
+            cursorColor: theme.colorScheme.onPrimary,
             decoration: InputDecoration(
               errorText: validator != null ? validator!(controller.text) : null,
               filled: true,
-              labelStyle: theme.textTheme.bodyMedium,
               focusedBorder: OutlineInputBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  borderSide: BorderSide(color: theme.focusColor, width: 2)),
-              hintStyle: theme.textTheme.bodyMedium?.apply(
-                  color: theme.textTheme.bodyMedium?.color?.withOpacity(.4)),
+                  borderSide:
+                      BorderSide(color: theme.colorScheme.secondary, width: 2)),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  borderSide:
+                      BorderSide(color: theme.colorScheme.primary, width: 2)),
               border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               hintText: hintText,

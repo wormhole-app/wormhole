@@ -6,6 +6,8 @@ class TransferConnecting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -15,10 +17,11 @@ class TransferConnecting extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 30, right: 30),
+          Padding(
+            padding: const EdgeInsets.only(left: 30, right: 30),
             child: LinearProgressIndicator(
               minHeight: 10,
+              color: theme.colorScheme.secondary,
             ),
           )
         ],

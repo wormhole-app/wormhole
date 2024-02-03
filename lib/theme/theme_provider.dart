@@ -5,7 +5,7 @@ import '../settings/settings.dart';
 
 enum ThemeType { dark, light, system }
 
-class DarkThemeProvider with ChangeNotifier {
+class ThemeProvider with ChangeNotifier {
   ThemeType _theme = ThemeType.dark;
 
   ThemeType get theme => _theme;

@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 import 'gen/ffi.dart';
 import 'navigation/navigation.dart';
 import 'settings/settings.dart';
-import 'theme/dark_theme_provider.dart';
-import 'theme/theme_data.dart';
+import 'theme/dark_theme.dart';
+import 'theme/light_theme.dart';
+import 'theme/theme_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  DarkThemeProvider themeChangeProvider = DarkThemeProvider();
+  ThemeProvider themeChangeProvider = ThemeProvider();
 
   @override
   void initState() {
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
       create: (_) {
         return themeChangeProvider;
       },
-      child: Consumer<DarkThemeProvider>(
+      child: Consumer<ThemeProvider>(
         builder: (context, value, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -58,8 +59,11 @@ class _MyAppState extends State<MyApp> {
               debugPrint('fallback to default locale');
               return const Locale('en');
             },
-            theme: Styles.themeData(
-                themeChangeProvider.isDarkThemeActive(), context),
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeChangeProvider.isDarkThemeActive()
+                ? ThemeMode.dark
+                : ThemeMode.light,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: const Navigation(),

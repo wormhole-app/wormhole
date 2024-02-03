@@ -10,6 +10,8 @@ class ReceiveFinished extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,6 +40,7 @@ class ReceiveFinished extends StatelessWidget {
                   },
                   child: Text(
                     AppLocalizations.of(context)!.transfer_finished_open,
+                    style: TextStyle(color: theme.colorScheme.onPrimary),
                   )),
             ),
           ),
@@ -55,8 +58,8 @@ class ReceiveFinished extends StatelessWidget {
                         text: file.split('/').last);
                   },
                   child: Text(
-                    AppLocalizations.of(context)!.transfer_finished_share,
-                  )),
+                      AppLocalizations.of(context)!.transfer_finished_share,
+                      style: TextStyle(color: theme.colorScheme.onPrimary))),
             ),
           ),
         ],

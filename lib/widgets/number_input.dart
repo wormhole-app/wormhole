@@ -37,7 +37,8 @@ class _NumberInputState extends State<NumberInput> {
       height: 50,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0), color: theme.cardColor),
+            borderRadius: BorderRadius.circular(15.0),
+            color: theme.colorScheme.secondary),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -53,7 +54,7 @@ class _NumberInputState extends State<NumberInput> {
               height: 50,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
-                  color: theme.primaryColor),
+                  color: theme.colorScheme.primary),
               child: Row(
                 children: [
                   _squaredButton(const Icon(Icons.add), () {
@@ -64,13 +65,11 @@ class _NumberInputState extends State<NumberInput> {
                       widget.onValueChange(value);
                     }
                   }, false, true),
-                  Container(
-                    color: theme.cardColor,
-                    child: const VerticalDivider(
-                      width: 0,
-                      indent: 7,
-                      endIndent: 7,
-                    ),
+                  VerticalDivider(
+                    color: theme.colorScheme.secondary,
+                    width: 0,
+                    indent: 7,
+                    endIndent: 7,
                   ),
                   _squaredButton(const Icon(Icons.remove), () {
                     if (value > widget.minValue) {
