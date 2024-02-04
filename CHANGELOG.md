@@ -1,6 +1,14 @@
 ## 1.1.3
 ### Changed
 - use two buttons instead of one split-button
+- redesign theme for better contrast
+- update magic_wormhole.rs with security fixes
+
+### Fixed
+- file_picker cache not cleared correctly
+
+### Added
+- Retry Button on error page
 
 ## 1.1.2
 ### Fixed
