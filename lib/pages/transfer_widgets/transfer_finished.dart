@@ -3,6 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../widgets/icon_text_button.dart';
+
 class ReceiveFinished extends StatelessWidget {
   const ReceiveFinished({super.key, required this.file});
 
@@ -10,8 +12,6 @@ class ReceiveFinished extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,39 +29,21 @@ class ReceiveFinished extends StatelessWidget {
           const SizedBox(
             height: 25,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: SizedBox(
-              width: 120,
-              height: 40,
-              child: ElevatedButton(
-                  onPressed: () {
-                    OpenFilex.open(file);
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)!.transfer_finished_open,
-                    style: TextStyle(color: theme.colorScheme.onPrimary),
-                  )),
-            ),
-          ),
+          IconTextButton(
+              onClick: () {
+                OpenFilex.open(file);
+              },
+              text: AppLocalizations.of(context)!.transfer_finished_open,
+              icon: Icons.file_open_outlined),
           const SizedBox(
-            height: 30,
+            height: 15,
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15.0),
-            child: SizedBox(
-              width: 120,
-              height: 40,
-              child: ElevatedButton(
-                  onPressed: () {
-                    Share.shareXFiles([XFile(file)],
-                        text: file.split('/').last);
-                  },
-                  child: Text(
-                      AppLocalizations.of(context)!.transfer_finished_share,
-                      style: TextStyle(color: theme.colorScheme.onPrimary))),
-            ),
-          ),
+          IconTextButton(
+              onClick: () {
+                Share.shareXFiles([XFile(file)], text: file.split('/').last);
+              },
+              text: AppLocalizations.of(context)!.transfer_finished_share,
+              icon: Icons.share),
         ],
       ),
     );

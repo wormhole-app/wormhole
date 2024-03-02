@@ -3,10 +3,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../gen/ffi.dart';
 import '../../settings/settings.dart';
+import '../../theme/theme_provider.dart';
 import '../../widgets/fast_future_builder.dart';
 import '../toasts/info_toast.dart';
 import '../type_helpers.dart';
@@ -88,26 +90,40 @@ class _TransferCodeState extends State<TransferCode> {
 
   Widget _buildQRCode(String code, CodeType codeType) {
     final theme = Theme.of(context);
-
-    // the built in qr scanner doesn't support scanning of
-    // inverted aztec codes -> so we need to invert colors when in dark theme
-
-    Color color = theme.iconTheme.color ?? Colors.black;
-    Color? backgroundColor;
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return FastFutureBuilder<String>(
         future: api.getPassphraseUri(passphrase: widget.data.getValue()),
         onData: (data) {
-          return BarcodeWidget(
-            data: data,
-            barcode: codeType == CodeType.qrCode
-                ? Barcode.qrCode()
-                : Barcode.aztec(),
-            color: color,
-            backgroundColor: backgroundColor,
-            height: 200,
-            width: 200,
-          );
+          if (themeProvider.isDarkThemeActive()) {
+            return Container(
+              decoration: BoxDecoration(
+                  color: theme.colorScheme.onPrimary,
+                  borderRadius: const BorderRadius.all(Radius.circular(20))),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: BarcodeWidget(
+                  data: data,
+                  barcode: codeType == CodeType.qrCode
+                      ? Barcode.qrCode()
+                      : Barcode.aztec(),
+                  backgroundColor: theme.colorScheme.onPrimary,
+                  height: 200,
+                  width: 200,
+                ),
+              ),
+            );
+          } else {
+            return BarcodeWidget(
+              data: data,
+              barcode: codeType == CodeType.qrCode
+                  ? Barcode.qrCode()
+                  : Barcode.aztec(),
+              color: theme.colorScheme.onPrimary,
+              height: 200,
+              width: 200,
+            );
+          }
         });
   }
 
