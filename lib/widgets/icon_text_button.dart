@@ -41,6 +41,7 @@ class IconTextButton extends StatelessWidget {
                     width: 95,
                     child: Text(
                       text,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   )
                 ],

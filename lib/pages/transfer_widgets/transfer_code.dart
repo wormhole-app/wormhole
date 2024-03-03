@@ -130,12 +130,14 @@ class _TransferCodeState extends State<TransferCode> {
   void _showHelpDialog() {
     final text = AppLocalizations.of(context)!.transfer_code_help;
     final textParts = text.split('<link>');
+    final theme = Theme.of(context);
 
     showDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: theme.colorScheme.secondary,
           title: Text(AppLocalizations.of(context)!.transfer_code_help_title),
           content: SizedBox(
             width: 250,
@@ -162,7 +164,12 @@ class _TransferCodeState extends State<TransferCode> {
             ),
           ),
           actions: <Widget>[
-            TextButton(
+            ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(theme.colorScheme.primary),
+                  foregroundColor:
+                      MaterialStateProperty.all(theme.colorScheme.onPrimary)),
               child: const Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();
