@@ -1,3 +1,12 @@
+## 1.1.4
+### Changed
+- Remove unused audio permission from QR Scanner
+- Update screenshots
+- Draw white frame around QR/Aztec code in light theme (two avoid qr code inversion issues)
+
+### Improved
+- contrast of Send-Info popover
+
 ## 1.1.3
 ### Changed
 - use two buttons instead of one split-button
