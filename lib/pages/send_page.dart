@@ -48,39 +48,41 @@ class _SendPageState extends State<SendPage> {
     final theme = Theme.of(context);
 
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Icon(
-            Icons.upload,
-            size: 96,
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            AppLocalizations.of(context)!.send_page_send_label,
-            style: theme.textTheme.headlineLarge,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(AppLocalizations.of(context)!.send_page_send_sublabel),
-          const SizedBox(
-            height: 25,
-          ),
-          IconTextButton(
-              onClick: _onSendButtonClick,
-              text: AppLocalizations.of(context)!.send_page_button,
-              icon: Icons.file_present),
-          const SizedBox(
-            height: 15,
-          ),
-          IconTextButton(
-              onClick: _onSendFolderButtonClick,
-              text: AppLocalizations.of(context)!.send_page_folder_button,
-              icon: Icons.folder),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(
+              Icons.upload,
+              size: 96,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              AppLocalizations.of(context)!.send_page_send_label,
+              style: theme.textTheme.headlineLarge,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(AppLocalizations.of(context)!.send_page_send_sublabel),
+            const SizedBox(
+              height: 25,
+            ),
+            IconTextButton(
+                onClick: _onSendButtonClick,
+                text: AppLocalizations.of(context)!.send_page_button,
+                icon: Icons.file_present),
+            const SizedBox(
+              height: 15,
+            ),
+            IconTextButton(
+                onClick: _onSendFolderButtonClick,
+                text: AppLocalizations.of(context)!.send_page_folder_button,
+                icon: Icons.folder),
+          ],
+        ),
       ),
     );
   }
