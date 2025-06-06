@@ -10,14 +10,14 @@ use std::rc::Rc;
 /// generate dummy implementation for cancel handler
 pub fn gen_handler_dummy<'a>() -> BoxFuture<'a, ()> {
     let notifier = Arc::new((Mutex::new(false), Condvar::new()));
-    return async move {
+    async move {
         let (lock, cvar) = &*notifier;
         let mut started = lock.lock().await;
         while !*started {
             started = cvar.wait(started).await;
         }
     }
-    .boxed();
+    .boxed()
 }
 
 /// generate new transithandler which callbacks connectiontype through streamsink
