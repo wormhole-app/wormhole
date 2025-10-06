@@ -2,10 +2,10 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../gen/ffi.dart';
 import '../../settings/settings.dart';
 import '../../theme/theme_provider.dart';

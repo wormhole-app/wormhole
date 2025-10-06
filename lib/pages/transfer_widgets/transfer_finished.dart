@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../widgets/icon_text_button.dart';
 
 class ReceiveFinished extends StatelessWidget {
@@ -38,12 +38,21 @@ class ReceiveFinished extends StatelessWidget {
           const SizedBox(
             height: 15,
           ),
-          IconTextButton(
-              onClick: () {
-                Share.shareXFiles([XFile(file)], text: file.split('/').last);
-              },
-              text: AppLocalizations.of(context)!.transfer_finished_share,
-              icon: Icons.share),
+          Builder(
+            builder: (BuildContext context) {
+              return IconTextButton(
+                  onClick: () {
+                    final box = context.findRenderObject() as RenderBox?;
+                    Share.shareXFiles(
+                      [XFile(file)],
+                      text: file.split('/').last,
+                      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+                    );
+                  },
+                  text: AppLocalizations.of(context)!.transfer_finished_share,
+                  icon: Icons.share);
+            },
+          ),
         ],
       ),
     );

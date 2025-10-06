@@ -29,9 +29,9 @@ dependencies:
 
   provider: ^6.1.1 # easy wrapper for changenotifier
   shared_preferences: ^2.0.18 # store key/value pairs on disk
-  share_handler: ^0.0.17 # receive share intents from other apps
+  share_handler: ^0.0.25 # receive share intents from other apps
   vibration: ^1.7.7 # trigger phone vibrations
-  intl: ^0.18.0 # handle translations
+  intl: ^0.20.2 # handle translations
   fluttertoast: ^8.2.1 # fancy toast popups
   toggle_switch: ^2.0.1
   permission_handler: ^11.1.0

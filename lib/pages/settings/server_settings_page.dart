@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../../gen/ffi.dart';
 import '../../settings/settings.dart';
 import '../../widgets/fast_future_builder.dart';

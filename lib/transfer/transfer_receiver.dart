@@ -4,11 +4,11 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_close_app/flutter_close_app.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_handler/share_handler.dart';
 
+import '../l10n/app_localizations.dart';
 import '../gen/ffi.dart';
 import '../navigation/navigation_provider.dart';
 import '../pages/connecting_page.dart';
@@ -111,7 +111,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
     // we need storage permission to store files
     if (!(Platform.isAndroid || Platform.isIOS) ||
-        (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33 ||
+        (Platform.isAndroid && (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33) ||
         await Permission.storage.request().isGranted) {
       final s = api.requestFile(
           passphrase: passphrase,
