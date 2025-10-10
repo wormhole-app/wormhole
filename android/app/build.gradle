@@ -1,3 +1,9 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
 /* calculated from git commits to give sequential integers */
 
 def getGitVersion() {
@@ -43,13 +49,9 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
 android {
-    compileSdkVersion 33
+    namespace "eu.heili.wormhole"
+    compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -105,7 +107,7 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0"
 }
 
 [
@@ -121,7 +123,7 @@ dependencies {
         }
     }
     tasks.register("cargoBuild$taskPostfix", Exec) {
-        workingDir "../../native"
+        workingDir "../../rust"
         environment ANDROID_NDK_HOME: "$ANDROID_NDK"
         commandLine 'cargo', 'ndk',
                 // the 2 ABIs below are used by real Android devices
