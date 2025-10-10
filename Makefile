@@ -11,6 +11,9 @@ container-apk:
 linux: translation
 	flutter build linux
 
+windows: translation
+	flutter build windows
+
 codegen:
 	/home/lukas/.cargo/bin/flutter_rust_bridge_codegen \
 	--rust-input native/src/api.rs \
@@ -40,7 +43,7 @@ clean:
 	flutter clean
 	cd native && cargo clean
 
-.PHONY: all apk linux get-dep codegen lint clean
+.PHONY: all apk linux windows get-dep codegen lint clean
 
 # Proto generation (calls terminal proto commands)
 get-dep:
