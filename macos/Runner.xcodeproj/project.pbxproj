@@ -234,6 +234,7 @@
 			buildConfigurationList = 33CC10FB2044A3C60003C045 /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
 				83EA931083E910DC0EBFE36A /* [CP] Check Pods Manifest.lock */,
+				3A1B2C3D4E5F6A7B8C9D0E1F /* Build Rust Library */,
 				33CC10E92044A3C60003C045 /* Sources */,
 				33CC10EA2044A3C60003C045 /* Frameworks */,
 				33CC10EB2044A3C60003C045 /* Resources */,
@@ -339,6 +340,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "echo \"$PRODUCT_NAME.app\" > \"$PROJECT_DIR\"/Flutter/ephemeral/.app_filename && \"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh embed\n";
+		};
+		3A1B2C3D4E5F6A7B8C9D0E1F /* Build Rust Library */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Rust Library";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/../native/target/debug/libnative.a",
+				"$(SRCROOT)/../native/target/release/libnative.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT\"/build_rust.sh\n";
 		};
 		33CC111E2044C6BF0003C045 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -561,7 +582,7 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-force_load",
-					"$(SRCROOT)/../native/target/debug/libnative.a",
+					"$(SRCROOT)/../native/target/release/libnative.a",
 				);
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -717,7 +738,7 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-force_load",
-					"$(SRCROOT)/../native/target/debug/libnative.a",
+					"$(SRCROOT)/../native/target/release/libnative.a",
 				);
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
