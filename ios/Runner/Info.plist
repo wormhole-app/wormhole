@@ -77,7 +77,9 @@
 
 	<!-- Optional: Add/Customize for AirDrop support -->
 	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<string>No</string>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>

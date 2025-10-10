@@ -42,7 +42,6 @@ PODS:
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
-    - Toast
   - image_picker_ios (0.0.1):
     - Flutter
   - open_filex (0.0.2):
@@ -57,6 +56,11 @@ PODS:
   - SDWebImage/Core (5.21.2)
   - share_handler_ios (0.0.14):
     - Flutter
+    - share_handler_ios/share_handler_ios_models (= 0.0.14)
+    - share_handler_ios_models
+  - share_handler_ios/share_handler_ios_models (0.0.14):
+    - Flutter
+    - share_handler_ios_models
   - share_handler_ios_models (0.0.9)
   - share_plus (0.0.1):
     - Flutter
@@ -64,10 +68,9 @@ PODS:
     - Flutter
     - FlutterMacOS
   - SwiftyGif (5.4.5)
-  - Toast (4.1.1)
   - url_launcher_ios (0.0.1):
     - Flutter
-  - vibration (1.7.5):
+  - vibration (3.0.0):
     - Flutter
 
 DEPENDENCIES:
@@ -94,7 +97,6 @@ SPEC REPOS:
     - DKPhotoGallery
     - SDWebImage
     - SwiftyGif
-    - Toast
 
 EXTERNAL SOURCES:
   camera_avfoundation:
@@ -131,27 +133,26 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/vibration/ios"
 
 SPEC CHECKSUMS:
-  camera_avfoundation: 7262a4e34c2e028f6aa5fb523ae74c9b74d3bd76
-  device_info_plus: 335f3ce08d2e174b9fdc3db3db0f4e3b1f66bd89
+  camera_avfoundation: 5675ca25298b6f81fa0a325188e7df62cc217741
+  device_info_plus: 21fcca2080fbcd348be798aa36c3e5ed849eefbe
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
-  file_picker: 07c75322ede1d47ec9bb4ac82b27c94d3598251a
+  file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_zxing: e741c4f3335db8910e5c396c4291cdfb320859dc
-  fluttertoast: 294ad8b4b83f149520f7c13484770323c54df109
-  image_picker_ios: 85f2b3c9fb98c09d63725c4d12ebd585b56ec35d
+  flutter_zxing: e8bcc43bd3056c70c271b732ed94e7a16fd62f93
+  fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
+  image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
   open_filex: 432f3cd11432da3e39f47fcc0df2b1603854eff1
-  path_provider_foundation: 608fcb11be570ce83519b076ab6a1fffe2474f05
-  permission_handler_apple: 834413bf783f6ddb56602d606f4fad13ba536a27
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   SDWebImage: 9f177d83116802728e122410fb25ad88f5c7608a
-  share_handler_ios: c718cec230091fb65005595bae58ce7c98b7e5ef
+  share_handler_ios: e2244e990f826b2c8eaa291ac3831569438ba0fb
   share_handler_ios_models: fc638c9b4330dc7f082586c92aee9dfa0b87b871
-  share_plus: de6030e33b4e106470e09322d87cf2a4258d2d1d
-  shared_preferences_foundation: 0b09b969fb36da5551c0bc4a2dbd9d0ff9387478
+  share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
-  Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
-  url_launcher_ios: c14c42eb16c26cfb6c43c2e40ce35a4085431791
-  vibration: 8e2f50fc35bb736f9eecb7dd9f7047fbb6a6e888
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  vibration: 69774ad57825b11c951ee4c46155f455d7a592ce
 
 PODFILE CHECKSUM: 3f97385e20038b28800df5d416216da72ec3e7b7
 
