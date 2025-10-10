@@ -14,7 +14,7 @@ dependencies:
 
   # flutter rust interop
   ffi: ^2.0.2
-  flutter_rust_bridge: ^1.63.1
+  flutter_rust_bridge: 2.11.1
   meta: ^1.9.1
   freezed_annotation: ^3.1.0
 
@@ -44,6 +44,8 @@ dependencies:
       ref: master
   flutter_zxing: ^2.2.1
   device_info_plus: ^12.1.0
+  rust_lib_wormhole:
+    path: rust_builder
 
 dev_dependencies:
   flutter_test:

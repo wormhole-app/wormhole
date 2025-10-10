@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../gen/bridge_definitions.dart';
+import '../../src/rust/api/wormhole.dart';
 import '../type_helpers.dart';
 
 class TransferZipProgress extends StatelessWidget {

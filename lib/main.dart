@@ -3,14 +3,16 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'l10n/app_localizations.dart';
-import 'gen/ffi.dart';
+import 'src/rust/api/wormhole.dart';
+import 'src/rust/frb_generated.dart';
 import 'navigation/navigation.dart';
 import 'settings/settings.dart';
 import 'theme/dark_theme.dart';
 import 'theme/light_theme.dart';
 import 'theme/theme_provider.dart';
 
-void main() {
+Future<void> main() async {
+  await RustLib.init();
   runApp(const MyApp());
 }
 
@@ -33,7 +35,7 @@ class _MyAppState extends State<MyApp> {
 
   void initBackend() async {
     final tempDir = (await getTemporaryDirectory()).path;
-    api.init(tempFilePath: tempDir);
+    init(tempFilePath: tempDir);
   }
 
   void getCurrentAppTheme() async {

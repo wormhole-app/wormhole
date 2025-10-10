@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../gen/ffi.dart' if (dart.library.html) 'ffi_web.dart';
+import '../src/rust/api/wormhole.dart';
 import '../navigation/back_pop_context.dart';
 import '../navigation/disallow_pop_context.dart';
 import 'transfer_widgets/transfer_code.dart';
@@ -36,14 +36,14 @@ class _ConnectingPageState extends State<ConnectingPage> {
     super.initState();
     controller.stream.listen((e) {
       switch (e.event) {
-        case Events.Total:
+        case Events.total:
           total = e.getValue();
           break;
-        case Events.ConnectionType:
+        case Events.connectionType:
           connectionType = (e.value as Value_ConnectionType).field0;
           connectionTypeName = (e.value as Value_ConnectionType).field1;
           break;
-        case Events.ZipFilesTotal:
+        case Events.zipFilesTotal:
           totalFileNr = e.getValue();
           break;
         default:
@@ -54,18 +54,18 @@ class _ConnectingPageState extends State<ConnectingPage> {
 
   Widget _handleEvent(TUpdate event) {
     switch (event.event) {
-      case Events.Connecting:
+      case Events.connecting:
         return const TransferConnecting();
-      case Events.Code:
+      case Events.code:
         return BackPopContext(
           child: TransferCode(
             data: event,
           ),
         );
-      case Events.StartTransfer:
-      case Events.ConnectionType:
-      case Events.Total:
-      case Events.Sent:
+      case Events.startTransfer:
+      case Events.connectionType:
+      case Events.total:
+      case Events.sent:
         return DisallowPopContext(
           child: TransferProgress(
               data: event,
@@ -73,17 +73,17 @@ class _ConnectingPageState extends State<ConnectingPage> {
               linkType: connectionType,
               linkName: connectionTypeName),
         );
-      case Events.Error:
+      case Events.error:
         return BackPopContext(
             child: TransferError(
                 error: event.value.field0 as ErrorType,
                 message: event.value is Value_ErrorValue
                     ? (event.value as Value_ErrorValue).field1
                     : null));
-      case Events.Finished:
+      case Events.finished:
         return BackPopContext(child: widget.finish(event.getValue()));
-      case Events.ZipFilesTotal:
-      case Events.ZipFiles:
+      case Events.zipFilesTotal:
+      case Events.zipFiles:
         return DisallowPopContext(
           child: TransferZipProgress(
             data: event,
@@ -108,7 +108,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
           case ConnectionState.done:
             return const BackPopContext(
                 child: TransferError(
-              error: ErrorType.ConnectionError,
+              error: ErrorType.connectionError,
               message: 'Connection Stream closed',
             ));
         }

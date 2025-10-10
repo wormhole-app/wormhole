@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../gen/ffi.dart';
+import '../../src/rust/api/wormhole.dart';
 import '../../settings/settings.dart';
 import '../../theme/theme_provider.dart';
 import '../../widgets/fast_future_builder.dart';
@@ -93,7 +93,7 @@ class _TransferCodeState extends State<TransferCode> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return FastFutureBuilder<String>(
-        future: api.getPassphraseUri(passphrase: widget.data.getValue()),
+        future: getPassphraseUri(passphrase: widget.data.getValue()),
         onData: (data) {
           if (themeProvider.isDarkThemeActive()) {
             return Container(

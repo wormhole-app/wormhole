@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:share_handler/share_handler.dart';
 
 import '../l10n/app_localizations.dart';
-import '../gen/ffi.dart';
+import '../src/rust/api/wormhole.dart';
 import '../navigation/navigation_provider.dart';
 import '../pages/connecting_page.dart';
 import '../pages/toasts/error_toast.dart';
@@ -33,7 +33,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
   void _sendFolder(String name, String path, bool causedByIntent) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
 
-    final stream = api.sendFolder(
+    final stream = sendFolder(
         folderPath: path,
         name: name,
         codeLength: codeLength,
@@ -44,7 +44,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
   void _sendFiles(
       String name, List<String> filepaths, bool causedByIntent) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
-    final stream = api.sendFiles(
+    final stream = sendFiles(
         name: name,
         filePaths: filepaths,
         codeLength: codeLength,
@@ -94,9 +94,9 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
   Future<ServerConfig> _getServerConfig() async {
     final rendezvousUrl =
-        (await Settings.getRendezvousUrl()) ?? await api.defaultRendezvousUrl();
+        (await Settings.getRendezvousUrl()) ?? await defaultRendezvousUrl();
     final transitUrl =
-        (await Settings.getTransitUrl()) ?? await api.defaultTransitUrl();
+        (await Settings.getTransitUrl()) ?? await defaultTransitUrl();
     final serverConfig =
         ServerConfig(rendezvousUrl: rendezvousUrl, transitUrl: transitUrl);
     return serverConfig;
@@ -111,9 +111,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
     // we need storage permission to store files
     if (!(Platform.isAndroid || Platform.isIOS) ||
-        (Platform.isAndroid && (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33) ||
+        (Platform.isAndroid &&
+            (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33) ||
         await Permission.storage.request().isGranted) {
-      final s = api.requestFile(
+      final s = requestFile(
           passphrase: passphrase,
           storageFolder: dpath,
           serverConfig: await _getServerConfig());

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../gen/ffi.dart';
+import '../../src/rust/api/wormhole.dart';
 import '../../settings/settings.dart';
 import '../../theme/theme_provider.dart';
 import '../../widgets/fast_future_builder.dart';
@@ -32,7 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildBottomVersion() {
     return FastFutureBuilder<BuildInfo>(
-      future: api.getBuildTime(),
+      future: getBuildTime(),
       onData: (data) => Column(
         children: [
           Text('Version: ${data.version}'),
