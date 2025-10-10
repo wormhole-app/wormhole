@@ -41,12 +41,18 @@ target 'Runner' do
     pod "share_handler_ios_models", :path => ".symlinks/plugins/share_handler_ios/ios/Models"
   end
   # share_handler addition end
-
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+  end
+
+  # Fix ShareExtension build settings to use $(inherited)
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = '$(inherited)'
+      config.build_settings['CLANG_CXX_LANGUAGE_STANDARD'] = '$(inherited)'
+    end
   end
 end
