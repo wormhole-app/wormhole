@@ -41,7 +41,7 @@ class TransferProgress extends StatelessWidget {
             child: LinearProgressIndicator(
               minHeight: 10,
               value: percent,
-              color: theme.colorScheme.secondary,
+              color: theme.colorScheme.primary,
             ),
           ),
           if (linkType != null) ...[
