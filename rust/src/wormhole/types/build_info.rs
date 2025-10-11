@@ -6,6 +6,12 @@ pub struct BuildInfo {
     pub version: String,
 }
 
+impl Default for BuildInfo {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BuildInfo {
     pub fn new() -> BuildInfo {
         BuildInfo {

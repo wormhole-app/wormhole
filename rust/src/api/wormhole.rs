@@ -1,8 +1,8 @@
+use crate::frb_generated::StreamSink;
 /// Entrypoint of Wormhole Rust backend
 use crate::wormhole::receive::request_file_impl;
 use crate::wormhole::send::{send_file_impl, send_files_impl};
 use crate::wormhole::zip::list_dir;
-use crate::frb_generated::StreamSink;
 use futures::executor::block_on;
 use magic_wormhole::rendezvous::DEFAULT_RENDEZVOUS_SERVER;
 use magic_wormhole::{transit, Code};
@@ -44,7 +44,7 @@ pub fn send_files(
 
     match file_paths.len().cmp(&1) {
         Ordering::Less => {
-            actions.add(TUpdate::new(
+            _ = actions.add(TUpdate::new(
                 Events::Error,
                 Value::Error(ErrorType::InvalidFilename),
                 // todo proper error message
@@ -99,7 +99,7 @@ pub fn send_folder(
     let files = match list_dir(folder_path) {
         Ok(v) => v,
         Err(_) => {
-            actions.add(TUpdate::new(
+            _ = actions.add(TUpdate::new(
                 Events::Error,
                 Value::Error(ErrorType::InvalidFilename),
                 // todo proper error message
