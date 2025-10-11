@@ -46,7 +46,8 @@ class ReceiveFinished extends StatelessWidget {
                     Share.shareXFiles(
                       [XFile(file)],
                       text: file.split('/').last,
-                      sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+                      sharePositionOrigin:
+                          box!.localToGlobal(Offset.zero) & box.size,
                     );
                   },
                   text: AppLocalizations.of(context)!.transfer_finished_share,
