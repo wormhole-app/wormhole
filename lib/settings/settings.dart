@@ -20,27 +20,27 @@ class Settings {
   static const _rendezvousUrl = 'RENDEZVOUSSERVER';
   static const _transitUrl = 'TRANSITURL';
 
-  static setRendezvousUrl(String? value) async {
+  static Future<void> setRendezvousUrl(String? value) async {
     await _setField(value, _rendezvousUrl);
   }
 
-  static setTransitUrl(String? value) async {
+  static Future<void> setTransitUrl(String? value) async {
     await _setField(value, _transitUrl);
   }
 
-  static setWordLength(int? value) async {
+  static Future<void> setWordLength(int? value) async {
     await _setField(value, _wordLength);
   }
 
-  static setCodeType(CodeType type) async {
+  static Future<void> setCodeType(CodeType type) async {
     await _setField(type == CodeType.qrCode, _codeType);
   }
 
-  static setCodeAlwaysVisible(bool value) async {
+  static Future<void> setCodeAlwaysVisible(bool value) async {
     await _setField(value, _codeAlwaysVisible);
   }
 
-  static setTheme(ThemeType theme) async {
+  static Future<void> setTheme(ThemeType theme) async {
     await _setField(theme.index, themeStatus);
   }
 
@@ -86,7 +86,7 @@ class Settings {
     }
   }
 
-  static _setField<T>(T? value, String field) async {
+  static Future<void> _setField<T>(T? value, String field) async {
     final prefs = await SharedPreferences.getInstance();
     if (value == null) {
       await prefs.remove(field);

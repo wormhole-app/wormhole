@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../gen/bridge_definitions.dart';
+import '../../l10n/app_localizations.dart';
+import '../../src/rust/api/wormhole.dart';
 import '../../utils/file_formatter.dart';
 import '../type_helpers.dart';
 
@@ -41,7 +41,7 @@ class TransferProgress extends StatelessWidget {
             child: LinearProgressIndicator(
               minHeight: 10,
               value: percent,
-              color: theme.colorScheme.secondary,
+              color: theme.colorScheme.primary,
             ),
           ),
           if (linkType != null) ...[
@@ -58,12 +58,12 @@ class TransferProgress extends StatelessWidget {
   String parseLinkType(
       ConnectionType linkType, String linkName, BuildContext context) {
     switch (linkType) {
-      case ConnectionType.Relay:
+      case ConnectionType.relay:
         final relayName = linkName;
         final locText =
             AppLocalizations.of(context)!.transfer_progress_connection_relay;
         return "$locText '$relayName'";
-      case ConnectionType.Direct:
+      case ConnectionType.direct:
         return AppLocalizations.of(context)!
             .transfer_progress_connection_direct;
     }

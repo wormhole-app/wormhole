@@ -1,4 +1,4 @@
-import '../gen/bridge_definitions.dart';
+import '../src/rust/api/wormhole.dart';
 
 extension GetValue<T> on TUpdate {
   T getValue() {

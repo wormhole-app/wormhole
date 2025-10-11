@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/app_localizations.dart';
 import '../pages/qr_scanner_page.dart';
 import '../pages/receive_page.dart';
 import '../pages/send_page.dart';
@@ -43,7 +43,7 @@ class _NavigationState extends State<Navigation> {
     });
   }
 
-  _onQrButtonPress() {
+  void _onQrButtonPress() {
     navigation.push(const QrScannerPage());
   }
 

@@ -48,3 +48,4 @@ jniLibs
 
 Cargo.lock
 pubspec.lock
+lib/l10n/

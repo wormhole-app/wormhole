@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-import '../../gen/bridge_definitions.dart';
+import '../../l10n/app_localizations.dart';
+import '../../src/rust/api/wormhole.dart';
 import '../../navigation/navigation_provider.dart';
 import '../receive_page.dart';
 
@@ -63,17 +63,17 @@ class TransferError extends StatelessWidget {
   String genErrorMessage(ErrorType error, String? message) {
     // todo error translations
     switch (error) {
-      case ErrorType.InvalidFilename:
+      case ErrorType.invalidFilename:
         return 'Sender did not specify a filename';
-      case ErrorType.NoFilePathFound:
+      case ErrorType.noFilePathFound:
         return 'No valid filepath could be found';
-      case ErrorType.ConnectionError:
+      case ErrorType.connectionError:
         return message ?? 'Connection Failed';
-      case ErrorType.FileRequestError:
-      case ErrorType.FileOpen:
-      case ErrorType.TransferError:
-      case ErrorType.TransferConnectionError:
-      case ErrorType.ZipFileError:
+      case ErrorType.fileRequestError:
+      case ErrorType.fileOpen:
+      case ErrorType.transferError:
+      case ErrorType.transferConnectionError:
+      case ErrorType.zipFileError:
         return message ?? 'Invalid Message';
     }
   }

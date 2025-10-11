@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../gen/ffi.dart';
+import '../../l10n/app_localizations.dart';
+import '../../src/rust/api/wormhole.dart';
 import '../../settings/settings.dart';
 import '../../widgets/fast_future_builder.dart';
 import '../../widgets/full_sized_text_input.dart';
@@ -75,7 +75,7 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
         child: Column(
           children: [
             FastFutureBuilder(
-              future: api.defaultRendezvousUrl(),
+              future: defaultRendezvousUrl(),
               onData: (String data) => SettingsRow(
                 name: AppLocalizations.of(context)!
                     .settings_page_rendezvousserver,
@@ -87,7 +87,7 @@ class _ServerSettingsPageState extends State<ServerSettingsPage> {
               ),
             ),
             FastFutureBuilder(
-              future: api.defaultTransitUrl(),
+              future: defaultTransitUrl(),
               onData: (data) => SettingsRow(
                 name: AppLocalizations.of(context)!.settings_page_transitserver,
                 child: FullSizedTextInput(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
+import '../l10n/app_localizations.dart';
 import '../navigation/back_pop_context.dart';
 import '../navigation/navigation_provider.dart';
 import '../transfer/transfer_provider.dart';

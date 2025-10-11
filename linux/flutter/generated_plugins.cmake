@@ -9,6 +9,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
   flutter_zxing
+  rust_lib_wormhole
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

@@ -4,7 +4,7 @@ version: 1.1.4
 publish_to: 'none'
 
 environment:
-  sdk: ">=3.0.0"
+  sdk: ">=3.4.0"
 
 dependencies:
   flutter:
@@ -14,14 +14,14 @@ dependencies:
 
   # flutter rust interop
   ffi: ^2.0.2
-  flutter_rust_bridge: ^1.63.1
+  flutter_rust_bridge: 2.11.1
   meta: ^1.9.1
-  freezed_annotation: ^2.2.0
+  freezed_annotation: ^3.1.0
 
   # file chooser / open / share
-  file_picker: ^6.1.1
+  file_picker: ^10.3.3
   path_provider: ^2.0.13
-  share_plus: ^7.0.0
+  share_plus: ^12.0.0
   open_filex: ^4.3.4
 
   # qr scanner/generation
@@ -29,12 +29,12 @@ dependencies:
 
   provider: ^6.1.1 # easy wrapper for changenotifier
   shared_preferences: ^2.0.18 # store key/value pairs on disk
-  share_handler: ^0.0.17 # receive share intents from other apps
-  vibration: ^1.7.7 # trigger phone vibrations
-  intl: ^0.18.0 # handle translations
-  fluttertoast: ^8.2.1 # fancy toast popups
+  share_handler: ^0.0.25 # receive share intents from other apps
+  vibration: ^3.1.4 # trigger phone vibrations
+  intl: ^0.20.2 # handle translations
+  fluttertoast: ^9.0.0 # fancy toast popups
   toggle_switch: ^2.0.1
-  permission_handler: ^11.1.0
+  permission_handler: ^12.0.1
   url_launcher: ^6.1.9
 
   # use custom plugin for handling programmatically close of app
@@ -42,18 +42,22 @@ dependencies:
     git:
       url: https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git
       ref: master
-  flutter_zxing: ^1.1.2
-  device_info_plus: ^9.0.2
+  flutter_zxing: ^2.2.1
+  device_info_plus: ^12.1.0
+  rust_lib_wormhole:
+    path: rust_builder
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.1
-  ffigen: ^11.0.0
+  dmg: ^0.1.6
+  flutter_lints: ^6.0.0
+  ffigen: ^19.1.0
   flutter_launcher_icons:
   build_runner:
-  freezed: ^2.3.2
+  freezed: ^3.2.3
+  msix: ^3.16.7
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -64,8 +68,26 @@ flutter:
   uses-material-design: true
 
 # app icon generation
-flutter_icons:
+flutter_launcher_icons:
   android: "ic_launcher"
   ios: true
-  image_path: "bitmap.png"
+  remove_alpha_ios: true
+  windows:
+    generate: true
+    image_path: "assets/bitmap.png"
+    icon_size: 256
+  macos:
+    generate: true
+  image_path: "assets/bitmap.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
+
+# Windows MSIX installer configuration
+msix_config:
+  display_name: Wormhole
+  publisher_display_name: Wormhole
+  identity_name: eu.heili.wormhole
+  msix_version: 1.1.4.0
+  logo_path: assets/bitmap.png
+  capabilities: internetClient, privateNetworkClientServer
+  publisher: CN=Wormhole
+  install_certificate: false

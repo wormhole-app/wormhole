@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../l10n/app_localizations.dart';
 
 class TransferConnecting extends StatelessWidget {
   const TransferConnecting({super.key});
@@ -21,7 +22,7 @@ class TransferConnecting extends StatelessWidget {
             padding: const EdgeInsets.only(left: 30, right: 30),
             child: LinearProgressIndicator(
               minHeight: 10,
-              color: theme.colorScheme.secondary,
+              color: theme.colorScheme.primary,
             ),
           )
         ],
