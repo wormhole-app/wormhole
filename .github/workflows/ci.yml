@@ -38,6 +38,26 @@ jobs:
         run: |
           cargo check
           cargo test --all
+  formatFlutter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.32.0
+
+      - name: Lint
+        run: flutter analyze --no-fatal-infos
+
+      - name: formatting
+        run: dart format --set-exit-if-changed .
+
   lintFlutter:
     runs-on: ubuntu-latest
     defaults:
@@ -52,9 +72,6 @@ jobs:
           channel: stable
           flutter-version: 3.32.0
 
-      - name: Toolchain info
-        run: flutter doctor
-
       - name: Build Runner
         run: |
           flutter pub get
@@ -63,6 +80,3 @@ jobs:
           flutter gen-l10n
       - name: Lint
         run: flutter analyze --no-fatal-infos
-
-      - name: formatting
-        run: dart format --set-exit-if-changed .
