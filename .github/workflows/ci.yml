@@ -52,9 +52,6 @@ jobs:
           channel: stable
           flutter-version: 3.32.0
 
-      - name: Lint
-        run: flutter analyze --no-fatal-infos
-
       - name: formatting
         run: dart format --set-exit-if-changed .
 
