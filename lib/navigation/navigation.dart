@@ -43,7 +43,7 @@ class _NavigationState extends State<Navigation> {
     });
   }
 
-  _onQrButtonPress() {
+  void _onQrButtonPress() {
     navigation.push(const QrScannerPage());
   }
 

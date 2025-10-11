@@ -167,9 +167,9 @@ class _TransferCodeState extends State<TransferCode> {
             ElevatedButton(
               style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all(theme.colorScheme.primary),
+                      WidgetStateProperty.all(theme.colorScheme.primary),
                   foregroundColor:
-                      MaterialStateProperty.all(theme.colorScheme.onPrimary)),
+                      WidgetStateProperty.all(theme.colorScheme.onPrimary)),
               child: const Text('Ok'),
               onPressed: () {
                 Navigator.of(context).pop();
