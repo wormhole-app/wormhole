@@ -71,6 +71,7 @@ flutter:
 flutter_launcher_icons:
   android: "ic_launcher"
   ios: true
+  remove_alpha_ios: true
   windows:
     generate: true
     image_path: "assets/bitmap.png"
