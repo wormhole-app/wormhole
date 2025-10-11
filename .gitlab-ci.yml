@@ -28,8 +28,6 @@ flutter_build_android:
 flutter_build_linux:
   stage: build
   allow_failure: true
-  before_script:
-    - rustup update stable
   script:
     - make linux
   artifacts:
