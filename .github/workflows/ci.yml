@@ -58,6 +58,7 @@ jobs:
       - name: Build Runner
         run: |
           flutter pub get
+          flutter pub get --directory=./rust_builder/cargokit/build_tool
           flutter pub run build_runner build --delete-conflicting-outputs
           flutter gen-l10n
       - name: Lint
