@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  lintAndTestRust:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rust
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Update local toolchain
+        run: |
+          rustup update
+          rustup component add clippy
+          rustup install stable          
+
+      - name: Toolchain info
+        run: |
+          cargo --version --verbose
+          rustc --version
+          cargo clippy --version          
+
+      - name: Lint
+        run: |
+          cargo fmt -- --check
+          cargo clippy -- -D warnings          
+
+      - name: Test
+        run: |
+          cargo check
+          cargo test --all
+  formatFlutter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.32.0
+
+      - name: Deps
+        run: |
+          flutter pub get
+
+      - name: formatting
+        run: dart format --set-exit-if-changed .
+
+  lintFlutter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.32.0
+
+      - name: Build Runner
+        run: |
+          flutter pub get
+          flutter pub get --directory=./rust_builder/cargokit/build_tool
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter gen-l10n
+      - name: Lint
+        run: flutter analyze --no-fatal-infos

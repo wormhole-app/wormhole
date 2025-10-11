@@ -118,7 +118,7 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 
 ## License
 
-    Copyright (C) 2023 Lukas Heiligenbrunner
+    Copyright (C) 2025 Lukas Heiligenbrunner
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
