@@ -4,7 +4,7 @@ use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_tran
 use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
 use crate::wormhole::path::find_free_filepath;
 use async_std::fs::OpenOptions;
-use magic_wormhole::{transfer, transit, Code, Wormhole};
+use magic_wormhole::{Code, Wormhole, transfer, transit};
 use std::path::Path;
 use std::rc::Rc;
 
@@ -45,7 +45,7 @@ pub async fn request_file_impl(
     let req = match transfer::request_file(
         wormhole,
         relay_hints,
-        transit::Abilities::ALL_ABILITIES,
+        transit::Abilities::ALL,
         gen_handler_dummy(),
     )
     .await

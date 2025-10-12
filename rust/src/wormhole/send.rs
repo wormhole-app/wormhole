@@ -4,7 +4,7 @@ use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_tran
 use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
 use crate::wormhole::zip::create_zip_file;
 use magic_wormhole::transfer::TransferError;
-use magic_wormhole::{transfer, transit, Wormhole};
+use magic_wormhole::{Wormhole, transfer, transit};
 use std::collections::HashMap;
 use std::fs::remove_file;
 use std::rc::Rc;
@@ -76,7 +76,7 @@ pub async fn send_file_impl(
         };
 
     let code = server_welcome.code;
-    _ = actions.add(TUpdate::new(Events::Code, Value::String(code.clone().0)));
+    _ = actions.add(TUpdate::new(Events::Code, Value::String(code.to_string())));
 
     let wormhole = match connector.await {
         Ok(v) => v,
@@ -94,7 +94,7 @@ pub async fn send_file_impl(
         relay_hints,
         file_path.as_str(),
         file_name.as_str(),
-        transit::Abilities::ALL_ABILITIES,
+        transit::Abilities::ALL,
         Rc::clone(&actions),
     ))
     .await
