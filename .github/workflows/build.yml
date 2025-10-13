@@ -71,3 +71,48 @@ jobs:
         with:
           name: macos
           path: ./build/macos/Build/Products/Release/wormhole.dmg
+
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.35.5
+      - name: Deps
+        run: |
+          flutter pub get
+          flutter gen-l10n
+      - name: Build Android APK
+        run: flutter build apk --release
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: ./build/app/outputs/flutter-apk/app-release.apk
+
+  build-ios:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.35.5
+      - name: Deps
+        run: |
+          flutter pub get
+          flutter gen-l10n
+      - name: Build iOS (no codesign)
+        run: flutter build ios --release --no-codesign
+      # Skip upload, as this is not a signed build
