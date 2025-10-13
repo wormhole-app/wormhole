@@ -372,7 +372,7 @@ packages:
       path: "."
       ref: master
       resolved-ref: e41abcffb368c3267978485337b2742b5991773a
-      url: "https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git"
+      url: "https://github.com/wormhole-app/fluttercloseapp"
     source: git
     version: "0.0.1"
   flutter_launcher_icons:

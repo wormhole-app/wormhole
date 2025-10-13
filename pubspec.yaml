@@ -40,7 +40,7 @@ dependencies:
   # use custom plugin for handling programmatically close of app
   flutter_close_app:
     git:
-      url: https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git
+      url: https://github.com/wormhole-app/fluttercloseapp
       ref: master
   flutter_zxing: ^2.2.1
   device_info_plus: ^12.1.0
