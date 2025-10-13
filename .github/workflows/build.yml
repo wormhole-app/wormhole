@@ -21,7 +21,9 @@ jobs:
           channel: stable
           flutter-version: 3.35.5
       - name: Deps
-        run: flutter pub get
+        run: |
+          flutter pub get
+          flutter gen-l10n
       - name: Build Windows
         run: |
           flutter build windows
@@ -46,7 +48,9 @@ jobs:
           channel: stable
           flutter-version: 3.35.5
       - name: Deps
-        run: flutter pub get
+        run: |
+          flutter pub get
+          flutter gen-l10n
       - name: Build macOS
         run: flutter build macos
       - name: Install dmg dependencies
