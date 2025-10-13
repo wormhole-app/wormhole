@@ -30,7 +30,7 @@ jobs:
           Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./wormhole.zip -Force
       # If release, this should create an MSIX installer (once we have a proper cert)
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows
           path: ./wormhole.zip
@@ -63,7 +63,7 @@ jobs:
         run: |
           dart run dmg --sign --identity "Developer ID Application: Emma Sabatschus (Y647R6B9S3)"
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos
           path: ./build/macos/Build/Products/Release/wormhole.dmg
