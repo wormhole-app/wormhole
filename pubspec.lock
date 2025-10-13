@@ -370,8 +370,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: e41abcffb368c3267978485337b2742b5991773a
+      ref: "5e4adc61eeac6f4c71018848928fe1bcb438130b"
+      resolved-ref: "5e4adc61eeac6f4c71018848928fe1bcb438130b"
       url: "https://github.com/wormhole-app/fluttercloseapp"
     source: git
     version: "0.0.1"

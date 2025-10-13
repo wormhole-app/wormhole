@@ -41,7 +41,7 @@ dependencies:
   flutter_close_app:
     git:
       url: https://github.com/wormhole-app/fluttercloseapp
-      ref: master
+      ref: 5e4adc61eeac6f4c71018848928fe1bcb438130b
   flutter_zxing: ^2.2.1
   device_info_plus: ^12.1.0
   rust_lib_wormhole:
