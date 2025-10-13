@@ -25,6 +25,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace 'eu.heili.flutter_close_app'
     compileSdkVersion 31
 
     compileOptions {
