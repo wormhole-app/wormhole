@@ -276,10 +276,11 @@ packages:
   dmg:
     dependency: "direct dev"
     description:
-      name: dmg
-      sha256: "1d57c5295b1837e1cdba3e922d327e19cbdd1ad13286dc3ae379285c16ba5562"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: ec3790d48fb100eee6dcd43a2280374afa4e6f99
+      url: "https://github.com/luksab/dmg.git"
+    source: git
     version: "0.1.6"
   fake_async:
     dependency: transitive

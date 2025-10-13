@@ -1,0 +1,69 @@
+name: build
+
+on:
+  workflow_call:
+    inputs:
+      release:
+        description: 'Version tag'
+        type: boolean
+        required: true
+
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.35.5
+      - name: Deps
+        run: flutter pub get
+      - name: Build Windows
+        run: |
+          flutter build windows
+      - name: Zip Windows Release
+        run: |
+          Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./wormhole.zip -Force
+      # If release, this should create an MSIX installer (once we have a proper cert)
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows
+          path: ./wormhole.zip
+
+  build-macos:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.35.5
+      - name: Deps
+        run: flutter pub get
+      - name: Build macOS
+        run: flutter build macos
+      - name: Install dmg dependencies
+        run: |
+          pip install dmgbuild
+      - name: Create unsigned DMG
+        if: ${{ !inputs.release }}
+        # In release, this should be signed with the proper cert (gotten from Apple)
+        run: |
+          dart run dmg --no-sign
+      - name: Create signed DMG
+        if: ${{ inputs.release }}
+        # In release, this should be signed with the proper cert (gotten from Apple)
+        run: |
+          dart run dmg --sign --identity "Developer ID Application: Emma Sabatschus (Y647R6B9S3)"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos
+          path: ./build/macos/Build/Products/Release/wormhole.dmg
