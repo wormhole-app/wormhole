@@ -1,4 +1,5 @@
-use crate::api::{ConnectionType, Events, TUpdate, Value};
+use crate::api;
+use crate::api::{Events, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use async_std::sync::{Arc, Condvar, Mutex};
 use futures::FutureExt;
@@ -27,19 +28,19 @@ pub fn gen_transit_handler(actions: Rc<StreamSink<TUpdate>>) -> Box<dyn Fn(Trans
             transit::ConnectionType::Direct => {
                 _ = actions.add(TUpdate::new(
                     Events::ConnectionType,
-                    Value::ConnectionType(ConnectionType::Direct, info.peer_addr.to_string()),
+                    Value::ConnectionType(api::ConnectionType::Direct, info.peer_addr.to_string()),
                 ));
             }
             transit::ConnectionType::Relay { name: Some(n) } => {
                 _ = actions.add(TUpdate::new(
                     Events::ConnectionType,
-                    Value::ConnectionType(ConnectionType::Relay, n),
+                    Value::ConnectionType(api::ConnectionType::Relay, n),
                 ));
             }
             transit::ConnectionType::Relay { name: None } => {
                 _ = actions.add(TUpdate::new(
                     Events::ConnectionType,
-                    Value::ConnectionType(ConnectionType::Relay, info.peer_addr.to_string()),
+                    Value::ConnectionType(api::ConnectionType::Relay, info.peer_addr.to_string()),
                 ));
             }
             _ => {}
