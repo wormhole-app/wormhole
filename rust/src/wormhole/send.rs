@@ -74,7 +74,10 @@ pub async fn send_file_impl(
         }
     };
 
-    let code = connection.code().clone();
+    _ = actions.add(TUpdate::new(
+        Events::Code,
+        Value::String(connection.code().to_string()),
+    ));
 
     let wormhole = match Wormhole::connect(connection).await {
         Ok(v) => v,
@@ -86,8 +89,6 @@ pub async fn send_file_impl(
             return;
         }
     };
-
-    _ = actions.add(TUpdate::new(Events::Code, Value::String(code.to_string())));
 
     match Box::pin(send(
         wormhole,
