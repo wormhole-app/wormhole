@@ -1,10 +1,11 @@
-use crate::api::{ConnectionType, Events, TUpdate, Value};
+use crate::api;
+use crate::api::{Events, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use async_std::sync::{Arc, Condvar, Mutex};
-use futures::future::BoxFuture;
 use futures::FutureExt;
+use futures::future::BoxFuture;
+use magic_wormhole::transit;
 use magic_wormhole::transit::TransitInfo;
-use std::net::SocketAddr;
 use std::rc::Rc;
 
 /// generate dummy implementation for cancel handler
@@ -21,27 +22,25 @@ pub fn gen_handler_dummy<'a>() -> BoxFuture<'a, ()> {
 }
 
 /// generate new transithandler which callbacks connectiontype through streamsink
-pub fn gen_transit_handler(
-    actions: Rc<StreamSink<TUpdate>>,
-) -> Box<dyn Fn(TransitInfo, SocketAddr)> {
-    let fnn = move |info: TransitInfo, peer_addr: SocketAddr| {
-        match info {
-            TransitInfo::Direct => {
+pub fn gen_transit_handler(actions: Rc<StreamSink<TUpdate>>) -> Box<dyn Fn(TransitInfo)> {
+    let fnn = move |info: TransitInfo| {
+        match info.conn_type {
+            transit::ConnectionType::Direct => {
                 _ = actions.add(TUpdate::new(
                     Events::ConnectionType,
-                    Value::ConnectionType(ConnectionType::Direct, peer_addr.to_string()),
+                    Value::ConnectionType(api::ConnectionType::Direct, info.peer_addr.to_string()),
                 ));
             }
-            TransitInfo::Relay { name: Some(n) } => {
+            transit::ConnectionType::Relay { name: Some(n) } => {
                 _ = actions.add(TUpdate::new(
                     Events::ConnectionType,
-                    Value::ConnectionType(ConnectionType::Relay, n),
+                    Value::ConnectionType(api::ConnectionType::Relay, n),
                 ));
             }
-            TransitInfo::Relay { name: None } => {
+            transit::ConnectionType::Relay { name: None } => {
                 _ = actions.add(TUpdate::new(
                     Events::ConnectionType,
-                    Value::ConnectionType(ConnectionType::Relay, peer_addr.to_string()),
+                    Value::ConnectionType(api::ConnectionType::Relay, info.peer_addr.to_string()),
                 ));
             }
             _ => {}

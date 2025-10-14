@@ -5,7 +5,7 @@ use crate::wormhole::send::{send_file_impl, send_files_impl};
 use crate::wormhole::zip::list_dir;
 use futures::executor::block_on;
 use magic_wormhole::rendezvous::DEFAULT_RENDEZVOUS_SERVER;
-use magic_wormhole::{transit, Code};
+use magic_wormhole::{Code, transit};
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::path::PathBuf;
