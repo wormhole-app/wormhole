@@ -369,11 +369,9 @@ packages:
   flutter_close_app:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "5e4adc61eeac6f4c71018848928fe1bcb438130b"
-      resolved-ref: "5e4adc61eeac6f4c71018848928fe1bcb438130b"
-      url: "https://github.com/wormhole-app/fluttercloseapp"
-    source: git
+      path: "packages/flutter_close_app"
+      relative: true
+    source: path
     version: "0.0.1"
   flutter_launcher_icons:
     dependency: "direct dev"
