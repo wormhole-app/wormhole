@@ -25,13 +25,16 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Flutter Close Example'),
         ),
         body: Center(
-          child: TextButton(onPressed: () async {
-            try {
-              await _flutterCloseAppPlugin.closeAndRemoveApp();
-            } on PlatformException {
-              print("failed to close app");
-            }
-          },child: const Text("close app"),),
+          child: TextButton(
+            onPressed: () async {
+              try {
+                await _flutterCloseAppPlugin.closeAndRemoveApp();
+              } on PlatformException {
+                print("failed to close app");
+              }
+            },
+            child: const Text("close app"),
+          ),
         ),
       ),
     );

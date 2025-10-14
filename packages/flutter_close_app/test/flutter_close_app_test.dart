@@ -7,13 +7,13 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockFlutterCloseAppPlatform
     with MockPlatformInterfaceMixin
     implements FlutterCloseAppPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 }
 
 void main() {
-  final FlutterCloseAppPlatform initialPlatform = FlutterCloseAppPlatform.instance;
+  final FlutterCloseAppPlatform initialPlatform =
+      FlutterCloseAppPlatform.instance;
 
   test('$MethodChannelFlutterCloseApp is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelFlutterCloseApp>());
