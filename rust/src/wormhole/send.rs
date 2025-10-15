@@ -4,7 +4,7 @@ use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_tran
 use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
 use crate::wormhole::zip::create_zip_file;
 use magic_wormhole::transfer::TransferError;
-use magic_wormhole::{transfer, transit, Wormhole};
+use magic_wormhole::{MailboxConnection, Wormhole, transfer, transit};
 use std::collections::HashMap;
 use std::fs::remove_file;
 use std::rc::Rc;
@@ -63,27 +63,28 @@ pub async fn send_file_impl(
     };
     let appconfig = gen_app_config(&server_config);
 
-    let (server_welcome, connector) =
-        match Wormhole::connect_without_code(appconfig, code_length as usize).await {
-            Ok(v) => v,
-            Err(e) => {
-                _ = actions.add(TUpdate::new(
-                    Events::Error,
-                    Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
-                ));
-                return;
-            }
-        };
-
-    let code = server_welcome.code;
-    _ = actions.add(TUpdate::new(Events::Code, Value::String(code.clone().0)));
-
-    let wormhole = match connector.await {
+    let connection = match MailboxConnection::create(appconfig, code_length as usize).await {
         Ok(v) => v,
         Err(e) => {
             _ = actions.add(TUpdate::new(
                 Events::Error,
-                Value::ErrorValue(ErrorType::TransferConnectionError, e.to_string()),
+                Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
+            ));
+            return;
+        }
+    };
+
+    _ = actions.add(TUpdate::new(
+        Events::Code,
+        Value::String(connection.code().to_string()),
+    ));
+
+    let wormhole = match Wormhole::connect(connection).await {
+        Ok(v) => v,
+        Err(e) => {
+            _ = actions.add(TUpdate::new(
+                Events::Error,
+                Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
             ));
             return;
         }
@@ -94,7 +95,7 @@ pub async fn send_file_impl(
         relay_hints,
         file_path.as_str(),
         file_name.as_str(),
-        transit::Abilities::ALL_ABILITIES,
+        transit::Abilities::ALL,
         Rc::clone(&actions),
     ))
     .await

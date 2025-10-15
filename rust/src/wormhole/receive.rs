@@ -4,7 +4,7 @@ use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_tran
 use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
 use crate::wormhole::path::find_free_filepath;
 use async_std::fs::OpenOptions;
-use magic_wormhole::{transfer, transit, Code, Wormhole};
+use magic_wormhole::{Code, MailboxConnection, Wormhole, transfer, transit};
 use std::path::Path;
 use std::rc::Rc;
 
@@ -31,7 +31,18 @@ pub async fn request_file_impl(
     };
     let appconfig = gen_app_config(&server_config);
 
-    let (_, wormhole) = match Wormhole::connect_with_code(appconfig, Code(passphrase)).await {
+    let connection = match MailboxConnection::connect(appconfig, Code(passphrase), true).await {
+        Ok(v) => v,
+        Err(e) => {
+            _ = actions.add(TUpdate::new(
+                Events::Error,
+                Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
+            ));
+            return;
+        }
+    };
+
+    let wormhole = match Wormhole::connect(connection).await {
         Ok(v) => v,
         Err(e) => {
             _ = actions.add(TUpdate::new(
@@ -45,7 +56,7 @@ pub async fn request_file_impl(
     let req = match transfer::request_file(
         wormhole,
         relay_hints,
-        transit::Abilities::ALL_ABILITIES,
+        transit::Abilities::ALL,
         gen_handler_dummy(),
     )
     .await
@@ -74,18 +85,7 @@ pub async fn request_file_impl(
      * - If it doesn't, directly accept, but DON'T overwrite any files
      */
 
-    let file_name = match req.filename.file_name() {
-        None => {
-            _ = actions.add(TUpdate::new(
-                Events::Error,
-                Value::Error(ErrorType::InvalidFilename),
-            ));
-            return;
-        }
-        Some(v) => v,
-    };
-
-    let file_path = Path::new(storage_folder.as_str()).join(file_name);
+    let file_path = Path::new(storage_folder.as_str()).join(req.file_name());
     let file_path = match find_free_filepath(file_path) {
         None => {
             _ = actions.add(TUpdate::new(

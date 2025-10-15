@@ -1,12 +1,12 @@
 use crate::api::{Events, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use std::collections::HashMap;
-use std::fs::{metadata, File};
+use std::fs::{File, metadata};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
-use zip::write::FileOptions;
 use zip::CompressionMethod;
+use zip::write::{ExtendedFileOptions, FileOptions};
 
 fn _list_files(vec: &mut Vec<PathBuf>, path: &Path) -> anyhow::Result<()> {
     if path.is_dir() {
@@ -60,7 +60,7 @@ pub fn create_zip_file(
 
     let file = File::create(temp_file.clone())?;
     let mut zip = zip::ZipWriter::new(file);
-    let options = FileOptions::default()
+    let options: FileOptions<ExtendedFileOptions> = FileOptions::default()
         .compression_method(CompressionMethod::Deflated)
         .unix_permissions(0o755);
 
@@ -78,7 +78,7 @@ pub fn create_zip_file(
         _ = actions.add(TUpdate::new(Events::ZipFiles, Value::Int(file_counter)));
         file_counter += 1;
 
-        zip.start_file(zip_path, options)?;
+        zip.start_file(zip_path, options.clone())?;
         let mut f = File::open(fs_path)?;
 
         f.read_to_end(&mut buffer)?;
