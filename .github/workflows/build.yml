@@ -142,6 +142,12 @@ jobs:
         run: |
           cd ios
           bundle install
+      - name: Setup temporary keychain
+        run: |
+          security create-keychain -p temporary_ci_password fastlane_tmp_keychain.keychain
+          security default-keychain -s fastlane_tmp_keychain.keychain
+          security unlock-keychain -p temporary_ci_password fastlane_tmp_keychain.keychain
+          security set-keychain-settings -t 3600 -u fastlane_tmp_keychain.keychain
       - name: Test build fastlane (no upload)
         if: ${{ !inputs.release }}
         run: |
