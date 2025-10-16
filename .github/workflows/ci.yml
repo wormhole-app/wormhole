@@ -86,5 +86,9 @@ jobs:
   build_test:
     uses: ./.github/workflows/build.yml
     secrets: inherit
+    needs:
+      - lintAndTestRust
+      - formatFlutter
+      - lintFlutter
     with:
       release: false
