@@ -89,6 +89,8 @@ jobs:
           flutter-version: 3.35.5
       - name: Deps
         run: |
+          rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+          cargo install cargo-ndk
           flutter pub get
           flutter gen-l10n
       - name: Build Android APK
