@@ -136,6 +136,7 @@ jobs:
         if: ${{ !inputs.release }}
         run: |
           cd ios
+          sudo xcode-select -s /Applications/Xcode.app
           bundle exec fastlane build
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}

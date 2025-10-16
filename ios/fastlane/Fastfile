@@ -49,10 +49,10 @@ platform :ios do
       key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
     )
 
-    # Increment build number to avoid conflicts
-    increment_build_number(
-      build_number: ENV["BUILD_NUMBER"] || latest_testflight_build_number(api_key: api_key) + 1
-    )
+    # # Increment build number to avoid conflicts
+    # increment_build_number(
+    #   build_number: ENV["BUILD_NUMBER"] || latest_testflight_build_number(api_key: api_key) + 1
+    # )
 
     # Build the app
     build_app(
