@@ -128,10 +128,10 @@ jobs:
         run: |
           flutter pub get
           flutter gen-l10n
-      - name: Build iOS (no codesign)
-        if: false
-        run: flutter build ios --release --no-codesign
-      # Skip upload, as this is not a signed build
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios
+          pod install
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
