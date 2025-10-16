@@ -1,0 +1,6 @@
+app_identifier("de.emmabyte.wormhole") # The bundle identifier of your app
+apple_id("emma@sabatschus.de") # Your Apple Developer Portal username
+
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

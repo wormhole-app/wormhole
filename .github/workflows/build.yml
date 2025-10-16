@@ -128,3 +128,25 @@ jobs:
       - name: Build iOS (no codesign)
         run: flutter build ios --release --no-codesign
       # Skip upload, as this is not a signed build
+      - name: Test build fastlane (no upload)
+        if: ${{ !inputs.release }}
+        run: |
+          cd ios
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+          eval "$(rbenv init -)"
+          bundle exec fastlane build
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+      - name: Build and upload to TestFlight
+        if: ${{ inputs.release }}
+        run: |
+          cd ios
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+          eval "$(rbenv init -)"
+          bundle exec fastlane alpha
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
