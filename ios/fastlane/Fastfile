@@ -37,11 +37,6 @@ platform :ios do
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          "de.emmabyte.wormhole" => "match AppStore de.emmabyte.wormhole"
-        }
-      }
     )
   end
   
@@ -64,11 +59,6 @@ platform :ios do
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          "de.emmabyte.wormhole" => "match AppStore de.emmabyte.wormhole"
-        }
-      }
     )
 
     # Upload to TestFlight
