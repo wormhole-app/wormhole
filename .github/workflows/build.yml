@@ -11,6 +11,7 @@ on:
 
 jobs:
   build-windows:
+    if: false
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
@@ -38,6 +39,7 @@ jobs:
           path: ./wormhole.zip
 
   build-macos:
+    if: false
     runs-on: macos-latest
     timeout-minutes: 30
     steps:
@@ -73,6 +75,7 @@ jobs:
           path: ./build/macos/Build/Products/Release/wormhole.dmg
 
   build-android:
+    if: false
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -126,8 +129,15 @@ jobs:
           flutter pub get
           flutter gen-l10n
       - name: Build iOS (no codesign)
+        if: false
         run: flutter build ios --release --no-codesign
       # Skip upload, as this is not a signed build
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: ios
       - name: Install fastlane dependencies
         run: |
           cd ios
