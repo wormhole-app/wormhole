@@ -28,7 +28,9 @@ platform :ios do
     # Sync code signing with match
     match(
       type: "appstore",
-      readonly: true
+      readonly: true,
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "login.keychain",
+      keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
     )
 
     commitnr = number_of_commits
@@ -58,7 +60,9 @@ platform :ios do
     # Sync code signing with match
     match(
       type: "appstore",
-      readonly: true
+      readonly: true,
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "login.keychain",
+      keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
     )
 
     # # Increment build number to avoid conflicts

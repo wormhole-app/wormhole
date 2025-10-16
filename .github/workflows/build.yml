@@ -154,6 +154,8 @@ jobs:
           APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
+          MATCH_KEYCHAIN_PASSWORD: temporary_ci_password
       - name: Build and upload to TestFlight
         if: ${{ inputs.release }}
         run: |
@@ -165,3 +167,5 @@ jobs:
           APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
+          MATCH_KEYCHAIN_PASSWORD: temporary_ci_password
