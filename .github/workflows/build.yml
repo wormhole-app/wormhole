@@ -128,12 +128,14 @@ jobs:
       - name: Build iOS (no codesign)
         run: flutter build ios --release --no-codesign
       # Skip upload, as this is not a signed build
+      - name: Install fastlane dependencies
+        run: |
+          cd ios
+          bundle install
       - name: Test build fastlane (no upload)
         if: ${{ !inputs.release }}
         run: |
           cd ios
-          eval "$(/opt/homebrew/bin/brew shellenv)"
-          eval "$(rbenv init -)"
           bundle exec fastlane build
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
@@ -143,8 +145,6 @@ jobs:
         if: ${{ inputs.release }}
         run: |
           cd ios
-          eval "$(/opt/homebrew/bin/brew shellenv)"
-          eval "$(rbenv init -)"
           bundle exec fastlane alpha
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
