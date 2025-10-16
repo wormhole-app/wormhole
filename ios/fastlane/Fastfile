@@ -25,6 +25,12 @@ platform :ios do
       key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
     )
 
+    # Sync code signing with match
+    match(
+      type: "appstore",
+      readonly: true
+    )
+
     commitnr = number_of_commits
     changelog_from_git_commits
 
@@ -47,6 +53,12 @@ platform :ios do
       key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
       key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+    )
+
+    # Sync code signing with match
+    match(
+      type: "appstore",
+      readonly: true
     )
 
     # # Increment build number to avoid conflicts
