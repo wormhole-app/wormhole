@@ -56,16 +56,44 @@ jobs:
       - name: Install dmg dependencies
         run: |
           pip install dmgbuild
+      - name: Setup code signing certificate
+        # if: ${{ inputs.release }}
+        run: |
+          # Create temporary keychain
+          security create-keychain -p temporary_ci_password build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p temporary_ci_password build.keychain
+          security set-keychain-settings -t 3600 -u build.keychain
+
+          # Decode and import certificate
+          echo "${{ secrets.MACOS_CERTIFICATE_BASE64 }}" | base64 --decode > certificate.p12
+          security import certificate.p12 -k build.keychain -P "${{ secrets.MACOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign -T /usr/bin/productsign
+          security set-key-partition-list -S apple-tool:,apple: -s -k temporary_ci_password build.keychain
+
+          # Clean up certificate file
+          rm -f certificate.p12
+      - name: Setup notary profile for notarization
+        # if: ${{ inputs.release }}
+        run: |
+          # Store notarization credentials for dmg package to use
+          xcrun notarytool store-credentials "NotaryProfile" \
+            --apple-id "${{ secrets.APPLE_ID }}" \
+            --password "${{ secrets.APPLE_PASSWORD }}" \
+            --team-id "${{ secrets.APPLE_TEAM_ID }}"
       - name: Create unsigned DMG
         if: ${{ !inputs.release }}
         # In release, this should be signed with the proper cert (gotten from Apple)
         run: |
           dart run dmg --no-sign
-      - name: Create signed DMG
-        if: ${{ inputs.release }}
-        # In release, this should be signed with the proper cert (gotten from Apple)
+      - name: Create signed DMG (with automatic notarization and stapling)
+        # if: ${{ inputs.release }}
+        # The dmg package will automatically: sign the app, create DMG, sign DMG, notarize, and staple
         run: |
-          dart run dmg --sign --identity "Developer ID Application: Emma Sabatschus (Y647R6B9S3)"
+          dart run dmg --sign-certificate "Developer ID Application: Emma Sabatschus (Y647R6B9S3)"
+      - name: Cleanup keychain
+        if: ${{ always() && inputs.release }}
+        run: |
+          security delete-keychain build.keychain || true
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
