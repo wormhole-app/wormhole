@@ -28,6 +28,7 @@ platform :ios do
     # Sync code signing with match
     match(
       type: "appstore",
+      app_identifier: ["de.emmabyte.wormhole", "de.emmabyte.wormhole.ShareExtension"],
       readonly: true,
       keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "login.keychain",
       keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
@@ -45,6 +46,12 @@ platform :ios do
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "de.emmabyte.wormhole" => "match AppStore de.emmabyte.wormhole",
+          "de.emmabyte.wormhole.ShareExtension" => "match AppStore de.emmabyte.wormhole.ShareExtension"
+        }
+      }
     )
   end
   
@@ -60,6 +67,7 @@ platform :ios do
     # Sync code signing with match
     match(
       type: "appstore",
+      app_identifier: ["de.emmabyte.wormhole", "de.emmabyte.wormhole.ShareExtension"],
       readonly: true,
       keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "login.keychain",
       keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
@@ -75,6 +83,12 @@ platform :ios do
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "de.emmabyte.wormhole" => "match AppStore de.emmabyte.wormhole",
+          "de.emmabyte.wormhole.ShareExtension" => "match AppStore de.emmabyte.wormhole.ShareExtension"
+        }
+      }
     )
 
     # Upload to TestFlight
