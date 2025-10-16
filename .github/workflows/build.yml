@@ -100,6 +100,16 @@ jobs:
         with:
           name: android-apk
           path: ./build/app/outputs/flutter-apk/app-release.apk
+      - name: Build Android AAB (to test fastlane)
+        run: |
+          cd android
+          fastlane android build_aab
+          cd ..
+      - name: Run fastlane to build Android App Bundle
+        if: ${{ inputs.release }}
+        run: |
+          cd android
+          bundle exec fastlane deploy
 
   build-ios:
     runs-on: macos-latest

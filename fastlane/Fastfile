@@ -16,6 +16,14 @@
 default_platform(:android)
 
 platform :android do
+  desc "Build AAB for testing fastlane setup"
+  lane :build_aab do
+    gradle(
+      task: "bundle",
+      build_type: "Release"
+    )
+  end
+
   desc "Deploy a new version to the Google Play"
   lane :deploy do
         commitnr = number_of_commits
