@@ -10,3 +10,63 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       release: true
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: release
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows
+          path: ./artifacts/windows
+
+      - name: Download macOS artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: macos
+          path: ./artifacts/macos
+
+      - name: Download Android APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: ./artifacts/android
+
+      - name: Extract changelog for current version
+        id: changelog
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          # Remove 'v' prefix if present
+          VERSION=${VERSION#v}
+
+          # Extract the section for this version from CHANGELOG.md
+          CHANGELOG=$(awk "/## ${VERSION}\$/{flag=1; next} /## [0-9]/{flag=0} flag" CHANGELOG.md)
+
+          # If changelog is empty, use a default message
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="Release ${VERSION}"
+          fi
+
+          # Save to output (escape for GitHub Actions)
+          {
+            echo "body<<EOF"
+            echo "$CHANGELOG"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{ steps.changelog.outputs.body }}
+          draft: false
+          prerelease: false
+          files: |
+            ./artifacts/android/app-release.apk
+            ./artifacts/windows/wormhole.zip
+            ./artifacts/macos/wormhole.dmg
