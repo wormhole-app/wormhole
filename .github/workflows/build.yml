@@ -57,7 +57,7 @@ jobs:
         run: |
           pip install dmgbuild
       - name: Setup code signing certificate
-        # if: ${{ inputs.release }}
+        if: ${{ inputs.release }}
         run: |
           # Create temporary keychain
           security create-keychain -p temporary_ci_password build.keychain
@@ -73,7 +73,7 @@ jobs:
           # Clean up certificate file
           rm -f certificate.p12
       - name: Setup notary profile for notarization
-        # if: ${{ inputs.release }}
+        if: ${{ inputs.release }}
         run: |
           # Store notarization credentials for dmg package to use
           xcrun notarytool store-credentials "NotaryProfile" \
@@ -82,11 +82,10 @@ jobs:
             --team-id "${{ secrets.APPLE_TEAM_ID }}"
       - name: Create unsigned DMG
         if: ${{ !inputs.release }}
-        # In release, this should be signed with the proper cert (gotten from Apple)
         run: |
           dart run dmg --no-sign
       - name: Create signed DMG (with automatic notarization and stapling)
-        # if: ${{ inputs.release }}
+        if: ${{ inputs.release }}
         # The dmg package will automatically: sign the app, create DMG, sign DMG, notarize, and staple
         run: |
           dart run dmg --sign-certificate "Developer ID Application: Emma Sabatschus (Y647R6B9S3)"
@@ -128,15 +127,11 @@ jobs:
         with:
           name: android-apk
           path: ./build/app/outputs/flutter-apk/app-release.apk
-      - name: Build Android AAB (to test fastlane)
-        run: |
-          cd android
-          fastlane android build_aab
-          cd ..
       - name: Run fastlane to build Android App Bundle
         if: ${{ inputs.release }}
         run: |
           cd android
+          fastlane build_aab
           bundle exec fastlane deploy
 
   build-ios:
@@ -157,36 +152,28 @@ jobs:
         run: |
           cd ios
           pod install
+      - name: Build iOS
+        if: ${{ !inputs.release }}
+        run: flutter build ios --release --no-codesign
       - name: Setup Ruby
+        if: ${{ inputs.release }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
           bundler-cache: true
           working-directory: ios
       - name: Install fastlane dependencies
+        if: ${{ inputs.release }}
         run: |
           cd ios
           bundle install
       - name: Setup temporary keychain
+        if: ${{ inputs.release }}
         run: |
           security create-keychain -p temporary_ci_password fastlane_tmp_keychain.keychain
           security default-keychain -s fastlane_tmp_keychain.keychain
           security unlock-keychain -p temporary_ci_password fastlane_tmp_keychain.keychain
           security set-keychain-settings -t 3600 -u fastlane_tmp_keychain.keychain
-      - name: Test build fastlane (no upload)
-        if: ${{ !inputs.release }}
-        run: |
-          cd ios
-          sudo xcode-select -s /Applications/Xcode.app
-          bundle exec fastlane build
-        env:
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
-          MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
-          MATCH_KEYCHAIN_PASSWORD: temporary_ci_password
       - name: Build and upload to TestFlight
         if: ${{ inputs.release }}
         run: |

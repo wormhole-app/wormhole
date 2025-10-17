@@ -16,7 +16,7 @@
 default_platform(:android)
 
 platform :android do
-  desc "Build AAB for testing fastlane setup"
+  desc "Build AAB"
   lane :build_aab do
     gradle(
       task: "bundle",
