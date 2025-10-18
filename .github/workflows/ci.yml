@@ -38,6 +38,7 @@ jobs:
         run: |
           cargo check
           cargo test --all
+
   formatFlutter:
     runs-on: ubuntu-latest
     defaults:
@@ -81,3 +82,13 @@ jobs:
           flutter gen-l10n
       - name: Lint
         run: flutter analyze --no-fatal-infos
+
+  build_test:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    needs:
+      - lintAndTestRust
+      - formatFlutter
+      - lintFlutter
+    with:
+      release: false

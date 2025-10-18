@@ -1,0 +1,134 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Test build for iOS"
+  lane :build do
+    # Ensure we have the latest profile and certificates
+    app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+    )
+
+    # Sync code signing with match
+    match(
+      type: "appstore",
+      app_identifier: ["de.emmabyte.wormhole", "de.emmabyte.wormhole.ShareExtension"],
+      readonly: true,
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "login.keychain",
+      keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
+    )
+
+    # Update code signing settings in Xcode project
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Runner.xcodeproj",
+      targets: ["Runner"],
+      code_sign_identity: "Apple Distribution",
+      profile_name: "match AppStore de.emmabyte.wormhole"
+    )
+
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Runner.xcodeproj",
+      targets: ["ShareExtension"],
+      code_sign_identity: "Apple Distribution",
+      profile_name: "match AppStore de.emmabyte.wormhole.ShareExtension"
+    )
+
+    commitnr = number_of_commits
+    changelog_from_git_commits
+
+    increment_build_number(
+      build_number: commitnr
+    )
+
+    # Build the app
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "de.emmabyte.wormhole" => "match AppStore de.emmabyte.wormhole",
+          "de.emmabyte.wormhole.ShareExtension" => "match AppStore de.emmabyte.wormhole.ShareExtension"
+        }
+      }
+    )
+  end
+  
+  desc "Upload to TestFlight"
+  lane :alpha do
+    # Ensure we have the latest profile and certificates
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+    )
+
+    # Sync code signing with match
+    match(
+      type: "appstore",
+      app_identifier: ["de.emmabyte.wormhole", "de.emmabyte.wormhole.ShareExtension"],
+      readonly: true,
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "login.keychain",
+      keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
+    )
+
+    # Update code signing settings in Xcode project
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Runner.xcodeproj",
+      targets: ["Runner"],
+      code_sign_identity: "Apple Distribution",
+      profile_name: "match AppStore de.emmabyte.wormhole"
+    )
+
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Runner.xcodeproj",
+      targets: ["ShareExtension"],
+      code_sign_identity: "Apple Distribution",
+      profile_name: "match AppStore de.emmabyte.wormhole.ShareExtension"
+    )
+
+    # # Increment build number to avoid conflicts
+    # increment_build_number(
+    #   build_number: ENV["BUILD_NUMBER"] || latest_testflight_build_number(api_key: api_key) + 1
+    # )
+
+    # Build the app
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "de.emmabyte.wormhole" => "match AppStore de.emmabyte.wormhole",
+          "de.emmabyte.wormhole.ShareExtension" => "match AppStore de.emmabyte.wormhole.ShareExtension"
+        }
+      }
+    )
+
+    # Upload to TestFlight
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true
+    )
+  end
+end
