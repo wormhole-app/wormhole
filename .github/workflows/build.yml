@@ -134,7 +134,7 @@ jobs:
           fastlane build_aab
           bundle exec fastlane deploy
 
-  build-android:
+  build-linux:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
