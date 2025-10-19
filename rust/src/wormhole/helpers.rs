@@ -67,6 +67,7 @@ pub fn sanitize_filename(filename: &str) -> String {
         let name_upper = name.to_uppercase();
         let base = name_upper.split('.').next().unwrap_or("");
 
+        #[rustfmt::skip]
         matches!(
             base,
             "CON" | "PRN" | "AUX" | "NUL"
