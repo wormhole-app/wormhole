@@ -127,6 +127,12 @@ jobs:
         with:
           name: android-apk
           path: ./build/app/outputs/flutter-apk/app-release.apk
+      - name: Prepare Fastlane service account key
+        if: ${{ inputs.release }}
+        run: |
+          echo "$ANDROID_FASTLANE_KEY" > android/fastlane-key.json
+        env:
+          ANDROID_FASTLANE_KEY: ${{ secrets.ANDROID_FASTLANE_KEY }}
       - name: Run fastlane to build Android App Bundle
         if: ${{ inputs.release }}
         run: |
