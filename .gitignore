@@ -48,4 +48,4 @@ jniLibs
 
 Cargo.lock
 pubspec.lock
-lib/l10n/
+lib/l10n/*.dart
