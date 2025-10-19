@@ -7,6 +7,7 @@ import 'package:flutter_close_app/flutter_close_app.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_handler/share_handler.dart';
+import 'package:app_links/app_links.dart';
 
 import '../l10n/app_localizations.dart';
 import '../src/rust/api/wormhole.dart';
@@ -178,6 +179,12 @@ class _TransferReceiverState extends State<TransferReceiver> {
     });
   }
 
+  void registerIntentReceiveHandler() {
+    AppLinks().uriLinkStream.listen((uri) {
+      _receiveFile(uri.path);
+    });
+  }
+
   void _sendIntentFile(List<SharedAttachment?> attachments) {
     final paths = attachments
         .where((e) => e != null)
@@ -195,6 +202,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
     // Intent shares only on android and ios
     if (Platform.isAndroid || Platform.isIOS) {
       registerIntentShareHandler();
+    }
+
+    if (Platform.isAndroid) {
+      registerIntentReceiveHandler();
     }
   }
 }

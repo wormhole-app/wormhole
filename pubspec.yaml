@@ -44,6 +44,7 @@ dependencies:
   device_info_plus: ^12.1.0
   rust_lib_wormhole:
     path: rust_builder
+  app_links: ^6.4.1
 
 dev_dependencies:
   flutter_test:
