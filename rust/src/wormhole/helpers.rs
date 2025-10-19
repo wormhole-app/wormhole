@@ -4,7 +4,7 @@ use magic_wormhole::{AppConfig, transit};
 use std::borrow::Cow;
 
 /// Character used to replace illegal characters in filenames
-const REPLACEMENT_CHAR: char = '-';
+const REPLACEMENT_CHAR: char = '_';
 
 /// Helper function to replace invalid characters in a filename
 fn replace_invalid_chars(filename: &str, is_valid: fn(char) -> bool) -> String {
