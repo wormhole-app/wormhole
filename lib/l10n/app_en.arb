@@ -26,7 +26,7 @@
   "transfer_code_help" : "The receiver needs to enter or scan the code.\nIt has to use an app compatible with the magic-wormhole protocol like this app or <link> for Desktops.",
   "transfer_code_help_title" : "How to use this code?",
   "transfer_error_retry" : "Retry",
-  "transfer_error_base" : "Transfer error occured:",
+  "transfer_error_base" : "Transfer error occurred:",
   "transfer_error_storagepermission" : "Insufficient Storage Permissions",
 
   "transfer_progress_connection_direct" : "Connection via direct link",

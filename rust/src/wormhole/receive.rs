@@ -1,7 +1,7 @@
 use crate::api::{ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
-use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
+use crate::wormhole::helpers::{gen_app_config, gen_relay_hints, sanitize_filename};
 use crate::wormhole::path::find_free_filepath;
 use async_std::fs::OpenOptions;
 use magic_wormhole::{Code, MailboxConnection, Wormhole, transfer, transit};
@@ -85,7 +85,8 @@ pub async fn request_file_impl(
      * - If it doesn't, directly accept, but DON'T overwrite any files
      */
 
-    let file_path = Path::new(storage_folder.as_str()).join(req.file_name());
+    let sanitized_filename = sanitize_filename(&req.file_name());
+    let file_path = Path::new(storage_folder.as_str()).join(sanitized_filename);
     let file_path = match find_free_filepath(file_path) {
         None => {
             _ = actions.add(TUpdate::new(
