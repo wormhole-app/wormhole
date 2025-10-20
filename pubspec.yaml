@@ -49,7 +49,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  dmg: ^0.1.6
+  dmg: ^0.1.7
   flutter_lints: ^6.0.0
   ffigen: ^19.1.0
   flutter_launcher_icons:
