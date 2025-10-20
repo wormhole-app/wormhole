@@ -75,9 +75,10 @@ fn is_valid_filename_char(c: char) -> bool {
 
 /// Checks if a filename is a Windows reserved name
 #[cfg(target_os = "windows")]
+#[rustfmt::skip]
 fn is_reserved_name(name: &str) -> bool {
-    let base = name.to_uppercase().split('.').next().unwrap_or("");
-    #[rustfmt::skip]
+    let uppercase = name.to_uppercase();
+    let base = uppercase.split('.').next().unwrap_or("");
     matches!(
         base,
         "CON" | "PRN" | "AUX" | "NUL"

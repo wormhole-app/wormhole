@@ -26,7 +26,7 @@ jobs:
           flutter gen-l10n
       - name: Build Windows
         run: |
-          flutter build windows
+          flutter build windows --verbose
       - name: Zip Windows Release
         run: |
           Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./wormhole.zip -Force
