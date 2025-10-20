@@ -104,7 +104,9 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 * [toggle_switch](https://pub.dev/packages/toggle_switch)(MIT) - pretty toggle switches
 * [permission_handler](https://pub.dev/packages/permission_handler) (MIT) - handle platform permissions
 * [url_launcher](https://pub.dev/packages/url_launcher) (BSD-3-Clause) - open urls in platform default browser
-* [flutter_close_app](https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git)(MIT) - proper close of app
+* [flutter_close_app](https://github.com/wormhole-app/wormhole/tree/main/packages/flutter_close_app)(MIT) - proper close of app
+* [device_info_plus](https://pub.dev/packages/device_info_plus) (BSD-3-Clause) - get device information
+* [app_links](https://pub.dev/packages/app_links) (Apache-2.0) - handle deep linking/universal links
 
 ## Rust
 
@@ -113,7 +115,8 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 * [futures](https://crates.io/crates/futures)(MIT) - async/await async programming
 * [async-std](https://crates.io/crates/async-std)(MIT) - async std-lib
 * [url](https://crates.io/crates/url)(MIT) - url generation lib
-* [yaml-rust](https://crates.io/crates/yaml-rust)(MIT) - yaml parser
+* [zip](https://crates.io/crates/zip)(MIT) - ZIP file compression/decompression
+* [fastrand](https://crates.io/crates/fastrand)(MIT) - fast random number generation
 
 
 ## License
