@@ -11,9 +11,9 @@ An open source Android, iOS, macOS, and Windows App for sending/receiveing files
 
 ## Preview
 
-<p><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799885.007992.png" width="32%"  alt=""/> 
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799886.892108.png" width="32%"  alt=""/> 
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799914.5084915.png" width="32%"  alt=""/></p>
+<p><img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799885.007992.png" width="32%"  alt=""/> 
+<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799886.892108.png" width="32%"  alt=""/> 
+<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799914.5084915.png" width="32%"  alt=""/></p>
 
 ## Features
 
