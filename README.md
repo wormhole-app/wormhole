@@ -6,6 +6,7 @@
 An open source Android, iOS, macOS, and Windows App for sending/receiveing files using the magic-wormhole protocol.
 
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play Store" height="75">](https://play.google.com/store/apps/details?id=eu.heili.wormhole)[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="75">](https://apt.izzysoft.de/packages/eu.heili.wormhole)
+
 [<img src="https://img.shields.io/badge/TestFlight-Join_Beta-0D96F6?style=for-the-badge&logo=apple&logoColor=white" alt="Join TestFlight Beta" height="75">](https://testflight.apple.com/join/dUGWPGtc)
 
 ## Preview
