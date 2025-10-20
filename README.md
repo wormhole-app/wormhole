@@ -104,7 +104,7 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 * [toggle_switch](https://pub.dev/packages/toggle_switch)(MIT) - pretty toggle switches
 * [permission_handler](https://pub.dev/packages/permission_handler) (MIT) - handle platform permissions
 * [url_launcher](https://pub.dev/packages/url_launcher) (BSD-3-Clause) - open urls in platform default browser
-* [flutter_close_app](https://gitlab.com/lukas-heiligenbrunner/fluttercloseapp.git)(MIT) - proper close of app
+* [flutter_close_app](https://github.com/wormhole-app/wormhole/tree/main/packages/flutter_close_app)(MIT) - proper close of app
 
 ## Rust
 
