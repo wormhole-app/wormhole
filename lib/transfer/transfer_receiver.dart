@@ -204,7 +204,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
       registerIntentShareHandler();
     }
 
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid || Platform.isIOS) {
       registerIntentReceiveHandler();
     }
   }
