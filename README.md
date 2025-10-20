@@ -1,7 +1,7 @@
 # Wormhole
 
-[![Latest Release](https://gitlab.com/lukas-heiligenbrunner/wormhole/-/badges/release.svg)](https://gitlab.com/lukas-heiligenbrunner/wormhole/-/releases)
-[![pipeline status](https://gitlab.com/lukas-heiligenbrunner/wormhole/badges/main/pipeline.svg)](https://gitlab.com/lukas-heiligenbrunner/wormhole/-/commits/main)
+[![Latest Release](https://img.shields.io/github/v/release/wormhole-app/wormhole)](https://github.com/wormhole-app/wormhole/releases)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/wormhole-app/wormhole/ci.yml?branch=main)](https://github.com/wormhole-app/wormhole/actions)
 
 An open source Android, iOS, macOS, and Windows App for sending/receiveing files using the magic-wormhole protocol.
 
