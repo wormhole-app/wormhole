@@ -28,11 +28,17 @@ jobs:
 
       - name: Prepare pages directory
         run: |
-          mkdir -p _site
-          cp page/config.yml _site/
-          cp page/index.md _site/
-          cp page/privacy_policy.md _site/
-          cp page/terms_and_conditions.md _site/
+          mkdir -p page_build
+          cp page/_config.yml page_build/
+          cp page/index.md page_build/
+          cp page/privacy_policy.md page_build/
+          cp page/terms_and_conditions.md page_build/
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./page_build
+          destination: ./_site
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
