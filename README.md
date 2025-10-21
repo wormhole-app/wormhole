@@ -107,6 +107,7 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 * [permission_handler](https://pub.dev/packages/permission_handler) (MIT) - handle platform permissions
 * [url_launcher](https://pub.dev/packages/url_launcher) (BSD-3-Clause) - open urls in platform default browser
 * [flutter_close_app](https://github.com/wormhole-app/wormhole/tree/main/packages/flutter_close_app)(MIT) - proper close of app
+* [media_scanner](https://pub.dev/packages/media_scanner) (MIT) - trigger media library scan on Android
 * [device_info_plus](https://pub.dev/packages/device_info_plus) (BSD-3-Clause) - get device information
 * [app_links](https://pub.dev/packages/app_links) (Apache-2.0) - handle deep linking/universal links
 
