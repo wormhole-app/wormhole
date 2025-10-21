@@ -668,6 +668,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      sha256: a7967e31b703831a893bbc3c3dd11db08126fe5f369b5c648a36f821979f5be3
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.2"
   logging:
     dependency: transitive
     description:
@@ -924,6 +932,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.2"
+  rotation_log:
+    dependency: "direct main"
+    description:
+      name: rotation_log
+      sha256: "3aa808f55b97ac4e1f37ac6362d1519b7c40d6e1f912a8550257857420955eea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.8"
   rust_lib_wormhole:
     dependency: "direct main"
     description:

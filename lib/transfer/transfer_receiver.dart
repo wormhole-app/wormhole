@@ -17,6 +17,7 @@ import '../pages/toasts/error_toast.dart';
 import '../pages/transfer_widgets/transfer_finished.dart';
 import '../settings/settings.dart';
 import '../utils/paths.dart';
+import '../utils/logger.dart';
 import 'transfer_provider.dart';
 
 class TransferReceiver extends StatefulWidget {
@@ -106,7 +107,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
   void _receiveFile(String passphrase) async {
     final dpath = await getDownloadPath();
     if (dpath == null) {
-      debugPrint('no download path available');
+      AppLogger.warning('No download path available');
       return;
     }
 
@@ -194,7 +195,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
       return;
     }
 
-    debugPrint('sending file ${paths.toString()}');
+    AppLogger.info('Sending file via intent: ${paths.toString()}');
     _sendFiles(paths[0].split('/').last, paths, true);
   }
 

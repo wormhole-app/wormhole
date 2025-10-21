@@ -109,6 +109,8 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 * [flutter_close_app](https://github.com/wormhole-app/wormhole/tree/main/packages/flutter_close_app)(MIT) - proper close of app
 * [device_info_plus](https://pub.dev/packages/device_info_plus) (BSD-3-Clause) - get device information
 * [app_links](https://pub.dev/packages/app_links) (Apache-2.0) - handle deep linking/universal links
+* [logger](https://pub.dev/packages/logger) (MIT) - structured logging
+* [rotation_log](https://pub.dev/packages/rotation_log) (MIT) - log file rotation and archiving
 
 ## Rust
 

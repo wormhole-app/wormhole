@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'logger.dart';
 
 Future<String?> getDownloadPath() async {
   Directory? directory;
@@ -19,7 +19,7 @@ Future<String?> getDownloadPath() async {
       directory = await getDownloadsDirectory();
     }
   } catch (err) {
-    debugPrint('Cannot get download folder path');
+    AppLogger.severe('Cannot get download folder path: $err');
   }
   return directory?.path;
 }

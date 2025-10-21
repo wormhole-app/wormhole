@@ -6,10 +6,12 @@ import '../../l10n/app_localizations.dart';
 import '../../src/rust/api/wormhole.dart';
 import '../../settings/settings.dart';
 import '../../theme/theme_provider.dart';
+import '../../utils/logger.dart';
 import '../../widgets/fast_future_builder.dart';
 import '../../widgets/number_input.dart';
 import '../../widgets/settings_row.dart';
 import '../../widgets/settings_section_button.dart';
+import 'package:share_plus/share_plus.dart';
 import 'server_settings_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -28,6 +30,72 @@ class _SettingsPageState extends State<SettingsPage> {
     Settings.getWordLength().then((value) {
       _controllerWordLength.text = value?.toString() ?? '';
     });
+  }
+
+  Future<void> _showExportLogsDialog() async {
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 450),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.logs_dialog_title,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                    'This will create a compressed archive of the application logs that you can share to help with debugging issues.'),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Cancel'),
+                    ),
+                    const SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                        await _exportLogs();
+                      },
+                      child:
+                          Text(AppLocalizations.of(context)!.logs_dialog_share),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _exportLogs() async {
+    try {
+      // Archive logs - this creates a zip file
+      final archivePath = await AppLogger.archiveLog();
+      AppLogger.info('Logs archived to: $archivePath');
+
+      // Share the archived log file
+      final params = ShareParams(
+        files: [XFile(archivePath)],
+        subject: 'Wormhole App Logs',
+      );
+      final result = await SharePlus.instance.share(params);
+
+      AppLogger.info('Logs exported with result: ${result.status}');
+    } catch (e) {
+      AppLogger.severe('Failed to export logs: $e');
+    }
   }
 
   Widget _buildBottomVersion() {
@@ -155,23 +223,34 @@ class _SettingsPageState extends State<SettingsPage> {
           iconRight: Icons.arrow_right_outlined,
         ),
       ),
+      SettingsRow(
+        name: AppLocalizations.of(context)!.settings_page_logs,
+        child: SettingsSectionButton(
+          onButtonClick: _showExportLogsDialog,
+          text: AppLocalizations.of(context)!.settings_page_export_logs,
+          iconRight: Icons.file_upload_outlined,
+        ),
+      ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: _buildSettingsContent(),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: _buildSettingsContent(),
+            ),
           ),
-          _buildBottomVersion()
-        ],
-      ),
+        ),
+        Center(child: _buildBottomVersion())
+      ],
     );
   }
 }

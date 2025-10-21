@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +11,20 @@ import 'settings/settings.dart';
 import 'theme/dark_theme.dart';
 import 'theme/light_theme.dart';
 import 'theme/theme_provider.dart';
+import 'utils/logger.dart';
 
 Future<void> main() async {
-  await RustLib.init();
-  runApp(const MyApp());
+  // Run app with global error logging
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await AppLogger.initialize();
+    await RustLib.init();
+    AppLogger.info('Application starting');
+    runApp(const MyApp());
+  }, (error, stackTrace) {
+    AppLogger.severe('Uncaught error: $error');
+    AppLogger.severe('Stack trace: $stackTrace');
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -58,7 +69,7 @@ class _MyAppState extends State<MyApp> {
                   .contains(deviceLocale?.languageCode)) {
                 return deviceLocale;
               }
-              debugPrint('fallback to default locale');
+              AppLogger.info('Fallback to default locale');
               return const Locale('en');
             },
             theme: lightTheme,
