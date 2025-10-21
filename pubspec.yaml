@@ -45,6 +45,7 @@ dependencies:
   rust_lib_wormhole:
     path: rust_builder
   app_links: ^6.4.1
+  media_scanner: ^2.2.0
 
 dev_dependencies:
   flutter_test:

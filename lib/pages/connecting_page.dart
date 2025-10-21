@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:media_scanner/media_scanner.dart';
 
 import '../src/rust/api/wormhole.dart';
 import '../navigation/back_pop_context.dart';
@@ -81,7 +83,12 @@ class _ConnectingPageState extends State<ConnectingPage> {
                     ? (event.value as Value_ErrorValue).field1
                     : null));
       case Events.finished:
-        return BackPopContext(child: widget.finish(event.getValue()));
+        final String file = event.getValue();
+        if (Platform.isAndroid) {
+          // register the new device to the Android Media Database
+          MediaScanner.loadMedia(path: file);
+        }
+        return BackPopContext(child: widget.finish(file));
       case Events.zipFilesTotal:
       case Events.zipFiles:
         return DisallowPopContext(
