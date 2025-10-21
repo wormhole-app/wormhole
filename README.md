@@ -32,23 +32,39 @@ An open source Android, iOS, macOS, and Windows App for sending/receiveing files
 ### Prerequisites
 - Flutter (>= 3.22.0)
 - Rust (MSRV >= 1.85.1)
+- Just
+
+**Android only:**
 - Android NDK
 - Android SDK (>= 31)
-- Just
 
 ### Build app
 
-Add rust Android targets:\
+#### Android
+
+Add Rust Android targets:\
 `rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android`
 
 Install cargo-ndk:\
 `cargo install cargo-ndk`
 
-Build apk+appbundle:\
+Build APK + App Bundle:\
 `just apk`
 
-Dev Linux build:\
+#### Linux
+
+Dev build:\
 `just linux`
+
+#### macOS
+
+Dev build:\
+`flutter build macos`
+
+#### Windows
+
+Dev build:\
+`flutter build windows`
 
 ### Format/Lint
 
