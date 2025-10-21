@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:media_scanner/media_scanner.dart';
 
 import '../src/rust/api/wormhole.dart';
@@ -86,7 +87,11 @@ class _ConnectingPageState extends State<ConnectingPage> {
         final String file = event.getValue();
         if (Platform.isAndroid) {
           // register the new device to the Android Media Database
-          MediaScanner.loadMedia(path: file);
+          try {
+            MediaScanner.loadMedia(path: file);
+          } on PlatformException {
+            debugPrint('Failed to trigger media scan for $file');
+          }
         }
         return BackPopContext(child: widget.finish(file));
       case Events.zipFilesTotal:
