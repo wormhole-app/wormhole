@@ -1,0 +1,34 @@
+# A list of devices you want to take the screenshots from
+# For App Store Connect screenshot requirements:
+#   - 6.9" display: iPhone 17 Pro Max (1320×2868)
+#   - 6.5" display: iPhone 15 Pro Max (1284×2778)
+#   - iPad 13": iPad Pro 13-inch (M4)
+devices([
+  "iPhone 17 Pro Max",      # 6.9" display (1320×2868)
+  "iPhone 15 Pro Max",      # 6.5" display (1284×2778)
+  "iPad Pro 13-inch (M4)"   # iPad Pro 13" display
+])
+
+languages([
+  "en-US",
+  "de-DE"
+])
+
+# The name of the scheme which contains the UI Tests
+scheme("Runner")
+
+# Where should the resulting screenshots be stored?
+output_directory("./fastlane/screenshots")
+
+# Clear all previously generated screenshots before creating new ones
+clear_previous_screenshots(true)
+
+# Remove the '#' to set the status bar to 9:41 AM, and show full battery and reception.
+# See also https://github.com/fastlane/fastlane/blob/master/snapshot/README.md#use-a-clean-status-bar
+override_status_bar(true)
+
+# Arguments to pass to the app on launch. See https://docs.fastlane.tools/actions/snapshot/#launch-arguments
+# launch_arguments(["-favColor red"])
+
+# For more information about all available options run
+# fastlane action snapshot

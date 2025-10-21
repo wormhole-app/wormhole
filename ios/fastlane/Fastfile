@@ -72,6 +72,14 @@ platform :ios do
     )
   end
   
+  desc "Generate screenshots for App Store"
+  lane :screenshots do
+    capture_screenshots(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner"
+    )
+  end
+
   desc "Upload to TestFlight"
   lane :alpha do
     # Ensure we have the latest profile and certificates
