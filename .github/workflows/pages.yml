@@ -29,7 +29,7 @@ jobs:
       - name: Prepare pages directory
         run: |
           mkdir -p _site
-          cp page/_config.yml _site/
+          cp page/config.yml _site/
           cp page/index.md _site/
           cp page/privacy_policy.md _site/
           cp page/terms_and_conditions.md _site/
