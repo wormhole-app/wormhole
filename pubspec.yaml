@@ -36,6 +36,8 @@ dependencies:
   toggle_switch: ^2.0.1
   permission_handler: ^12.0.1
   url_launcher: ^6.1.9
+  logger: ^2.6.1 # structured logging (used by rotation_log)
+  rotation_log: ^0.0.8 # log file rotation and archiving
 
   # use custom plugin for handling programmatically close of app
   flutter_close_app:

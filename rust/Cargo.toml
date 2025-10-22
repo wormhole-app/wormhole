@@ -16,6 +16,8 @@ url = { version = "2.3.1", features = ["serde"] }
 zip = { version = "6.0.0", default-features = false, features = ["deflate"] }
 macros = { path = "macros", version = "1" }
 fastrand = "2.0.1"
+flutter_logger = "0.6.1"
+log = "0.4"
 
 [profile.release]
 opt-level = 'z'     # Optimize for size.

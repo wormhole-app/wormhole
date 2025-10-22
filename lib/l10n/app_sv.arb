@@ -49,6 +49,11 @@
   "settings_page_transitserver" : "Transit Server:",
   "settings_page_error_url" : "Ogiltig webbadress:",
   "settings_page_server_saved" : "Serverinställningar sparade!",
+  "settings_page_logs" : "Loggar:",
+  "settings_page_export_logs" : "Exportera loggar",
+
+  "logs_dialog_title" : "Exportera applikationsloggar",
+  "logs_dialog_share" : "Dela loggar",
 
   "toast_error_qr_fail" : "Misslyckades med att scanna QR-kod",
   "toast_error_qr_invalid" : "Scannad QR-kod är ogiltig",

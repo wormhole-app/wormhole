@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../transfer/transfer_provider.dart';
 import '../widgets/icon_text_button.dart';
+import '../utils/logger.dart';
 
 class SendPage extends StatefulWidget {
   const SendPage({super.key});
@@ -23,11 +24,12 @@ class _SendPageState extends State<SendPage> {
           result.files.where((element) => element.path != null).toList();
 
       if (!mounted) return;
+      AppLogger.info('Sending ${files.length} file(s)');
       Provider.of<TransferProvider>(context, listen: false).sendFiles(
           files.first.name,
           files.map((e) => e.path).whereType<String>().toList());
     } else {
-      debugPrint('user canceled picker');
+      AppLogger.debug('User canceled file picker');
     }
   }
 
@@ -36,10 +38,11 @@ class _SendPageState extends State<SendPage> {
 
     if (result != null) {
       if (!mounted) return;
+      AppLogger.info('Sending folder: ${result.split('/').last}');
       Provider.of<TransferProvider>(context, listen: false)
           .sendFolder(result.split('/').last, result);
     } else {
-      debugPrint('user canceled picker');
+      AppLogger.debug('User canceled folder picker');
     }
   }
 

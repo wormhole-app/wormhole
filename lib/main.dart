@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +11,60 @@ import 'settings/settings.dart';
 import 'theme/dark_theme.dart';
 import 'theme/light_theme.dart';
 import 'theme/theme_provider.dart';
+import 'utils/logger.dart';
 
 Future<void> main() async {
-  await RustLib.init();
-  runApp(const MyApp());
+  // Run app with global error logging
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await AppLogger.initialize();
+
+    debugPrint = (String? message, {int? wrapWidth}) {
+      if (message != null) AppLogger.debug(message);
+    };
+
+    await RustLib.init();
+
+    // Setup Rust logging bridge
+    await setupRustLogger();
+
+    AppLogger.info('Application starting');
+    runApp(const MyApp());
+  }, (error, stackTrace) {
+    AppLogger.error('Uncaught error: $error');
+    AppLogger.error('Stack trace: $stackTrace');
+  });
+}
+
+/// Setup Rust logger to bridge Rust logs into Flutter logging system
+Future<void> setupRustLogger() async {
+  try {
+    setupLogStream().listen((logEntry) {
+      // Map Rust log levels to Flutter AppLogger
+      final message = '[Rust:${logEntry.lbl}] ${logEntry.msg}';
+
+      switch (logEntry.logLevel) {
+        case Level.error:
+          AppLogger.error(message);
+          break;
+        case Level.warn:
+          AppLogger.warn(message);
+          break;
+        case Level.info:
+          AppLogger.info(message);
+          break;
+        case Level.debug:
+        case Level.trace:
+          AppLogger.debug(message);
+          break;
+      }
+    }, onError: (error) {
+      AppLogger.error('Rust log stream error: $error');
+    });
+    AppLogger.info('Rust logger initialized');
+  } catch (e) {
+    AppLogger.error('Failed to setup Rust logger: $e');
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -58,7 +109,7 @@ class _MyAppState extends State<MyApp> {
                   .contains(deviceLocale?.languageCode)) {
                 return deviceLocale;
               }
-              debugPrint('fallback to default locale');
+              AppLogger.info('Fallback to default locale');
               return const Locale('en');
             },
             theme: lightTheme,

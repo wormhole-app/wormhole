@@ -73,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 968120258;
+  int get rustContentHash => 1333549542;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -111,6 +111,8 @@ abstract class RustLibApi extends BaseApi {
       required String name,
       required int codeLength,
       required ServerConfig serverConfig});
+
+  Stream<LogEntry> crateApiWormholeSetupLogStream();
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -357,10 +359,43 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         ],
       );
 
+  @override
+  Stream<LogEntry> crateApiWormholeSetupLogStream() {
+    final sink = RustStreamSink<LogEntry>();
+    unawaited(handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_StreamSink_log_entry_Sse(sink, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 9, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiWormholeSetupLogStreamConstMeta,
+      argValues: [sink],
+      apiImpl: this,
+    )));
+    return sink.stream;
+  }
+
+  TaskConstMeta get kCrateApiWormholeSetupLogStreamConstMeta =>
+      const TaskConstMeta(
+        debugName: 'setup_log_stream',
+        argNames: ['sink'],
+      );
+
   @protected
   AnyhowException dco_decode_AnyhowException(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return AnyhowException(raw as String);
+  }
+
+  @protected
+  RustStreamSink<LogEntry> dco_decode_StreamSink_log_entry_Sse(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError();
   }
 
   @protected
@@ -425,6 +460,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PlatformInt64 dco_decode_i_64(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeI64(raw);
+  }
+
+  @protected
+  Level dco_decode_level(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return Level.values[raw as int];
+  }
+
+  @protected
   List<String> dco_decode_list_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_String).toList();
@@ -434,6 +481,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  LogEntry dco_decode_log_entry(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return LogEntry(
+      timeMillis: dco_decode_i_64(arr[0]),
+      msg: dco_decode_String(arr[1]),
+      logLevel: dco_decode_level(arr[2]),
+      lbl: dco_decode_String(arr[3]),
+    );
   }
 
   @protected
@@ -523,6 +584,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  RustStreamSink<LogEntry> sse_decode_StreamSink_log_entry_Sse(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    throw UnimplementedError('Unreachable ()');
+  }
+
+  @protected
   RustStreamSink<TUpdate> sse_decode_StreamSink_t_update_Sse(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -587,6 +655,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PlatformInt64 sse_decode_i_64(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getPlatformInt64();
+  }
+
+  @protected
+  Level sse_decode_level(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_i_32(deserializer);
+    return Level.values[inner];
+  }
+
+  @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -603,6 +684,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  LogEntry sse_decode_log_entry(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_timeMillis = sse_decode_i_64(deserializer);
+    var var_msg = sse_decode_String(deserializer);
+    var var_logLevel = sse_decode_level(deserializer);
+    var var_lbl = sse_decode_String(deserializer);
+    return LogEntry(
+        timeMillis: var_timeMillis,
+        msg: var_msg,
+        logLevel: var_logLevel,
+        lbl: var_lbl);
   }
 
   @protected
@@ -686,6 +781,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_StreamSink_log_entry_Sse(
+      RustStreamSink<LogEntry> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(
+        self.setupAndSerialize(
+            codec: SseCodec(
+          decodeSuccessData: sse_decode_log_entry,
+          decodeErrorData: sse_decode_AnyhowException,
+        )),
+        serializer);
+  }
+
+  @protected
   void sse_encode_StreamSink_t_update_Sse(
       RustStreamSink<TUpdate> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -751,6 +859,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_i_64(PlatformInt64 self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putPlatformInt64(self);
+  }
+
+  @protected
+  void sse_encode_level(Level self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
@@ -765,6 +885,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_log_entry(LogEntry self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_64(self.timeMillis, serializer);
+    sse_encode_String(self.msg, serializer);
+    sse_encode_level(self.logLevel, serializer);
+    sse_encode_String(self.lbl, serializer);
   }
 
   @protected

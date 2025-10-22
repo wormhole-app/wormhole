@@ -820,6 +820,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "flutter_logger"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6a3d407fd7ed76065e3d7ddbc574af50082d4301dcbf19000badc3c4367fdbd0"
+dependencies = [
+ "log",
+ "once_cell",
+]
+
+[[package]]
 name = "flutter_rust_bridge"
 version = "2.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1803,8 +1813,10 @@ dependencies = [
  "anyhow",
  "async-std",
  "fastrand",
+ "flutter_logger",
  "flutter_rust_bridge",
  "futures",
+ "log",
  "macros",
  "magic-wormhole",
  "url",

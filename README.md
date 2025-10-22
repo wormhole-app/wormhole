@@ -124,6 +124,8 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 * [media_scanner](https://pub.dev/packages/media_scanner) (MIT) - trigger media library scan on Android
 * [device_info_plus](https://pub.dev/packages/device_info_plus) (BSD-3-Clause) - get device information
 * [app_links](https://pub.dev/packages/app_links) (Apache-2.0) - handle deep linking/universal links
+* [logger](https://pub.dev/packages/logger) (MIT) - structured logging
+* [rotation_log](https://pub.dev/packages/rotation_log) (MIT) - log file rotation and archiving
 
 ## Rust
 
@@ -134,6 +136,8 @@ Especially to [magic-wormhole](https://crates.io/crates/magic-wormhole) and [flu
 * [url](https://crates.io/crates/url)(MIT) - url generation lib
 * [zip](https://crates.io/crates/zip)(MIT) - ZIP file compression/decompression
 * [fastrand](https://crates.io/crates/fastrand)(MIT) - fast random number generation
+* [log](https://crates.io/crates/log)(MIT) - logging facade for Rust
+* [flutter_logger](https://crates.io/crates/flutter_logger)(MIT/Apache-2.0) - bridge Rust logs to Flutter
 
 
 ## License

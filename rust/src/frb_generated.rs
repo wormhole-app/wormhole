@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 968120258;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1333549542;
 
 // Section: executor
 
@@ -360,6 +360,55 @@ fn wire__crate__api__wormhole__send_folder_impl(
         },
     )
 }
+fn wire__crate__api__wormhole__setup_log_stream_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "setup_log_stream",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_sink = <StreamSink<
+                crate::api::wormhole::LogEntry,
+                flutter_rust_bridge::for_generated::SseCodec,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok({
+                        crate::api::wormhole::setup_log_stream(api_sink);
+                    })?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+
+// Section: static_checks
+
+#[allow(clippy::unnecessary_literal_unwrap)]
+const _: fn() = || {
+    let LogEntry = None::<crate::api::wormhole::LogEntry>.unwrap();
+    let _: i64 = LogEntry.time_millis;
+    let _: String = LogEntry.msg;
+    let _: crate::api::wormhole::Level = LogEntry.log_level;
+    let _: String = LogEntry.lbl;
+};
 
 // Section: dart2rust
 
@@ -368,6 +417,16 @@ impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <String>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::anyhow::anyhow!("{}", inner);
+    }
+}
+
+impl SseDecode
+    for StreamSink<crate::api::wormhole::LogEntry, flutter_rust_bridge::for_generated::SseCodec>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <String>::sse_decode(deserializer);
+        return StreamSink::deserialize(inner);
     }
 }
 
@@ -470,6 +529,28 @@ impl SseDecode for i32 {
     }
 }
 
+impl SseDecode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i64::<NativeEndian>().unwrap()
+    }
+}
+
+impl SseDecode for crate::api::wormhole::Level {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::wormhole::Level::Error,
+            1 => crate::api::wormhole::Level::Warn,
+            2 => crate::api::wormhole::Level::Info,
+            3 => crate::api::wormhole::Level::Debug,
+            4 => crate::api::wormhole::Level::Trace,
+            _ => unreachable!("Invalid variant for Level: {}", inner),
+        };
+    }
+}
+
 impl SseDecode for Vec<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -491,6 +572,22 @@ impl SseDecode for Vec<u8> {
             ans_.push(<u8>::sse_decode(deserializer));
         }
         return ans_;
+    }
+}
+
+impl SseDecode for crate::api::wormhole::LogEntry {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_timeMillis = <i64>::sse_decode(deserializer);
+        let mut var_msg = <String>::sse_decode(deserializer);
+        let mut var_logLevel = <crate::api::wormhole::Level>::sse_decode(deserializer);
+        let mut var_lbl = <String>::sse_decode(deserializer);
+        return crate::api::wormhole::LogEntry {
+            time_millis: var_timeMillis,
+            msg: var_msg,
+            log_level: var_logLevel,
+            lbl: var_lbl,
+        };
     }
 }
 
@@ -611,6 +708,7 @@ fn pde_ffi_dispatcher_primary_impl(
         6 => wire__crate__api__wormhole__request_file_impl(port, ptr, rust_vec_len, data_len),
         7 => wire__crate__api__wormhole__send_files_impl(port, ptr, rust_vec_len, data_len),
         8 => wire__crate__api__wormhole__send_folder_impl(port, ptr, rust_vec_len, data_len),
+        9 => wire__crate__api__wormhole__setup_log_stream_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -729,6 +827,53 @@ impl flutter_rust_bridge::IntoIntoDart<crate::wormhole::types::events::Events>
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::wormhole::Level> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self.0 {
+            crate::api::wormhole::Level::Error => 0.into_dart(),
+            crate::api::wormhole::Level::Warn => 1.into_dart(),
+            crate::api::wormhole::Level::Info => 2.into_dart(),
+            crate::api::wormhole::Level::Debug => 3.into_dart(),
+            crate::api::wormhole::Level::Trace => 4.into_dart(),
+            _ => unreachable!(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::wormhole::Level>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::wormhole::Level>>
+    for crate::api::wormhole::Level
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::wormhole::Level> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::wormhole::LogEntry> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.0.time_millis.into_into_dart().into_dart(),
+            self.0.msg.into_into_dart().into_dart(),
+            self.0.log_level.into_into_dart().into_dart(),
+            self.0.lbl.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::wormhole::LogEntry>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::wormhole::LogEntry>>
+    for crate::api::wormhole::LogEntry
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::wormhole::LogEntry> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::wormhole::ServerConfig {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -817,6 +962,15 @@ impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(format!("{:?}", self), serializer);
+    }
+}
+
+impl SseEncode
+    for StreamSink<crate::api::wormhole::LogEntry, flutter_rust_bridge::for_generated::SseCodec>
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        unimplemented!("")
     }
 }
 
@@ -924,6 +1078,32 @@ impl SseEncode for i32 {
     }
 }
 
+impl SseEncode for i64 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i64::<NativeEndian>(self).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::wormhole::Level {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(
+            match self {
+                crate::api::wormhole::Level::Error => 0,
+                crate::api::wormhole::Level::Warn => 1,
+                crate::api::wormhole::Level::Info => 2,
+                crate::api::wormhole::Level::Debug => 3,
+                crate::api::wormhole::Level::Trace => 4,
+                _ => {
+                    unimplemented!("");
+                }
+            },
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for Vec<String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -941,6 +1121,16 @@ impl SseEncode for Vec<u8> {
         for item in self {
             <u8>::sse_encode(item, serializer);
         }
+    }
+}
+
+impl SseEncode for crate::api::wormhole::LogEntry {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i64>::sse_encode(self.time_millis, serializer);
+        <String>::sse_encode(self.msg, serializer);
+        <crate::api::wormhole::Level>::sse_encode(self.log_level, serializer);
+        <String>::sse_encode(self.lbl, serializer);
     }
 }
 

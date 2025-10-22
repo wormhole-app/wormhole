@@ -18,6 +18,11 @@ export '../wormhole/types/events.dart';
 export '../wormhole/types/t_update.dart';
 export '../wormhole/types/value.dart';
 
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `send`
+
+Stream<LogEntry> setupLogStream() =>
+    RustLib.instance.api.crateApiWormholeSetupLogStream();
+
 /// initialize backend api
 Future<void> init({required String tempFilePath}) =>
     RustLib.instance.api.crateApiWormholeInit(tempFilePath: tempFilePath);
@@ -66,6 +71,43 @@ Future<String> defaultRendezvousUrl() =>
 
 Future<String> defaultTransitUrl() =>
     RustLib.instance.api.crateApiWormholeDefaultTransitUrl();
+
+enum Level {
+  error,
+  warn,
+  info,
+  debug,
+  trace,
+  ;
+}
+
+class LogEntry {
+  final PlatformInt64 timeMillis;
+  final String msg;
+  final Level logLevel;
+  final String lbl;
+
+  const LogEntry({
+    required this.timeMillis,
+    required this.msg,
+    required this.logLevel,
+    required this.lbl,
+  });
+
+  @override
+  int get hashCode =>
+      timeMillis.hashCode ^ msg.hashCode ^ logLevel.hashCode ^ lbl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LogEntry &&
+          runtimeType == other.runtimeType &&
+          timeMillis == other.timeMillis &&
+          msg == other.msg &&
+          logLevel == other.logLevel &&
+          lbl == other.lbl;
+}
 
 class ServerConfig {
   final String rendezvousUrl;

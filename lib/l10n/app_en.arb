@@ -49,6 +49,11 @@
   "settings_page_transitserver" : "Transit Server:",
   "settings_page_error_url" : "Invalid Url",
   "settings_page_server_saved" : "Server Settings Saved!",
+  "settings_page_logs" : "Logs:",
+  "settings_page_export_logs" : "Export Logs",
+
+  "logs_dialog_title" : "Export Application Logs",
+  "logs_dialog_share" : "Share Logs",
 
   "toast_error_qr_fail" : "Failed to Scan QR Code",
   "toast_error_qr_invalid" : "Scanned QR Code Invalid",
