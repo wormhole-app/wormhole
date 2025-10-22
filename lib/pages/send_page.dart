@@ -29,7 +29,7 @@ class _SendPageState extends State<SendPage> {
           files.first.name,
           files.map((e) => e.path).whereType<String>().toList());
     } else {
-      AppLogger.fine('User canceled file picker');
+      AppLogger.debug('User canceled file picker');
     }
   }
 
@@ -42,7 +42,7 @@ class _SendPageState extends State<SendPage> {
       Provider.of<TransferProvider>(context, listen: false)
           .sendFolder(result.split('/').last, result);
     } else {
-      AppLogger.fine('User canceled folder picker');
+      AppLogger.debug('User canceled folder picker');
     }
   }
 

@@ -94,7 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
       AppLogger.info('Logs exported with result: ${result.status}');
     } catch (e) {
-      AppLogger.severe('Failed to export logs: $e');
+      AppLogger.error('Failed to export logs: $e');
     }
   }
 

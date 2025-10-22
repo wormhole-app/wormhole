@@ -18,12 +18,17 @@ Future<void> main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await AppLogger.initialize();
+
+    debugPrint = (String? message, {int? wrapWidth}) {
+      if (message != null) AppLogger.debug(message);
+    };
+
     await RustLib.init();
-    AppLogger.info('Application starting');
+    AppLogger.error('Application starting');
     runApp(const MyApp());
   }, (error, stackTrace) {
-    AppLogger.severe('Uncaught error: $error');
-    AppLogger.severe('Stack trace: $stackTrace');
+    AppLogger.error('Uncaught error: $error');
+    AppLogger.error('Stack trace: $stackTrace');
   });
 }
 
