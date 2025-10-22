@@ -4,6 +4,7 @@ use crate::wormhole::receive::request_file_impl;
 use crate::wormhole::send::{send_file_impl, send_files_impl};
 use crate::wormhole::zip::list_dir;
 use futures::executor::block_on;
+use log::{debug, error, info};
 use magic_wormhole::rendezvous::DEFAULT_RENDEZVOUS_SERVER;
 use magic_wormhole::{Code, transit};
 use std::cmp::Ordering;
@@ -20,11 +21,18 @@ pub use crate::wormhole::types::events::Events;
 pub use crate::wormhole::types::t_update::TUpdate;
 pub use crate::wormhole::types::value::{ConnectionType, Value};
 
+// Initialize flutter_logger for Rust log integration
+flutter_logger::flutter_logger_init!();
+
 /// Keep a global temp file path reference
 static TEMP_FILE_PATH: Mutex<Option<String>> = Mutex::new(None);
 
 /// initialize backend api
 pub fn init(temp_file_path: String) {
+    info!(
+        "Initializing Wormhole backend with temp path: {}",
+        temp_file_path
+    );
     *TEMP_FILE_PATH.lock().unwrap() = Some(temp_file_path);
 }
 
@@ -44,6 +52,7 @@ pub fn send_files(
 
     match file_paths.len().cmp(&1) {
         Ordering::Less => {
+            error!("No files provided for send_files");
             _ = actions.add(TUpdate::new(
                 Events::Error,
                 Value::Error(ErrorType::InvalidFilename),
@@ -51,6 +60,7 @@ pub fn send_files(
             ));
         }
         Ordering::Equal => {
+            debug!("Sending single file: {}", file_paths[0]);
             block_on(async {
                 send_file_impl(
                     name,
@@ -63,6 +73,10 @@ pub fn send_files(
             });
         }
         Ordering::Greater => {
+            info!(
+                "Sending multiple files ({}), will create zip",
+                file_paths.len()
+            );
             let files: HashMap<String, String> = file_paths
                 .iter()
                 .map(|x| {
@@ -98,7 +112,8 @@ pub fn send_folder(
 ) {
     let files = match list_dir(folder_path) {
         Ok(v) => v,
-        Err(_) => {
+        Err(e) => {
+            error!("Failed to list directory: {:?}", e);
             _ = actions.add(TUpdate::new(
                 Events::Error,
                 Value::Error(ErrorType::InvalidFilename),

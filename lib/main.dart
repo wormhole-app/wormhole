@@ -24,12 +24,47 @@ Future<void> main() async {
     };
 
     await RustLib.init();
-    AppLogger.error('Application starting');
+
+    // Setup Rust logging bridge
+    await setupRustLogger();
+
+    AppLogger.info('Application starting');
     runApp(const MyApp());
   }, (error, stackTrace) {
     AppLogger.error('Uncaught error: $error');
     AppLogger.error('Stack trace: $stackTrace');
   });
+}
+
+/// Setup Rust logger to bridge Rust logs into Flutter logging system
+Future<void> setupRustLogger() async {
+  try {
+    setupLogStream().listen((logEntry) {
+      // Map Rust log levels to Flutter AppLogger
+      final message = '[Rust:${logEntry.lbl}] ${logEntry.msg}';
+
+      switch (logEntry.logLevel) {
+        case Level.error:
+          AppLogger.error(message);
+          break;
+        case Level.warn:
+          AppLogger.warn(message);
+          break;
+        case Level.info:
+          AppLogger.info(message);
+          break;
+        case Level.debug:
+        case Level.trace:
+          AppLogger.debug(message);
+          break;
+      }
+    }, onError: (error) {
+      AppLogger.error('Rust log stream error: $error');
+    });
+    AppLogger.info('Rust logger initialized');
+  } catch (e) {
+    AppLogger.error('Failed to setup Rust logger: $e');
+  }
 }
 
 class MyApp extends StatefulWidget {
