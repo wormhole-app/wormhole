@@ -16,62 +16,6 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Test build for iOS"
-  lane :build do
-    # Ensure we have the latest profile and certificates
-    app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
-    )
-
-    # Sync code signing with match
-    match(
-      type: "appstore",
-      app_identifier: ["de.emmabyte.wormhole", "de.emmabyte.wormhole.ShareExtension"],
-      readonly: true,
-      keychain_name: ENV["MATCH_KEYCHAIN_NAME"] || "login.keychain",
-      keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"] || ""
-    )
-
-    # Update code signing settings in Xcode project
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      path: "Runner.xcodeproj",
-      targets: ["Runner"],
-      code_sign_identity: "Apple Distribution",
-      profile_name: "match AppStore de.emmabyte.wormhole"
-    )
-
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      path: "Runner.xcodeproj",
-      targets: ["ShareExtension"],
-      code_sign_identity: "Apple Distribution",
-      profile_name: "match AppStore de.emmabyte.wormhole.ShareExtension"
-    )
-
-    commitnr = number_of_commits
-    changelog_from_git_commits
-
-    increment_build_number(
-      build_number: commitnr
-    )
-
-    # Build the app
-    build_app(
-      workspace: "Runner.xcworkspace",
-      scheme: "Runner",
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          "de.emmabyte.wormhole" => "match AppStore de.emmabyte.wormhole",
-          "de.emmabyte.wormhole.ShareExtension" => "match AppStore de.emmabyte.wormhole.ShareExtension"
-        }
-      }
-    )
-  end
-  
   desc "Generate screenshots for App Store"
   lane :screenshots do
     capture_screenshots(
@@ -86,7 +30,8 @@ platform :ios do
     api_key = app_store_connect_api_key(
       key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"],
+      is_key_content_base64: true
     )
 
     # Sync code signing with match
