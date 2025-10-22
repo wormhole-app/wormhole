@@ -1,3 +1,23 @@
+## 1.1.5
+### Added
+- iOS platform support with TestFlight availability (App Store release coming soon)
+- macOS platform support with DMG installer
+- Windows platform support with portable Zip file
+- Deep link support for `wormhole-transfer://` URI scheme (Android thanks @ubuntuegor and iOS)
+- Logging of app events to log files for easier debugging (can be exported from Settings)
+- Brazilian Portuguese translation (thanks @lagden)
+- Ukrainian translation (thanks @xalt7x)
+
+### Changed
+- Update magic-wormhole Rust library to latest version with security improvements
+- Improved filename sanitization for received files (replaces invalid characters with '_')
+- Make the pages scrollable
+- Slight changes to the theme for improved readability
+- Update dependencies to latest versions
+
+### Fixed
+- Android received files not showing in recent files
+
 ## 1.1.4
 ### Changed
 - Remove unused audio permission from QR Scanner
