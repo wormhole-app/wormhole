@@ -49,6 +49,11 @@
   "settings_page_transitserver": "Servidor de Trânsito:",
   "settings_page_error_url": "URL Inválida",
   "settings_page_server_saved": "Configurações do servidor salvas!",
+  "settings_page_logs": "Registros:",
+  "settings_page_export_logs": "Exportar Registros",
+
+  "logs_dialog_title": "Exportar Registros do Aplicativo",
+  "logs_dialog_share": "Compartilhar Registros",
 
   "toast_error_qr_fail": "Falha ao escanear o código QR",
   "toast_error_qr_invalid": "Código QR escaneado inválido",

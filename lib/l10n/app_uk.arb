@@ -49,6 +49,11 @@
   "settings_page_transitserver" : "Транзитний сервер:",
   "settings_page_error_url" : "Некоректна адреса",
   "settings_page_server_saved" : "Налаштування сервера збережено!",
+  "settings_page_logs" : "Журнали:",
+  "settings_page_export_logs" : "Експортувати журнали",
+
+  "logs_dialog_title" : "Експортувати журнали програми",
+  "logs_dialog_share" : "Поділитися журналами",
 
   "toast_error_qr_fail" : "Не вдалося просканувати QR-код",
   "toast_error_qr_invalid" : "Просканований QR-код є некоректним",
