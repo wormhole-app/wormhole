@@ -19,7 +19,7 @@ Future<String?> getDownloadPath() async {
       directory = await getDownloadsDirectory();
     }
   } catch (err) {
-    AppLogger.severe('Cannot get download folder path: $err');
+    AppLogger.error('Cannot get download folder path: $err');
   }
   return directory?.path;
 }

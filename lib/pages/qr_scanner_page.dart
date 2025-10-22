@@ -33,12 +33,12 @@ class QrScannerPage extends StatelessWidget {
         // todo handle extra query parameters
       }
 
-      AppLogger.warning('Invalid QR code scanned');
+      AppLogger.warn('Invalid QR code scanned');
       Provider.of<NavigationProvider>(context, listen: false).pop();
       ErrorToast(message: AppLocalizations.of(context)!.toast_error_qr_invalid)
           .show(context);
     } else {
-      AppLogger.warning('Failed to scan barcode');
+      AppLogger.warn('Failed to scan barcode');
       Provider.of<NavigationProvider>(context, listen: false).pop();
       ErrorToast(message: AppLocalizations.of(context)!.toast_error_qr_fail)
           .show(context);

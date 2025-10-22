@@ -107,7 +107,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
   void _receiveFile(String passphrase) async {
     final dpath = await getDownloadPath();
     if (dpath == null) {
-      AppLogger.warning('No download path available');
+      AppLogger.warn('No download path available');
       return;
     }
 
