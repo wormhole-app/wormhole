@@ -127,6 +127,18 @@ jobs:
         with:
           name: android-apk
           path: ./build/app/outputs/flutter-apk/app-release.apk
+      - name: Setup Ruby
+        if: ${{ inputs.release }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: android
+      - name: Install fastlane
+        if: ${{ inputs.release }}
+        run: |
+          cd android
+          gem install fastlane
       - name: Prepare Fastlane service account key
         if: ${{ inputs.release }}
         run: |
@@ -138,7 +150,7 @@ jobs:
         run: |
           cd android
           fastlane build_aab
-          bundle exec fastlane deploy
+          fastlane deploy
 
   build-linux:
     runs-on: ubuntu-latest
