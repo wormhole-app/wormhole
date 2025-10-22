@@ -149,7 +149,7 @@ jobs:
         if: ${{ inputs.release }}
         run: |
           cd android
-          fastlane build_aab
+          flutter build appbundle --release
           fastlane deploy
 
   build-linux:
