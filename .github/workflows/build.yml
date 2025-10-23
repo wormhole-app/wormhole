@@ -72,6 +72,9 @@ jobs:
           echo "Imported certificates"
           security set-key-partition-list -S apple-tool:,apple: -s -k temporary_ci_password build.keychain
 
+          # Add keychain to search list so codesign can find it
+          security list-keychains -s build.keychain login.keychain
+
           # Clean up certificate file
           rm -f certificate.p12
       - name: Setup notary profile for notarization
@@ -90,6 +93,8 @@ jobs:
         if: ${{ inputs.release }}
         # The dmg package will automatically: sign the app, create DMG, sign DMG, notarize, and staple
         run: |
+          # Keep keychain unlocked during signing
+          security unlock-keychain -p temporary_ci_password build.keychain
           dart run dmg --sign-certificate "Developer ID Application: Emma Sabatschus (Y647R6B9S3)"
       - name: Cleanup keychain
         if: ${{ always() && inputs.release }}
@@ -236,4 +241,4 @@ jobs:
         continue-on-error: true
         with:
           name: ios
-          path: ./build/ios/iphoneos/*.ipa
+          path: /Users/runner/work/wormhole/wormhole/ios/wormhole.ipa
