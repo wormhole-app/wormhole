@@ -57,7 +57,7 @@ jobs:
         run: |
           pip install dmgbuild
       - name: Setup code signing certificate
-        # if: ${{ inputs.release }}
+        if: ${{ inputs.release }}
         run: |
           # Create temporary keychain
           security create-keychain -p temporary_ci_password build.keychain
@@ -75,7 +75,7 @@ jobs:
           # Clean up certificate file
           rm -f certificate.p12
       - name: Setup notary profile for notarization
-        # if: ${{ inputs.release }}
+        if: ${{ inputs.release }}
         run: |
           # Store notarization credentials for dmg package to use
           xcrun notarytool store-credentials "NotaryProfile" \
