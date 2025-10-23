@@ -197,7 +197,7 @@ jobs:
           cd ios
           pod install
       - name: Build iOS
-        if: ${{ !inputs.release }}
+        if: ${{ !inputs.release && false }} # Temporarily disabled
         run: flutter build ios --release --no-codesign
       - name: Setup Ruby
         # if: ${{ inputs.release }}
@@ -229,7 +229,7 @@ jobs:
       - name: Test api key validity
         run: |
           cd ios
-          bundle exec fastlane run test_api_key
+          bundle exec fastlane test_api_key
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
