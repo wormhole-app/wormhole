@@ -200,14 +200,14 @@ jobs:
         if: ${{ !inputs.release }}
         run: flutter build ios --release --no-codesign
       - name: Setup Ruby
-        if: ${{ inputs.release }}
+        # if: ${{ inputs.release }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
           bundler-cache: true
           working-directory: ios
       - name: Install fastlane dependencies
-        if: ${{ inputs.release }}
+        # if: ${{ inputs.release }}
         run: |
           cd ios
           bundle install
@@ -221,9 +221,18 @@ jobs:
       - name: Verify API Key Curve
         run: |
           echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | wc -c
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | openssl ec -text -noout
           echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 -d | wc -c
-          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 -d | openssl ec -text -noout | grep -i "prime256v1\|P-256" || (echo "API Key is not using P-256 curve")
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 -d | openssl ec -text -noout || (echo "API Key is not using P-256 curve")
         env:
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
+      - name: Test api key validity
+        run: |
+          cd ios
+          bundle exec fastlane run test_api_key
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
       - name: Build and upload to TestFlight
         if: ${{ inputs.release }}
