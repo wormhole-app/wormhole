@@ -57,7 +57,7 @@ jobs:
         run: |
           pip install dmgbuild
       - name: Setup code signing certificate
-        if: ${{ inputs.release && false }} # Temporarily disabled
+        if: ${{ inputs.release }}
         run: |
           # Create temporary keychain
           security create-keychain -p temporary_ci_password build.keychain
