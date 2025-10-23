@@ -24,17 +24,6 @@ platform :ios do
     )
   end
 
-  desc "Test getting API key"
-  lane :test_api_key do
-    api_key = app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
-    )
-
-    puts "API Key size: #{api_key.to_s.size}"
-  end
-
   desc "Upload to TestFlight"
   lane :alpha do
     # Ensure we have the latest profile and certificates
