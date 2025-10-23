@@ -57,7 +57,7 @@ jobs:
         run: |
           pip install dmgbuild
       - name: Setup code signing certificate
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release && false }} # Temporarily disabled
         run: |
           # Create temporary keychain
           security create-keychain -p temporary_ci_password build.keychain
@@ -75,7 +75,7 @@ jobs:
           # Clean up certificate file
           rm -f certificate.p12
       - name: Setup notary profile for notarization
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release && false }} # Temporarily disabled
         run: |
           # Store notarization credentials for dmg package to use
           xcrun notarytool store-credentials "NotaryProfile" \
@@ -87,7 +87,7 @@ jobs:
         run: |
           dart run dmg --no-sign
       - name: Create signed DMG (with automatic notarization and stapling)
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release && false }} # Temporarily disabled
         # The dmg package will automatically: sign the app, create DMG, sign DMG, notarize, and staple
         run: |
           dart run dmg --sign-certificate "Developer ID Application: Emma Sabatschus (Y647R6B9S3)"
@@ -218,6 +218,12 @@ jobs:
           security default-keychain -s fastlane_tmp_keychain.keychain
           security unlock-keychain -p temporary_ci_password fastlane_tmp_keychain.keychain
           security set-keychain-settings -t 3600 -u fastlane_tmp_keychain.keychain
+      - name: Verify API Key Curve
+        if: ${{ inputs.release }}
+        run: |
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 -d | openssl ec -text -noout | grep -i "prime256v1\|P-256"
+        env:
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
       - name: Build and upload to TestFlight
         if: ${{ inputs.release }}
         run: |

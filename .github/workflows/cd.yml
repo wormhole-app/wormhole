@@ -27,6 +27,7 @@ jobs:
           path: ./artifacts/windows
 
       - name: Download macOS artifact
+        if: false # Temporarily disabled
         uses: actions/download-artifact@v4
         with:
           name: macos
