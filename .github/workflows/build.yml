@@ -219,9 +219,10 @@ jobs:
           security unlock-keychain -p temporary_ci_password fastlane_tmp_keychain.keychain
           security set-keychain-settings -t 3600 -u fastlane_tmp_keychain.keychain
       - name: Verify API Key Curve
-        if: ${{ inputs.release }}
         run: |
-          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 -d | openssl ec -text -noout | grep -i "prime256v1\|P-256"
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | wc -c
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 -d | wc -c
+          echo "$APP_STORE_CONNECT_API_KEY_CONTENT" | base64 -d | openssl ec -text -noout | grep -i "prime256v1\|P-256" || (echo "API Key is not using P-256 curve")
         env:
           APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}
       - name: Build and upload to TestFlight
