@@ -11,13 +11,13 @@ anyhow = "1.0.100"
 flutter_rust_bridge = "=2.11.1"
 magic-wormhole = {version = "0.7.6", features = ["tls", "transfer", "transit", "forwarding"]}
 futures = "0.3.31"
-async-std = "1.12.0"
-url = { version = "2.3.1", features = ["serde"] }
+async-std = "1.13.2"
+url = { version = "2.5.7", features = ["serde"] }
 zip = { version = "6.0.0", default-features = false, features = ["deflate"] }
 macros = { path = "macros", version = "1" }
-fastrand = "2.0.1"
+fastrand = "2.3.0"
 flutter_logger = "0.6.1"
-log = "0.4"
+log = "0.4.28"
 
 [profile.release]
 opt-level = 'z'     # Optimize for size.
