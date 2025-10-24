@@ -1808,7 +1808,7 @@ dependencies = [
 
 [[package]]
 name = "rust_lib_wormhole"
-version = "1.1.4"
+version = "1.1.5"
 dependencies = [
  "anyhow",
  "async-std",
