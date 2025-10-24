@@ -104,6 +104,11 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      # Increase Gradle heap size
+      GRADLE_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=512m"
+      # Flutter environment vars
+      JAVA_TOOL_OPTIONS: "-Xmx4g"
     steps:
       - uses: actions/checkout@v5
       - name: Setup Java
