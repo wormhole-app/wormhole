@@ -146,6 +146,12 @@ jobs:
         run: |
           cd android
           gem install fastlane
+      - name: Decode signing key
+        if: ${{ inputs.release }}
+        run: echo "${{ secrets.ANDROID_SIGNING_KEY_BASE64 }}" | base64 -d > android/my-release-key.keystore
+      - name: Decode key properties
+        if: ${{ inputs.release }}
+        run: echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 -d > android/key.properties
       - name: Prepare Fastlane service account key
         if: ${{ inputs.release }}
         run: |
