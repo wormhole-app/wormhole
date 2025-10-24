@@ -1,0 +1,28 @@
+name: "Setup Flutter + Rust + Caching"
+description: "Sets up Flutter, Cargo, and caches dependencies for CI"
+
+runs:
+  using: "composite"
+  steps:
+  - name: Setup Flutter
+    uses: subosito/flutter-action@v2
+    with:
+      flutter-version: 3.35.5
+      channel: stable
+      cache: true
+
+  - name: Cache Flutter Pub
+    uses: actions/cache@v4
+    with:
+      path: ~/.pub-cache
+      key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+
+  - name: Cache Cargo
+    uses: actions/cache@v4
+    with:
+      path: |
+        ~/.cargo/registry
+        ~/.cargo/git
+        ~/.cargo/bin
+        target
+      key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
