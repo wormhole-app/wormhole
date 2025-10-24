@@ -97,7 +97,7 @@ jobs:
 
   build-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     env:
       # Increase Gradle heap size
       GRADLE_OPTS: "-Xmx4g"
