@@ -111,6 +111,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
