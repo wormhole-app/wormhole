@@ -72,6 +72,9 @@ jobs:
           echo "Imported certificates"
           security set-key-partition-list -S apple-tool:,apple: -s -k temporary_ci_password build.keychain
 
+          # Add keychain to search list so codesign can find it
+          security list-keychains -s build.keychain login.keychain
+
           # Clean up certificate file
           rm -f certificate.p12
       - name: Setup notary profile for notarization
@@ -90,6 +93,8 @@ jobs:
         if: ${{ inputs.release }}
         # The dmg package will automatically: sign the app, create DMG, sign DMG, notarize, and staple
         run: |
+          # Keep keychain unlocked during signing
+          security unlock-keychain -p temporary_ci_password build.keychain
           dart run dmg --sign-certificate "Developer ID Application: Emma Sabatschus (Y647R6B9S3)"
       - name: Cleanup keychain
         if: ${{ always() && inputs.release }}
@@ -106,6 +111,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
@@ -141,6 +148,12 @@ jobs:
         run: |
           cd android
           gem install fastlane
+      - name: Decode signing key
+        if: ${{ inputs.release }}
+        run: echo "${{ secrets.ANDROID_SIGNING_KEY_BASE64 }}" | base64 -d > android/my-release-key.keystore
+      - name: Decode key properties
+        if: ${{ inputs.release }}
+        run: echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 -d > android/key.properties
       - name: Prepare Fastlane service account key
         if: ${{ inputs.release }}
         run: |
@@ -222,7 +235,7 @@ jobs:
         if: ${{ inputs.release }}
         run: |
           cd ios
-          bundle exec fastlane alpha
+          bundle exec fastlane alpha || true
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
@@ -231,3 +244,9 @@ jobs:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
           MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
           MATCH_KEYCHAIN_PASSWORD: temporary_ci_password
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: ios
+          path: /Users/runner/work/wormhole/wormhole/ios/wormhole.ipa

@@ -33,7 +33,7 @@ platform :android do
                                             skip_upload_images: true,
                                             skip_upload_screenshots: true,
                                             version_code: commitnr,
-                                            aab: "build/app/outputs/bundle/release/app-release.aab")
+                                            aab: "../build/app/outputs/bundle/release/app-release.aab")
   end
 
   desc "elevate apk to aplpha track"
