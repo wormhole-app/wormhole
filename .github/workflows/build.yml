@@ -162,8 +162,6 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      CHROME_EXECUTABLE: "/dev/null"
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
@@ -171,7 +169,7 @@ jobs:
       - name: Deps
         run: |
           sudo apt-get update -y && sudo apt-get upgrade -y
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev firefox
           flutter pub get
           flutter gen-l10n
       - name: Build Linux
