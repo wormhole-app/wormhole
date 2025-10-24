@@ -162,6 +162,8 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      CHROME_EXECUTABLE: "/dev/null"
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
