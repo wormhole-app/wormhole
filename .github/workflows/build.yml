@@ -111,6 +111,15 @@ jobs:
       - name: Setup Flutter
         uses: ./.github/actions/setup-flutter
 
+      - name: Prepare NDK dir for caching ( workaround for https://github.com/actions/virtual-environments/issues/1337 )
+        run: |
+          sudo mkdir -p /usr/local/lib/android/sdk/ndk
+          sudo mkdir -p /usr/local/lib/android/sdk/platforms
+          sudo chmod -R 777 /usr/local/lib/android/sdk/ndk
+          sudo chmod -R 777 /usr/local/lib/android/sdk/platforms
+          sudo chown -R $USER:$USER /usr/local/lib/android/sdk/ndk
+          sudo chown -R $USER:$USER /usr/local/lib/android/sdk/platforms
+
       # Cache Android SDK / NDK / Gradle
       - name: Cache Android SDK, NDK, and Gradle
         uses: actions/cache@v4
@@ -169,7 +178,7 @@ jobs:
       - name: Deps
         run: |
           sudo apt-get update -y && sudo apt-get upgrade -y
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev firefox
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev
           flutter pub get
           flutter gen-l10n
       - name: Build Linux
