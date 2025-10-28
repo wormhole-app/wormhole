@@ -32,7 +32,7 @@ jobs:
           Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./wormhole.zip -Force
       # If release, this should create an MSIX installer (once we have a proper cert)
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: windows
           path: ./wormhole.zip
@@ -101,7 +101,7 @@ jobs:
         run: |
           security delete-keychain build.keychain || true
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: macos
           path: ./build/macos/Build/Products/Release/wormhole.dmg
@@ -132,7 +132,7 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: android-apk
           path: ./build/app/outputs/flutter-apk/app-release.apk
@@ -186,7 +186,7 @@ jobs:
       - name: Build Linux
         run: flutter build linux --release
       - name: Upload binary artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: linux
           path: ./build/linux/x64/release/bundle
@@ -245,7 +245,7 @@ jobs:
           MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
           MATCH_KEYCHAIN_PASSWORD: temporary_ci_password
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ios
