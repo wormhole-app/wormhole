@@ -133,8 +133,8 @@ jobs:
         run: flutter build apk --release
       - name: Save Google Play APK
         run: |
-          mkdir -p ./build/apks
-          cp ./build/app/outputs/flutter-apk/app-release.apk ./build/apks/app-release.apk
+          mkdir -p ./apk-artifacts
+          cp ./build/app/outputs/flutter-apk/app-release.apk ./apk-artifacts/app-release.apk
       - name: Prepare F-Droid Build
         run: bash scripts/prepare-fdroid-build.sh
       - name: Build F-Droid APK
@@ -144,12 +144,12 @@ jobs:
           flutter build apk --release
       - name: Save F-Droid APK
         run: |
-          cp ./build/app/outputs/flutter-apk/app-release.apk ./build/apks/wormhole-android-openSource.apk
+          cp ./build/app/outputs/flutter-apk/app-release.apk ./apk-artifacts/wormhole-android-openSource.apk
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: ./build/apks/
+          path: ./apk-artifacts/
       - name: Setup Ruby
         if: ${{ inputs.release }}
         uses: ruby/setup-ruby@v1
