@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zxing/flutter_zxing.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
@@ -48,12 +49,32 @@ class QrScannerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackPopContext(
-      child: ReaderWidget(
-        tryInverted: true,
-        onScan: (result) async {
-          _onQrDetect(result.text, context);
-        },
-      ),
+      child: _buildMobileScannerWidget(context),
+    );
+  }
+
+  // ignore: unused_element
+  Widget _buildFlutterZxingWidget(BuildContext context) {
+    return ReaderWidget(
+      tryInverted: true,
+      onScan: (result) async {
+        _onQrDetect(result.text, context);
+      },
+    );
+  }
+
+  // ignore: unused_element
+  Widget _buildMobileScannerWidget(BuildContext context) {
+    return MobileScanner(
+      onDetect: (capture) {
+        final List<Barcode> barcodes = capture.barcodes;
+        for (final barcode in barcodes) {
+          if (barcode.rawValue != null) {
+            _onQrDetect(barcode.rawValue, context);
+            break;
+          }
+        }
+      },
     );
   }
 }
