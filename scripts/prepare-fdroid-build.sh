@@ -8,10 +8,13 @@ SCANNER_FILE="lib/pages/qr_scanner_page.dart"
 PUBSPEC_FILE="pubspec.yaml"
 
 # Replace the conditional logic to use flutter_zxing on all platforms
-sed -i '' 's/_buildMobileScannerWidget(context)/_buildFlutterZxingWidget(context)/g' "$SCANNER_FILE"
-
-# Remove mobile_scanner dependency from pubspec.yaml
-sed -i '' '/mobile_scanner:/d' "$PUBSPEC_FILE"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i '' 's/_buildMobileScannerWidget(context)/_buildFlutterZxingWidget(context)/g' "$SCANNER_FILE"
+  sed -i '' '/mobile_scanner:/d' "$PUBSPEC_FILE"
+else
+  sed -i 's/_buildMobileScannerWidget(context)/_buildFlutterZxingWidget(context)/g' "$SCANNER_FILE"
+  sed -i '/mobile_scanner:/d' "$PUBSPEC_FILE"
+fi
 
 echo "F-Droid build preparation complete:"
 echo "  - Replaced _buildMobileScannerWidget with _buildFlutterZxingWidget"
