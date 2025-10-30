@@ -114,15 +114,10 @@ jobs:
         # give the folders user rights -> cache restore would fail if not
       - name: Prepare NDK dir for caching
         run: |
-          find /usr/local/lib/android/sdk/
-          du -hs /usr/local/lib/android/sdk/ndk
-          du -hs /usr/local/lib/android/sdk/platforms
           sudo mkdir -p /usr/local/lib/android/sdk/ndk
           sudo mkdir -p /usr/local/lib/android/sdk/platforms
           sudo chmod -R 777 /usr/local/lib/android/sdk/ndk
           sudo chmod -R 777 /usr/local/lib/android/sdk/platforms
-          sudo chown -R $USER:$USER /usr/local/lib/android/sdk/ndk
-          sudo chown -R $USER:$USER /usr/local/lib/android/sdk/platforms
 
       # Cache Android SDK / NDK / Gradle
       - name: Cache Android SDK, NDK, and Gradle
