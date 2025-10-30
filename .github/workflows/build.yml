@@ -16,10 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.5
+        uses: ./.github/actions/setup-flutter
       - name: Deps
         run: |
           flutter pub get
@@ -43,10 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.5
+        uses: ./.github/actions/setup-flutter
       - name: Deps
         run: |
           flutter pub get
@@ -108,7 +102,10 @@ jobs:
 
   build-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
+    env:
+      # Increase Gradle heap size
+      GRADLE_OPTS: "-Xmx4g"
     steps:
       - uses: actions/checkout@v5
         with:
@@ -119,10 +116,26 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+        uses: ./.github/actions/setup-flutter
+
+        # give the folders user rights -> cache restore would fail if not
+      - name: Prepare NDK dir for caching
+        run: |
+          sudo mkdir -p /usr/local/lib/android/sdk/ndk
+          sudo mkdir -p /usr/local/lib/android/sdk/platforms
+          sudo chmod -R 777 /usr/local/lib/android/sdk/ndk
+          sudo chmod -R 777 /usr/local/lib/android/sdk/platforms
+
+      # Cache Android SDK / NDK / Gradle
+      - name: Cache Android SDK, NDK, and Gradle
+        uses: actions/cache@v4
         with:
-          channel: stable
-          flutter-version: 3.35.5
+          path: |
+            /usr/local/lib/android/sdk/ndk
+            /usr/local/lib/android/sdk/platforms
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-android-sdk-${{ hashFiles('android/app/build.gradle', 'android/build.gradle') }}
       - name: Deps
         run: |
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
@@ -173,10 +186,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.5
+        uses: ./.github/actions/setup-flutter
       - name: Deps
         run: |
           sudo apt-get update -y && sudo apt-get upgrade -y
@@ -197,10 +207,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.5
+        uses: ./.github/actions/setup-flutter
       - name: Deps
         run: |
           flutter pub get
