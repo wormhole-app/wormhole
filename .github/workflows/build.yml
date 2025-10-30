@@ -111,8 +111,12 @@ jobs:
       - name: Setup Flutter
         uses: ./.github/actions/setup-flutter
 
-      - name: Prepare NDK dir for caching ( workaround for https://github.com/actions/virtual-environments/issues/1337 )
+        # give the folders user rights -> cache restore would fail if not
+      - name: Prepare NDK dir for caching
         run: |
+          find /usr/local/lib/android/sdk/
+          du -hs /usr/local/lib/android/sdk/ndk
+          du -hs /usr/local/lib/android/sdk/platforms
           sudo mkdir -p /usr/local/lib/android/sdk/ndk
           sudo mkdir -p /usr/local/lib/android/sdk/platforms
           sudo chmod -R 777 /usr/local/lib/android/sdk/ndk
