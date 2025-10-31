@@ -16,10 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.5
+        uses: ./.github/actions/setup-flutter
       - name: Deps
         run: |
           flutter pub get
@@ -32,7 +29,7 @@ jobs:
           Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./wormhole.zip -Force
       # If release, this should create an MSIX installer (once we have a proper cert)
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: windows
           path: ./wormhole.zip
@@ -43,10 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.5
+        uses: ./.github/actions/setup-flutter
       - name: Deps
         run: |
           flutter pub get
@@ -101,14 +95,14 @@ jobs:
         run: |
           security delete-keychain build.keychain || true
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: macos
           path: ./build/macos/Build/Products/Release/wormhole.dmg
 
   build-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
         with:
@@ -119,10 +113,26 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+        uses: ./.github/actions/setup-flutter
+
+        # give the folders user rights -> cache restore would fail if not
+      - name: Prepare NDK dir for caching
+        run: |
+          sudo mkdir -p /usr/local/lib/android/sdk/ndk
+          sudo mkdir -p /usr/local/lib/android/sdk/platforms
+          sudo chmod -R 777 /usr/local/lib/android/sdk/ndk
+          sudo chmod -R 777 /usr/local/lib/android/sdk/platforms
+
+      # Cache Android SDK / NDK / Gradle
+      - name: Cache Android SDK, NDK, and Gradle
+        uses: actions/cache@v4
         with:
-          channel: stable
-          flutter-version: 3.35.5
+          path: |
+            /usr/local/lib/android/sdk/ndk
+            /usr/local/lib/android/sdk/platforms
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-android-sdk-${{ hashFiles('android/app/build.gradle', 'android/build.gradle') }}
       - name: Deps
         run: |
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
@@ -146,7 +156,7 @@ jobs:
         run: |
           cp ./build/app/outputs/flutter-apk/app-release.apk ./apk-artifacts/wormhole-android-openSource.apk
       - name: Upload APK artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: android-apk
           path: ./apk-artifacts/
@@ -187,10 +197,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.5
+        uses: ./.github/actions/setup-flutter
       - name: Deps
         run: |
           sudo apt-get update -y && sudo apt-get upgrade -y
@@ -200,7 +207,7 @@ jobs:
       - name: Build Linux
         run: flutter build linux --release
       - name: Upload binary artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: linux
           path: ./build/linux/x64/release/bundle
@@ -211,10 +218,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.35.5
+        uses: ./.github/actions/setup-flutter
       - name: Deps
         run: |
           flutter pub get
@@ -259,7 +263,7 @@ jobs:
           MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
           MATCH_KEYCHAIN_PASSWORD: temporary_ci_password
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         continue-on-error: true
         with:
           name: ios
