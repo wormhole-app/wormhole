@@ -1,12 +1,33 @@
 import 'package:logger/logger.dart';
 import 'package:rotation_log/rotation_log.dart';
 
+/// Custom printer that shows stack traces only for errors
+class CustomLogPrinter extends LogPrinter {
+  // needed, because apparently, PrettyPrinter errorMethodCount doesn't do what I would think it does
+  final _errorPrinter = PrettyPrinter(
+    methodCount: 8,
+  );
+  final _otherPrinter = PrettyPrinter(
+    methodCount: 0,
+    noBoxingByDefault: true,
+  );
+
+  @override
+  List<String> log(LogEvent event) {
+    if (event.level >= Level.error) {
+      return _errorPrinter.log(event);
+    }
+    return _otherPrinter.log(event);
+  }
+}
+
 /// Application logger using rotation_log for file management
 final rotLog = RotationLogger(RotationLogTerm.term(RotationLogTermEnum.daily));
 Logger? _loggerInstance;
 
 Logger get log {
   _loggerInstance ??= Logger(
+    printer: CustomLogPrinter(),
     output: MultiOutput([ConsoleOutput(), RotationLogOutput(rotLog)]),
   );
   return _loggerInstance!;
