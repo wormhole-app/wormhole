@@ -23,10 +23,15 @@ class CustomLogPrinter extends LogPrinter {
 
 /// Application logger using rotation_log for file management
 final rotLog = RotationLogger(RotationLogTerm.term(RotationLogTermEnum.daily));
-final log = Logger(
-  printer: CustomLogPrinter(),
-  output: MultiOutput([ConsoleOutput(), RotationLogOutput(rotLog)]),
-);
+Logger? _loggerInstance;
+
+Logger get log {
+  _loggerInstance ??= Logger(
+    printer: CustomLogPrinter(),
+    output: MultiOutput([ConsoleOutput(), RotationLogOutput(rotLog)]),
+  );
+  return _loggerInstance!;
+}
 
 class AppLogger {
   /// Initialize the logger with daily rotation
@@ -37,7 +42,13 @@ class AppLogger {
 
   /// Archive logs and return the path to the zip file
   static Future<String> archiveLog() async {
-    await log.close();
+    // Close the current logger instance
+    if (_loggerInstance != null) {
+      await _loggerInstance!.close();
+      _loggerInstance = null;
+    }
+
+    // Archive the logs
     final archivePath = await rotLog.archiveLog();
     await rotLog.init();
     return archivePath;
@@ -45,7 +56,10 @@ class AppLogger {
 
   /// Close the logger
   static Future<void> close() async {
-    await log.close();
+    if (_loggerInstance != null) {
+      await _loggerInstance!.close();
+      _loggerInstance = null;
+    }
   }
 
   /// Log methods for convenience
