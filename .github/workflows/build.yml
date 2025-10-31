@@ -141,11 +141,25 @@ jobs:
           flutter gen-l10n
       - name: Build Android APK
         run: flutter build apk --release
-      - name: Upload APK artifact
+      - name: Save Google Play APK
+        run: |
+          mkdir -p ./apk-artifacts
+          cp ./build/app/outputs/flutter-apk/app-release.apk ./apk-artifacts/app-release.apk
+      - name: Prepare F-Droid Build
+        run: bash scripts/prepare-fdroid-build.sh
+      - name: Build F-Droid APK
+        run: |
+          flutter clean
+          flutter pub get
+          flutter build apk --release
+      - name: Save F-Droid APK
+        run: |
+          cp ./build/app/outputs/flutter-apk/app-release.apk ./apk-artifacts/wormhole-android-openSource.apk
+      - name: Upload APK artifacts
         uses: actions/upload-artifact@v5
         with:
           name: android-apk
-          path: ./build/app/outputs/flutter-apk/app-release.apk
+          path: ./apk-artifacts/
       - name: Setup Ruby
         if: ${{ inputs.release }}
         uses: ruby/setup-ruby@v1

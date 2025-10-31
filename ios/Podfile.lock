@@ -46,6 +46,9 @@ PODS:
     - Flutter
   - image_picker_ios (0.0.1):
     - Flutter
+  - mobile_scanner (7.0.0):
+    - Flutter
+    - FlutterMacOS
   - open_filex (0.0.2):
     - Flutter
   - path_provider_foundation (0.0.1):
@@ -86,6 +89,7 @@ DEPENDENCIES:
   - flutter_zxing (from `.symlinks/plugins/flutter_zxing/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - mobile_scanner (from `.symlinks/plugins/mobile_scanner/darwin`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
@@ -121,6 +125,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  mobile_scanner:
+    :path: ".symlinks/plugins/mobile_scanner/darwin"
   open_filex:
     :path: ".symlinks/plugins/open_filex/ios"
   path_provider_foundation:
@@ -153,6 +159,7 @@ SPEC CHECKSUMS:
   flutter_zxing: e8bcc43bd3056c70c271b732ed94e7a16fd62f93
   fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
+  mobile_scanner: 9157936403f5a0644ca3779a38ff8404c5434a93
   open_filex: 432f3cd11432da3e39f47fcc0df2b1603854eff1
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
