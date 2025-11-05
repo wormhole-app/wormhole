@@ -184,12 +184,19 @@ jobs:
           echo "$ANDROID_FASTLANE_KEY" > android/fastlane-key.json
         env:
           ANDROID_FASTLANE_KEY: ${{ secrets.ANDROID_FASTLANE_KEY }}
-      - name: Run fastlane to build Android App Bundle
-        if: ${{ inputs.release }}
+      - name: Run fastlane to build Android App Bundle and deploy to Internal
+        if: ${{ !inputs.release }}
         run: |
           cd android
           flutter build appbundle --release
-          fastlane deploy
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            fastlane deploy
+          fi
+      - name: Promote to Beta track (only if release)
+        if: ${{ inputs.release }}
+        run: |
+          cd android
+          fastlane elevate
 
   build-linux:
     runs-on: ubuntu-latest
