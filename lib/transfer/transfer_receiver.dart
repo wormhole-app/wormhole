@@ -18,7 +18,9 @@ import '../pages/transfer_widgets/transfer_finished.dart';
 import '../settings/settings.dart';
 import '../utils/paths.dart';
 import '../utils/logger.dart';
+import '../utils/code.dart';
 import 'transfer_provider.dart';
+import 'demo_transfer.dart';
 
 class TransferReceiver extends StatefulWidget {
   const TransferReceiver({super.key, required this.child});
@@ -108,6 +110,21 @@ class _TransferReceiverState extends State<TransferReceiver> {
     final dpath = await getDownloadPath();
     if (dpath == null) {
       AppLogger.warn('No download path available');
+      return;
+    }
+
+    // Check if this is a demo code for App Store review
+    if (isDemoCode(passphrase)) {
+      // Use demo transfer stream instead of real wormhole connection
+      final s = generateDemoReceiveStream(dpath);
+      if (!mounted) return;
+      Provider.of<NavigationProvider>(context, listen: false).push(
+        ConnectingPage(
+          key: UniqueKey(),
+          stream: s,
+          finish: (file) => ReceiveFinished(file: file),
+        ),
+      );
       return;
     }
 
