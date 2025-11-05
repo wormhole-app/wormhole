@@ -115,24 +115,16 @@ jobs:
       - name: Setup Flutter
         uses: ./.github/actions/setup-flutter
 
-        # give the folders user rights -> cache restore would fail if not
-      - name: Prepare NDK dir for caching
-        run: |
-          sudo mkdir -p /usr/local/lib/android/sdk/ndk
-          sudo mkdir -p /usr/local/lib/android/sdk/platforms
-          sudo chmod -R 777 /usr/local/lib/android/sdk/ndk
-          sudo chmod -R 777 /usr/local/lib/android/sdk/platforms
-
-      # Cache Android SDK / NDK / Gradle
-      - name: Cache Android SDK, NDK, and Gradle
+      # Cache Gradle dependencies only
+      - name: Cache Gradle
         uses: actions/cache@v4
         with:
           path: |
-            /usr/local/lib/android/sdk/ndk
-            /usr/local/lib/android/sdk/platforms
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-android-sdk-${{ hashFiles('android/app/build.gradle', 'android/build.gradle') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: Deps
         run: |
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
@@ -161,35 +153,42 @@ jobs:
           name: android-apk
           path: ./apk-artifacts/
       - name: Setup Ruby
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.4.7'
           bundler-cache: true
           working-directory: android
       - name: Install fastlane
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: |
           cd android
           gem install fastlane
       - name: Decode signing key
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: echo "${{ secrets.ANDROID_SIGNING_KEY_BASE64 }}" | base64 -d > android/my-release-key.keystore
       - name: Decode key properties
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 -d > android/key.properties
       - name: Prepare Fastlane service account key
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: |
           echo "$ANDROID_FASTLANE_KEY" > android/fastlane-key.json
         env:
           ANDROID_FASTLANE_KEY: ${{ secrets.ANDROID_FASTLANE_KEY }}
-      - name: Run fastlane to build Android App Bundle
-        if: ${{ inputs.release }}
+      - name: Run fastlane to build Android App Bundle and deploy to Internal
+        if: ${{ !inputs.release }}
         run: |
           cd android
           flutter build appbundle --release
-          fastlane deploy
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            fastlane deploy
+          fi
+      - name: Promote to Beta track (only if release)
+        if: ${{ inputs.release }}
+        run: |
+          cd android
+          fastlane elevate
 
   build-linux:
     runs-on: ubuntu-latest
