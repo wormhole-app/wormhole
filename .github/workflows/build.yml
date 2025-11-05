@@ -161,25 +161,25 @@ jobs:
           name: android-apk
           path: ./apk-artifacts/
       - name: Setup Ruby
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.4.7'
           bundler-cache: true
           working-directory: android
       - name: Install fastlane
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: |
           cd android
           gem install fastlane
       - name: Decode signing key
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: echo "${{ secrets.ANDROID_SIGNING_KEY_BASE64 }}" | base64 -d > android/my-release-key.keystore
       - name: Decode key properties
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 -d > android/key.properties
       - name: Prepare Fastlane service account key
-        if: ${{ inputs.release }}
+        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: |
           echo "$ANDROID_FASTLANE_KEY" > android/fastlane-key.json
         env:
