@@ -139,14 +139,19 @@ jobs:
           cp ./build/app/outputs/flutter-apk/app-release.apk ./apk-artifacts/app-release.apk
       - name: Prepare F-Droid Build
         run: bash scripts/prepare-fdroid-build.sh
-      - name: Build F-Droid APK
+      - name: Build F-Droid APK (split per ABI)
         run: |
           flutter clean
           flutter pub get
-          flutter build apk --release
-      - name: Save F-Droid APK
+          flutter build apk --split-per-abi --release
+      - name: Display APK sizes
         run: |
-          cp ./build/app/outputs/flutter-apk/app-release.apk ./apk-artifacts/wormhole-android-openSource.apk
+          ls -lh ./build/app/outputs/flutter-apk/app-*-release.apk
+      - name: Save F-Droid split APKs
+        run: |
+          cp ./build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk ./apk-artifacts/wormhole-android-openSource-armeabi-v7a.apk
+          cp ./build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ./apk-artifacts/wormhole-android-openSource-arm64-v8a.apk
+          cp ./build/app/outputs/flutter-apk/app-x86_64-release.apk ./apk-artifacts/wormhole-android-openSource-x86_64.apk
       - name: Upload APK artifacts
         uses: actions/upload-artifact@v5
         with:

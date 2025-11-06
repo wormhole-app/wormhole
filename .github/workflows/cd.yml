@@ -69,5 +69,8 @@ jobs:
           prerelease: false
           files: |
             ./artifacts/android/app-release.apk
+            ./artifacts/android/wormhole-android-openSource-armeabi-v7a.apk
+            ./artifacts/android/wormhole-android-openSource-arm64-v8a.apk
+            ./artifacts/android/wormhole-android-openSource-x86_64.apk
             ./artifacts/windows/wormhole.zip
             ./artifacts/macos/wormhole.dmg
