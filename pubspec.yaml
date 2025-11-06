@@ -70,6 +70,10 @@ flutter:
   # include material icons
   uses-material-design: true
 
+  # include demo assets for App Store review
+  assets:
+    - assets/demo/
+
 # app icon generation
 flutter_launcher_icons:
   android: "ic_launcher"
