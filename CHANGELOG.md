@@ -1,3 +1,17 @@
+## 1.1.6
+### Added
+- Demo file and transfer simulation for App Store review purposes
+- Mobile scanner integration for improved QR code scanning (non-F-Droid / IzzyOnDroid builds)
+- Custom log printer that only shows stack traces for errors
+
+### Changed
+- Update dependencies
+- Improve logging format and export functionality
+
+### Fixed
+- Fixed F-Droid/IzzyOnDroid build compatibility
+- Fixed macOS entitlements for file access and network permissions
+
 ## 1.1.5
 ### Added
 - iOS platform support with TestFlight availability (App Store release coming soon)
