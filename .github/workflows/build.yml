@@ -125,6 +125,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Decode signing key
+        run: echo "${{ secrets.ANDROID_SIGNING_KEY_BASE64 }}" | base64 -d > android/my-release-key.keystore
+      - name: Decode key properties
+        run: echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 -d > android/key.properties
       - name: Deps
         run: |
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
@@ -169,12 +173,6 @@ jobs:
         run: |
           cd android
           gem install fastlane
-      - name: Decode signing key
-        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
-        run: echo "${{ secrets.ANDROID_SIGNING_KEY_BASE64 }}" | base64 -d > android/my-release-key.keystore
-      - name: Decode key properties
-        if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
-        run: echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 -d > android/key.properties
       - name: Prepare Fastlane service account key
         if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         run: |
