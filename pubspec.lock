@@ -333,10 +333,10 @@ packages:
     dependency: "direct dev"
     description:
       name: ffigen
-      sha256: "2bd9a420ca42cb5ce8cff5d80f88547b547a042ae26807704b1698714e4464a2"
+      sha256: c880c7cda18808b10304ecbd3e3867b29a8da0d58fd2d03080829e3b65bc567c
       url: "https://pub.dev"
     source: hosted
-    version: "19.1.0"
+    version: "20.0.0"
   file:
     dependency: transitive
     description:
