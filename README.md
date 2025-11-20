@@ -29,6 +29,11 @@ An open source Android, iOS, macOS, and Windows App for sending/receiveing files
 
 (feel free to add yours)
 
+# Translation
+We use [Codeberg Translate](https://translate.codeberg.org/projects/wormhole/).
+
+[![Translation Status](https://translate.codeberg.org/widget/wormhole/multi-auto.svg)](https://translate.codeberg.org/engage/wormhole/)
+
 ## Development
 
 ### Prerequisites
