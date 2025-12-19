@@ -45,6 +45,8 @@
     "settings_page_dark_theme" : "Dunkel",
     "settings_page_light_theme" : "Hell",
     "settings_page_system_theme" : "System",
+    "settings_page_language" : "Sprache:",
+    "settings_page_system_language" : "System",
     "settings_page_advanced" : "Fortgeschritten:",
     "settings_page_serversettings" : "Server Einstellungen",
     "settings_page_rendezvousserver" : "Rendezvous Server:",

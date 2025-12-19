@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'src/rust/api/wormhole.dart';
 import 'src/rust/frb_generated.dart';
+import 'locale/locale_provider.dart';
 import 'navigation/navigation.dart';
 import 'settings/settings.dart';
 import 'theme/dark_theme.dart';
@@ -76,11 +77,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeProvider themeChangeProvider = ThemeProvider();
+  LocaleProvider localeChangeProvider = LocaleProvider();
 
   @override
   void initState() {
     super.initState();
     getCurrentAppTheme();
+    getCurrentAppLocale();
     initBackend();
   }
 
@@ -93,35 +96,53 @@ class _MyAppState extends State<MyApp> {
     themeChangeProvider.theme = await Settings.getTheme();
   }
 
+  void getCurrentAppLocale() async {
+    localeChangeProvider.language = await Settings.getLanguage();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) {
         return themeChangeProvider;
       },
-      child: Consumer<ThemeProvider>(
-        builder: (context, value, child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            localeResolutionCallback: (deviceLocale, supportedLocales) {
-              if (supportedLocales
-                  .map((e) => e.languageCode)
-                  .contains(deviceLocale?.languageCode)) {
-                return deviceLocale;
-              }
-              AppLogger.info('Fallback to default locale');
-              return const Locale('en');
-            },
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: themeChangeProvider.isDarkThemeActive()
-                ? ThemeMode.dark
-                : ThemeMode.light,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: const Navigation(),
-          );
+      child: ChangeNotifierProvider(
+        create: (_) {
+          return localeChangeProvider;
         },
+        child: Consumer2<ThemeProvider, LocaleProvider>(
+          builder: (context, themeProvider, localeProvider, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              locale: localeProvider.getLocale(),
+              localeResolutionCallback: (deviceLocale, supportedLocales) {
+                // If user selected a specific language, use it
+                final userLocale = localeProvider.getLocale();
+                if (userLocale != null) {
+                  return userLocale;
+                }
+
+                // Otherwise, use device locale if supported
+                if (supportedLocales
+                    .map((e) => e.languageCode)
+                    .contains(deviceLocale?.languageCode)) {
+                  return deviceLocale;
+                }
+
+                AppLogger.info('Fallback to default locale');
+                return const Locale('en');
+              },
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: themeProvider.isDarkThemeActive()
+                  ? ThemeMode.dark
+                  : ThemeMode.light,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: const Navigation(),
+            );
+          },
+        ),
       ),
     );
   }

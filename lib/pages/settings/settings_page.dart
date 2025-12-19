@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../locale/locale_provider.dart';
 import '../../src/rust/api/wormhole.dart';
 import '../../settings/settings.dart';
 import '../../theme/theme_provider.dart';
@@ -114,9 +115,52 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Widget _buildLanguageDropdown(
+    BuildContext context,
+    LanguageType currentLanguage,
+    LocaleProvider localeprov,
+    ThemeData theme,
+  ) {
+    final items = LanguageType.values;
+
+    final labels = {
+      for (var lang in LanguageType.values)
+        lang: LocaleProvider.getLanguageDisplayName(lang, context)
+    };
+
+    return SizedBox(
+      width: 180.0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.secondary,
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: DropdownButton<LanguageType>(
+          value: currentLanguage,
+          items: items
+              .map((language) => DropdownMenuItem(
+                    value: language,
+                    child: Text(labels[language] ?? ''),
+                  ))
+              .toList(),
+          onChanged: (LanguageType? value) {
+            if (value != null) {
+              localeprov.language = value;
+            }
+          },
+          underline: const SizedBox(),
+          isExpanded: true,
+          style: theme.textTheme.bodyMedium,
+        ),
+      ),
+    );
+  }
+
   List<Widget> _buildSettingsContent() {
     final theme = Theme.of(context);
     final themeprov = Provider.of<ThemeProvider>(context);
+    final localeprov = Provider.of<LocaleProvider>(context);
 
     return [
       SettingsRow(
@@ -214,6 +258,10 @@ class _SettingsPageState extends State<SettingsPage> {
               themeprov.theme = ThemeType.values[index];
             },
           )),
+      SettingsRow(
+          name: AppLocalizations.of(context)!.settings_page_language,
+          child: _buildLanguageDropdown(
+              context, localeprov.language, localeprov, theme)),
       SettingsRow(
         name: AppLocalizations.of(context)!.settings_page_advanced,
         child: SettingsSectionButton(
