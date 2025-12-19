@@ -26,5 +26,9 @@
     "transfer_finished_label": "Fail on vastuvõetud!",
     "@transfer_finished_label": {},
     "transfer_finished_open": "Ava fail",
-    "@transfer_finished_open": {}
+    "@transfer_finished_open": {},
+    "settings_page_language": "Keel:",
+    "@settings_page_language": {},
+    "settings_page_system_language": "Süsteem",
+    "@settings_page_system_language": {}
 }

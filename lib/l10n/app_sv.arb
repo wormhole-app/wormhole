@@ -43,6 +43,8 @@
   "settings_page_dark_theme" : "Mörkt",
   "settings_page_light_theme" : "Ljus",
   "settings_page_system_theme" : "System",
+  "settings_page_language" : "Språk:",
+  "settings_page_system_language" : "System",
   "settings_page_advanced" : "Avancerad:",
   "settings_page_serversettings" : "Serverinställningar",
   "settings_page_rendezvousserver" : "Rendezvous Server:",

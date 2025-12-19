@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../locale/locale_provider.dart' show LanguageType;
 import '../theme/theme_provider.dart';
 
 enum CodeType { qrCode, aztecCode }
@@ -17,6 +18,7 @@ class Settings {
   static const _codeType = 'CODETYPE';
   static const _codeAlwaysVisible = 'CODEALVISIBLE';
   static const themeStatus = 'THEMESTATUS';
+  static const _language = 'LANGUAGE';
   static const _rendezvousUrl = 'RENDEZVOUSSERVER';
   static const _transitUrl = 'TRANSITURL';
 
@@ -42,6 +44,10 @@ class Settings {
 
   static Future<void> setTheme(ThemeType theme) async {
     await _setField(theme.index, themeStatus);
+  }
+
+  static Future<void> setLanguage(LanguageType language) async {
+    await _setField(language.index, _language);
   }
 
   static Future<String?> getRendezvousUrl() async {
@@ -83,6 +89,17 @@ class Settings {
       return ThemeType.values[idx];
     } else {
       return ThemeType.dark;
+    }
+  }
+
+  /// get current language
+  static Future<LanguageType> getLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final idx = prefs.getInt(_language);
+    if (idx != null) {
+      return LanguageType.values[idx];
+    } else {
+      return LanguageType.system;
     }
   }
 
