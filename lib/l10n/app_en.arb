@@ -36,6 +36,8 @@
 
   "settings_page_wordlength" : "Word length:",
   "settings_page_code_type" : "Code Type:",
+  "settings_page_qr_code" : "QR Code",
+  "settings_page_aztec_code" : "Aztec Code",
   "settings_page_show_code" : "Show QR Code:",
   "settings_page_show_always" : "Always",
   "settings_page_show_never" : "Never",

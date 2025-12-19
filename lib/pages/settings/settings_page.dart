@@ -150,7 +150,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       ? (snapshot.data! == CodeType.qrCode ? 0 : 1)
                       : 0,
                   totalSwitches: 2,
-                  labels: const ['Qr Code', 'Aztec Code'],
+                  labels: [
+                    AppLocalizations.of(context)!.settings_page_qr_code,
+                    AppLocalizations.of(context)!.settings_page_aztec_code
+                  ],
                   radiusStyle: true,
                   onToggle: (index) {
                     Settings.setCodeType(
