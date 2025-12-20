@@ -26,7 +26,7 @@
 // Section: imports
 
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
-use flutter_rust_bridge::for_generated::{Lifetimeable, Lockable, transform_result_dco};
+use flutter_rust_bridge::for_generated::{transform_result_dco, Lifetimeable, Lockable};
 use flutter_rust_bridge::{Handler, IntoIntoDart};
 
 // Section: boilerplate
@@ -651,7 +651,7 @@ impl SseDecode for crate::wormhole::types::value::Value {
         let mut tag_ = <i32>::sse_decode(deserializer);
         match tag_ {
             0 => {
-                let mut var_field0 = <i32>::sse_decode(deserializer);
+                let mut var_field0 = <u64>::sse_decode(deserializer);
                 return crate::wormhole::types::value::Value::Int(var_field0);
             }
             1 => {
@@ -1185,7 +1185,7 @@ impl SseEncode for crate::wormhole::types::value::Value {
         match self {
             crate::wormhole::types::value::Value::Int(field0) => {
                 <i32>::sse_encode(0, serializer);
-                <i32>::sse_encode(field0, serializer);
+                <u64>::sse_encode(field0, serializer);
             }
             crate::wormhole::types::value::Value::String(field0) => {
                 <i32>::sse_encode(1, serializer);
@@ -1223,7 +1223,7 @@ mod io {
     use flutter_rust_bridge::for_generated::byteorder::{
         NativeEndian, ReadBytesExt, WriteBytesExt,
     };
-    use flutter_rust_bridge::for_generated::{Lifetimeable, Lockable, transform_result_dco};
+    use flutter_rust_bridge::for_generated::{transform_result_dco, Lifetimeable, Lockable};
     use flutter_rust_bridge::{Handler, IntoIntoDart};
 
     // Section: boilerplate

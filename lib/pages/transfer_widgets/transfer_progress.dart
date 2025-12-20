@@ -14,14 +14,14 @@ class TransferProgress extends StatelessWidget {
       this.linkName});
 
   final TUpdate data;
-  final int? total;
+  final BigInt? total;
   final ConnectionType? linkType;
   final String? linkName;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final int sent = data.getValue();
+    final BigInt sent = data.getValue();
     double? percent;
     if (total != null) {
       percent = sent.toDouble() / total!.toDouble();
@@ -32,7 +32,8 @@ class TransferProgress extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('${sent.readableFileSize()}/${total?.readableFileSize()}'),
+          Text(
+              '${sent.toInt().readableFileSize()}/${total?.toInt().readableFileSize()}'),
           const SizedBox(
             height: 10,
           ),
