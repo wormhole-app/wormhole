@@ -53,10 +53,10 @@ pub fn gen_transit_handler(actions: Rc<StreamSink<TUpdate>>) -> Box<dyn Fn(Trans
 pub fn gen_progress_handler(action: Rc<StreamSink<TUpdate>>) -> Box<dyn Fn(u64, u64)> {
     let handler = move |received: u64, total: u64| {
         if received == 0 {
-            _ = action.add(TUpdate::new(Events::Total, Value::Int(total as i32)));
-            _ = action.add(TUpdate::new(Events::StartTransfer, Value::Int(-1)));
+            _ = action.add(TUpdate::new(Events::Total, Value::Int(total)));
+            _ = action.add(TUpdate::new(Events::StartTransfer, Value::Int(0)));
         }
-        _ = action.add(TUpdate::new(Events::Sent, Value::Int(received as i32)));
+        _ = action.add(TUpdate::new(Events::Sent, Value::Int(received)));
     };
     Box::new(handler)
 }

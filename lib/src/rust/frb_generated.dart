@@ -551,7 +551,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     switch (raw[0]) {
       case 0:
         return Value_Int(
-          dco_decode_i_32(raw[1]),
+          dco_decode_u_64(raw[1]),
         );
       case 1:
         return Value_String(
@@ -752,7 +752,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var tag_ = sse_decode_i_32(deserializer);
     switch (tag_) {
       case 0:
-        var var_field0 = sse_decode_i_32(deserializer);
+        var var_field0 = sse_decode_u_64(deserializer);
         return Value_Int(var_field0);
       case 1:
         var var_field0 = sse_decode_String(deserializer);
@@ -943,7 +943,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     switch (self) {
       case Value_Int(field0: final field0):
         sse_encode_i_32(0, serializer);
-        sse_encode_i_32(field0, serializer);
+        sse_encode_u_64(field0, serializer);
       case Value_String(field0: final field0):
         sse_encode_i_32(1, serializer);
         sse_encode_String(field0, serializer);

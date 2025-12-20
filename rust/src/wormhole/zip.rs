@@ -67,12 +67,12 @@ pub fn create_zip_file(
     // send zip start event + nr of total files
     _ = actions.add(TUpdate::new(
         Events::ZipFilesTotal,
-        Value::Int(files.len() as i32),
+        Value::Int(files.len() as u64),
     ));
 
     let mut buffer = Vec::new();
 
-    let mut file_counter = 1;
+    let mut file_counter: u64 = 1;
     // zip files
     for (fs_path, zip_path) in files.into_iter() {
         _ = actions.add(TUpdate::new(Events::ZipFiles, Value::Int(file_counter)));

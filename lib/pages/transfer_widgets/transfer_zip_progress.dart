@@ -9,11 +9,11 @@ class TransferZipProgress extends StatelessWidget {
       {super.key, required this.data, required this.totalFileNr});
 
   final TUpdate data;
-  final int? totalFileNr;
+  final BigInt? totalFileNr;
 
   @override
   Widget build(BuildContext context) {
-    final int alreadyProcessed = data.getValue();
+    final BigInt alreadyProcessed = data.getValue();
     double? percent;
     if (totalFileNr != null) {
       percent = alreadyProcessed.toDouble() / totalFileNr!.toDouble();
@@ -32,7 +32,7 @@ class TransferZipProgress extends StatelessWidget {
             height: 16,
           ),
           Text(
-              '${AppLocalizations.of(context)!.transfer_zipping} $alreadyProcessed/$totalFileNr'),
+              '${AppLocalizations.of(context)!.transfer_zipping} ${alreadyProcessed.toInt()}/${totalFileNr?.toInt()}'),
           const SizedBox(
             height: 10,
           ),

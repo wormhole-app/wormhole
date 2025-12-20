@@ -26,8 +26,8 @@ class ConnectingPage extends StatefulWidget {
 }
 
 class _ConnectingPageState extends State<ConnectingPage> {
-  int? total;
-  int? totalFileNr;
+  BigInt? total;
+  BigInt? totalFileNr;
   ConnectionType? connectionType;
   String? connectionTypeName;
 
