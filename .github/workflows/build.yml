@@ -200,19 +200,37 @@ jobs:
       - uses: actions/checkout@v6
       - name: Setup Flutter
         uses: ./.github/actions/setup-flutter
-      - name: Deps
+      - name: Install system dependencies
         run: |
           sudo apt-get update -y && sudo apt-get upgrade -y
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev rpm patchelf
+      - name: Install Flutter dependencies
+        run: |
           flutter pub get
           flutter gen-l10n
-      - name: Build Linux
+      - name: Activate fastforge
+        run: dart pub global activate fastforge
+      - name: Build Linux binary
         run: flutter build linux --release
+      - name: Build DEB package
+        run: fastforge package --platform linux --targets deb --release production
+      - name: Build RPM package
+        run: fastforge package --platform linux --targets rpm --release production
       - name: Upload binary artifact
         uses: actions/upload-artifact@v5
         with:
           name: linux
           path: ./build/linux/x64/release/bundle
+      - name: Upload DEB package
+        uses: actions/upload-artifact@v5
+        with:
+          name: linux-deb
+          path: ./dist/**/*.deb
+      - name: Upload RPM package
+        uses: actions/upload-artifact@v5
+        with:
+          name: linux-rpm
+          path: ./dist/**/*.rpm
 
   build-ios:
     runs-on: macos-26
