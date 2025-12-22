@@ -213,9 +213,9 @@ jobs:
       - name: Build Linux binary
         run: flutter build linux --release
       - name: Build DEB package
-        run: fastforge package --platform linux --targets deb --release production
+        run: fastforge package --platform linux --targets deb
       - name: Build RPM package
-        run: fastforge package --platform linux --targets rpm --release production
+        run: fastforge package --platform linux --targets rpm
       - name: Upload binary artifact
         uses: actions/upload-artifact@v5
         with:
