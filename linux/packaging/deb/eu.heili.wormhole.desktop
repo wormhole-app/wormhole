@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Wormhole
+Comment=Send and receive files using magic-wormhole
+GenericName=File Transfer
+Exec=wormhole
+Icon=wormhole
+Terminal=false
+Type=Application
+Categories=Network;FileTransfer;Utility;
+Keywords=wormhole;magic-wormhole;file;transfer;send;receive;p2p;
+StartupNotify=true

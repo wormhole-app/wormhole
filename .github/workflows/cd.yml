@@ -39,6 +39,18 @@ jobs:
           name: android-apk
           path: ./artifacts/android
 
+      - name: Download Linux DEB artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: linux-deb
+          path: ./artifacts/linux
+
+      - name: Download Linux RPM artifact
+        uses: actions/download-artifact@v6
+        with:
+          name: linux-rpm
+          path: ./artifacts/linux
+
       - name: Extract changelog for current version
         id: changelog
         run: |
@@ -74,3 +86,5 @@ jobs:
             ./artifacts/android/wormhole-android-openSource-x86_64.apk
             ./artifacts/windows/wormhole.zip
             ./artifacts/macos/wormhole.dmg
+            ./artifacts/linux/*.deb
+            ./artifacts/linux/*.rpm

@@ -1,0 +1,45 @@
+# Flutter Distributor / Fastforge configuration for Wormhole
+# Defines packaging jobs for Linux DEB and RPM distributions
+
+output: dist/
+
+releases:
+  # Production release (triggered by git tags in CI/CD)
+  - name: production
+    jobs:
+      # Debian package for Ubuntu/Debian-based distributions
+      - name: release-linux-deb
+        package:
+          platform: linux
+          target: deb
+        build_args:
+          build-name: "1.1.6"
+          build-number: "1"
+
+      # RPM package for Fedora/openSUSE/RHEL-based distributions
+      - name: release-linux-rpm
+        package:
+          platform: linux
+          target: rpm
+        build_args:
+          build-name: "1.1.6"
+          build-number: "1"
+
+  # Development release (for testing locally)
+  - name: dev
+    jobs:
+      - name: dev-linux-deb
+        package:
+          platform: linux
+          target: deb
+        build_args:
+          dart-define:
+            APP_ENV: dev
+
+      - name: dev-linux-rpm
+        package:
+          platform: linux
+          target: rpm
+        build_args:
+          dart-define:
+            APP_ENV: dev

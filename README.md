@@ -30,6 +30,26 @@ An open source Android, iOS, macOS, and Windows App for sending/receiveing files
 
 (feel free to add yours)
 
+## Installation
+
+### Linux
+
+**Debian/Ubuntu:**
+```bash
+# Download the .deb package from releases, then install:
+sudo apt install ./wormhole_{version}_amd64.deb
+```
+
+**Fedora/RHEL/openSUSE:**
+```bash
+# Download the .rpm package from releases, then install:
+sudo rpm -i wormhole-{version}.x86_64.rpm
+# Or on Fedora:
+sudo dnf localinstall ./wormhole-{version}.x86_64.rpm
+```
+
+Download the latest packages from the [Releases](https://github.com/wormhole-app/wormhole/releases) page.
+
 # Translation
 We use [Codeberg Translate](https://translate.codeberg.org/projects/wormhole/).
 
@@ -63,6 +83,20 @@ Build APK + App Bundle:\
 
 Dev build:\
 `just linux`
+
+Create distribution packages:\
+```bash
+# Activate fastforge first (one-time setup)
+dart pub global activate fastforge
+
+# Build DEB package (for Debian/Ubuntu)
+fastforge package --platform linux --targets deb
+
+# Build RPM package (for Fedora/RHEL)
+fastforge package --platform linux --targets rpm
+```
+
+Packages will be created in the `dist/` directory.
 
 #### macOS
 

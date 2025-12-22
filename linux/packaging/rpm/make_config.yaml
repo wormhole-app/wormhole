@@ -1,0 +1,35 @@
+# RPM package configuration for Wormhole
+# Reference: https://fastforge.dev/makers/rpm
+
+display_name: Wormhole
+
+icon: assets/bitmap.png
+summary: Send and receive files using magic-wormhole
+group: Applications/Internet
+vendor: emmabyte
+packager: emmabyte
+packagerEmail: emma@emmabyte.de
+license: GPL-3.0
+url: https://github.com/wormhole-app/wormhole
+
+keywords:
+  - wormhole
+  - magic-wormhole
+  - file
+  - transfer
+  - send
+  - receive
+  - p2p
+
+generic_name: File Transfer
+categories:
+  - Network
+  - FileTransfer
+  - Utility
+
+startup_notify: true
+
+requires:
+  - gtk3
+  - libblkid
+  - xz-libs
