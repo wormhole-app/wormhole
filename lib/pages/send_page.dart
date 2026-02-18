@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,6 +19,29 @@ class SendPage extends StatefulWidget {
 }
 
 class _SendPageState extends State<SendPage> {
+  bool _showMediaButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAndroidVersion();
+  }
+
+  Future<void> _checkAndroidVersion() async {
+    if (Platform.isAndroid) {
+      final androidInfo = await DeviceInfoPlugin().androidInfo;
+      if (mounted) {
+        setState(() {
+          _showMediaButton = androidInfo.version.sdkInt >= 33;
+        });
+      }
+    } else if (Platform.isIOS) {
+      setState(() {
+        _showMediaButton = true;
+      });
+    }
+  }
+
   void _onSendButtonClick() async {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(allowMultiple: true);
@@ -97,12 +121,12 @@ class _SendPageState extends State<SendPage> {
             const SizedBox(
               height: 15,
             ),
-            if (Platform.isAndroid || Platform.isIOS)
+            if (_showMediaButton)
               IconTextButton(
                   onClick: _onSendMediaButtonClick,
                   text: AppLocalizations.of(context)!.send_page_media_button,
                   icon: Icons.photo_library),
-            if (Platform.isAndroid || Platform.isIOS)
+            if (_showMediaButton)
               const SizedBox(
                 height: 15,
               ),
