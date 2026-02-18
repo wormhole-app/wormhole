@@ -7,6 +7,7 @@
     "send_page_send_label" : "Datei senden",
     "send_page_send_sublabel" : "Zu sendende Datei auswählen",
     "send_page_button" : "Dateiauswahl",
+    "send_page_media_button" : "Medien senden",
     "send_page_folder_button" : "Ordnerauswahl",
 
     "receive_page_label" : "Datei empfangen",

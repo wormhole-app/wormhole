@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
@@ -46,6 +49,20 @@ class _SendPageState extends State<SendPage> {
     }
   }
 
+  void _onSendMediaButtonClick() async {
+    final List<XFile> media = await ImagePicker().pickMultipleMedia();
+
+    if (media.isNotEmpty) {
+      if (!mounted) return;
+      final paths = media.map((f) => f.path).toList();
+      AppLogger.info('Sending ${media.length} media file(s)');
+      Provider.of<TransferProvider>(context, listen: false)
+          .sendFiles(media.first.name, paths);
+    } else {
+      AppLogger.debug('User canceled media picker');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -80,6 +97,15 @@ class _SendPageState extends State<SendPage> {
             const SizedBox(
               height: 15,
             ),
+            if (Platform.isAndroid || Platform.isIOS)
+              IconTextButton(
+                  onClick: _onSendMediaButtonClick,
+                  text: AppLocalizations.of(context)!.send_page_media_button,
+                  icon: Icons.photo_library),
+            if (Platform.isAndroid || Platform.isIOS)
+              const SizedBox(
+                height: 15,
+              ),
             IconTextButton(
                 onClick: _onSendFolderButtonClick,
                 text: AppLocalizations.of(context)!.send_page_folder_button,
