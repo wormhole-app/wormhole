@@ -24,6 +24,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final _controllerWordLength = TextEditingController();
+  final _exportLogsKey = GlobalKey();
 
   @override
   void initState() {
@@ -35,6 +36,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _showExportLogsDialog() async {
     if (!mounted) return;
+    // Capture the button position now, while the widget is still fully rendered,
+    // so it can be passed to the iOS share sheet popover anchor.
+    final renderBox =
+        _exportLogsKey.currentContext?.findRenderObject() as RenderBox?;
+    Rect? sharePositionOrigin;
+    if (renderBox != null) {
+      final offset = renderBox.localToGlobal(Offset.zero);
+      sharePositionOrigin = offset & renderBox.size;
+    }
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -65,7 +75,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     TextButton(
                       onPressed: () async {
                         Navigator.of(context).pop();
-                        await _exportLogs();
+                        await _exportLogs(
+                            sharePositionOrigin: sharePositionOrigin);
                       },
                       child:
                           Text(AppLocalizations.of(context)!.logs_dialog_share),
@@ -80,16 +91,18 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Future<void> _exportLogs() async {
+  Future<void> _exportLogs({Rect? sharePositionOrigin}) async {
     try {
       // Archive logs - this creates a zip file
       final archivePath = await AppLogger.archiveLog();
       AppLogger.info('Logs archived to: $archivePath');
 
-      // Share the archived log file
+      // Share the archived log file.
+      // sharePositionOrigin is required by share_plus on iOS for the popover anchor.
       final params = ShareParams(
         files: [XFile(archivePath)],
         subject: 'Wormhole App Logs',
+        sharePositionOrigin: sharePositionOrigin,
       );
       final result = await SharePlus.instance.share(params);
 
@@ -275,6 +288,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       SettingsRow(
+        key: _exportLogsKey,
         name: AppLocalizations.of(context)!.settings_page_logs,
         child: SettingsSectionButton(
           onButtonClick: _showExportLogsDialog,
