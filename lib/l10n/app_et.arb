@@ -13,6 +13,8 @@
     "@send_page_send_sublabel": {},
     "send_page_button": "Vali fail",
     "@send_page_button": {},
+    "send_page_media_button": "Saada meedia",
+    "@send_page_media_button": {},
     "send_page_folder_button": "Vali kaust",
     "@send_page_folder_button": {},
     "receive_page_label": "Võta fail vastu",
