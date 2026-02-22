@@ -2,7 +2,7 @@ group 'eu.heili.flutter_close_app'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '2.2.21'
+    ext.kotlin_version = '2.3.10'
     repositories {
         google()
         mavenCentral()
