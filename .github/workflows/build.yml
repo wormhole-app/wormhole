@@ -29,7 +29,7 @@ jobs:
           Compress-Archive -Path ./build/windows/x64/runner/Release/* -DestinationPath ./wormhole.zip -Force
       # If release, this should create an MSIX installer (once we have a proper cert)
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: windows
           path: ./wormhole.zip
@@ -95,7 +95,7 @@ jobs:
         run: |
           security delete-keychain build.keychain || true
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: macos
           path: ./build/macos/Build/Products/Release/wormhole.dmg
@@ -157,7 +157,7 @@ jobs:
           cp ./build/app/outputs/flutter-apk/app-arm64-v8a-release.apk ./apk-artifacts/wormhole-android-openSource-arm64-v8a.apk
           cp ./build/app/outputs/flutter-apk/app-x86_64-release.apk ./apk-artifacts/wormhole-android-openSource-x86_64.apk
       - name: Upload APK artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: android-apk
           path: ./apk-artifacts/
@@ -217,17 +217,17 @@ jobs:
       - name: Build RPM package
         run: fastforge package --platform linux --targets rpm
       - name: Upload binary artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: linux
           path: ./build/linux/x64/release/bundle
       - name: Upload DEB package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: linux-deb
           path: ./dist/**/*.deb
       - name: Upload RPM package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: linux-rpm
           path: ./dist/**/*.rpm
@@ -283,7 +283,7 @@ jobs:
           MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
           MATCH_KEYCHAIN_PASSWORD: temporary_ci_password
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         continue-on-error: true
         with:
           name: ios
