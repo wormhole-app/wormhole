@@ -48,7 +48,7 @@ dependencies:
   device_info_plus: ^12.1.0
   rust_lib_wormhole:
     path: rust_builder
-  app_links: ^6.4.1
+  app_links: 7.0.0
   media_scanner: ^2.2.0
 
 dev_dependencies:
