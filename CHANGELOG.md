@@ -1,3 +1,19 @@
+## 1.1.7
+### Added
+- Media picker for selecting photos and videos on mobile (Android SDK >= 33 and iOS)
+- Language selection dropdown in settings. Thanks @HeCorr for opening the Issue!
+- Estonian translation. Thanks @[jrtcdbrg](https://translate.codeberg.org/user/jrtcdbrg/) for the translation!
+- Linux DEB and RPM packages. Thanks @sbstn87 for opening the Issue!
+- On the fly theme switching. Thanks @HeCorr for opening the Issue!
+
+### Changed
+- Update dependencies
+
+### Fixed
+- Fix log export in production mode and on iOS
+- Fix total file size display when receiving files (also prevents overflow for large files). Thanks @HeCorr for opening the Issue!
+- Code type labels (QR / Aztec) are now translatable. Thanks @loutr for opening the Issue!
+
 ## 1.1.6
 ### Added
 - Demo file and transfer simulation for App Store review purposes

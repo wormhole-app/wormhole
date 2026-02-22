@@ -1,6 +1,6 @@
 name: wormhole
 description: A magic-wormhole client
-version: 1.1.6
+version: 1.1.7
 publish_to: 'none'
 
 environment:
@@ -94,7 +94,7 @@ msix_config:
   display_name: Wormhole
   publisher_display_name: Wormhole
   identity_name: eu.heili.wormhole
-  msix_version: 1.1.4.0
+  msix_version: 1.1.7.0
   logo_path: assets/bitmap.png
   capabilities: internetClient, privateNetworkClientServer
   publisher: CN=Wormhole
