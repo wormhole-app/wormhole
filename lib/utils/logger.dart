@@ -27,6 +27,7 @@ Logger? _loggerInstance;
 
 Logger get log {
   _loggerInstance ??= Logger(
+    filter: ProductionFilter(),
     printer: CustomLogPrinter(),
     output: MultiOutput([ConsoleOutput(), RotationLogOutput(rotLog)]),
   );
