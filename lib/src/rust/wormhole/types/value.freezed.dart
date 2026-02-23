@@ -166,7 +166,7 @@ extension ValuePatterns on Value {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int field0)? int,
+    TResult Function(BigInt field0)? int,
     TResult Function(String field0)? string,
     TResult Function(ErrorType field0, String field1)? errorValue,
     TResult Function(ErrorType field0)? error,
@@ -205,7 +205,7 @@ extension ValuePatterns on Value {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int field0) int,
+    required TResult Function(BigInt field0) int,
     required TResult Function(String field0) string,
     required TResult Function(ErrorType field0, String field1) errorValue,
     required TResult Function(ErrorType field0) error,
@@ -241,7 +241,7 @@ extension ValuePatterns on Value {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int field0)? int,
+    TResult? Function(BigInt field0)? int,
     TResult? Function(String field0)? string,
     TResult? Function(ErrorType field0, String field1)? errorValue,
     TResult? Function(ErrorType field0)? error,
@@ -271,7 +271,7 @@ class Value_Int extends Value {
   const Value_Int(this.field0) : super._();
 
   @override
-  final int field0;
+  final BigInt field0;
 
   /// Create a copy of Value
   /// with the given fields replaced by the non-null parameter values.
@@ -302,7 +302,7 @@ abstract mixin class $Value_IntCopyWith<$Res> implements $ValueCopyWith<$Res> {
   factory $Value_IntCopyWith(Value_Int value, $Res Function(Value_Int) _then) =
       _$Value_IntCopyWithImpl;
   @useResult
-  $Res call({int field0});
+  $Res call({BigInt field0});
 }
 
 /// @nodoc
@@ -322,7 +322,7 @@ class _$Value_IntCopyWithImpl<$Res> implements $Value_IntCopyWith<$Res> {
       null == field0
           ? _self.field0
           : field0 // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
     ));
   }
 }

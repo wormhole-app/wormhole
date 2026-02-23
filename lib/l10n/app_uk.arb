@@ -7,6 +7,7 @@
   "send_page_send_label" : "Надіслати файл",
   "send_page_send_sublabel" : "Виберіть файл для надсилання",
   "send_page_button" : "Вибрати файл",
+  "send_page_media_button" : "Надіслати медіа",
   "send_page_folder_button" : "Вибрати теку",
 
   "receive_page_label" : "Отримати файл",
@@ -43,6 +44,8 @@
   "settings_page_dark_theme" : "Темна",
   "settings_page_light_theme" : "Світла",
   "settings_page_system_theme" : "Системна",
+  "settings_page_language" : "Мова:",
+  "settings_page_system_language" : "Системна",
   "settings_page_advanced" : "Додатково:",
   "settings_page_serversettings" : "Налаштування сервера",
   "settings_page_rendezvousserver" : "Сервер рандеву:",

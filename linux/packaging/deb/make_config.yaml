@@ -1,0 +1,35 @@
+# Debian package configuration for Wormhole
+# Reference: https://fastforge.dev/makers/deb
+
+display_name: Wormhole
+package_name: wormhole
+
+maintainer:
+  name: emmabyte
+  email: emma@emmabyte.de
+
+priority: optional
+section: Network
+installed_size: 50000
+
+icon: assets/bitmap.png
+
+keywords:
+  - wormhole
+  - magic-wormhole
+  - file
+  - transfer
+  - send
+  - receive
+  - p2p
+
+generic_name: File Transfer
+categories:
+  - Network
+  - FileTransfer
+  - Utility
+
+dependencies:
+  - libgtk-3-0
+  - libblkid1
+  - liblzma5

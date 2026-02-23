@@ -2,7 +2,7 @@ use crate::api::ErrorType;
 
 pub enum Value {
     /// Integer value
-    Int(i32),
+    Int(u64),
     /// String value
     String(String),
     /// Error value with message

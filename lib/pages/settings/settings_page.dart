@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../locale/locale_provider.dart';
 import '../../src/rust/api/wormhole.dart';
 import '../../settings/settings.dart';
 import '../../theme/theme_provider.dart';
@@ -23,6 +24,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final _controllerWordLength = TextEditingController();
+  final _exportLogsKey = GlobalKey();
 
   @override
   void initState() {
@@ -34,6 +36,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _showExportLogsDialog() async {
     if (!mounted) return;
+    // Capture the button position now, while the widget is still fully rendered,
+    // so it can be passed to the iOS share sheet popover anchor.
+    final renderBox =
+        _exportLogsKey.currentContext?.findRenderObject() as RenderBox?;
+    Rect? sharePositionOrigin;
+    if (renderBox != null) {
+      final offset = renderBox.localToGlobal(Offset.zero);
+      sharePositionOrigin = offset & renderBox.size;
+    }
     showDialog(
       context: context,
       builder: (context) => Dialog(
@@ -64,7 +75,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     TextButton(
                       onPressed: () async {
                         Navigator.of(context).pop();
-                        await _exportLogs();
+                        await _exportLogs(
+                            sharePositionOrigin: sharePositionOrigin);
                       },
                       child:
                           Text(AppLocalizations.of(context)!.logs_dialog_share),
@@ -79,16 +91,18 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  Future<void> _exportLogs() async {
+  Future<void> _exportLogs({Rect? sharePositionOrigin}) async {
     try {
       // Archive logs - this creates a zip file
       final archivePath = await AppLogger.archiveLog();
       AppLogger.info('Logs archived to: $archivePath');
 
-      // Share the archived log file
+      // Share the archived log file.
+      // sharePositionOrigin is required by share_plus on iOS for the popover anchor.
       final params = ShareParams(
         files: [XFile(archivePath)],
         subject: 'Wormhole App Logs',
+        sharePositionOrigin: sharePositionOrigin,
       );
       final result = await SharePlus.instance.share(params);
 
@@ -114,9 +128,52 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  Widget _buildLanguageDropdown(
+    BuildContext context,
+    LanguageType currentLanguage,
+    LocaleProvider localeprov,
+    ThemeData theme,
+  ) {
+    final items = LanguageType.values;
+
+    final labels = {
+      for (var lang in LanguageType.values)
+        lang: LocaleProvider.getLanguageDisplayName(lang, context)
+    };
+
+    return SizedBox(
+      width: 180.0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.secondary,
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: DropdownButton<LanguageType>(
+          value: currentLanguage,
+          items: items
+              .map((language) => DropdownMenuItem(
+                    value: language,
+                    child: Text(labels[language] ?? ''),
+                  ))
+              .toList(),
+          onChanged: (LanguageType? value) {
+            if (value != null) {
+              localeprov.language = value;
+            }
+          },
+          underline: const SizedBox(),
+          isExpanded: true,
+          style: theme.textTheme.bodyMedium,
+        ),
+      ),
+    );
+  }
+
   List<Widget> _buildSettingsContent() {
     final theme = Theme.of(context);
     final themeprov = Provider.of<ThemeProvider>(context);
+    final localeprov = Provider.of<LocaleProvider>(context);
 
     return [
       SettingsRow(
@@ -150,7 +207,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       ? (snapshot.data! == CodeType.qrCode ? 0 : 1)
                       : 0,
                   totalSwitches: 2,
-                  labels: const ['Qr Code', 'Aztec Code'],
+                  labels: [
+                    AppLocalizations.of(context)!.settings_page_qr_code,
+                    AppLocalizations.of(context)!.settings_page_aztec_code
+                  ],
                   radiusStyle: true,
                   onToggle: (index) {
                     Settings.setCodeType(
@@ -212,6 +272,10 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           )),
       SettingsRow(
+          name: AppLocalizations.of(context)!.settings_page_language,
+          child: _buildLanguageDropdown(
+              context, localeprov.language, localeprov, theme)),
+      SettingsRow(
         name: AppLocalizations.of(context)!.settings_page_advanced,
         child: SettingsSectionButton(
           onButtonClick: () {
@@ -224,6 +288,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       SettingsRow(
+        key: _exportLogsKey,
         name: AppLocalizations.of(context)!.settings_page_logs,
         child: SettingsSectionButton(
           onButtonClick: _showExportLogsDialog,

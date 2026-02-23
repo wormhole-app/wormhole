@@ -1,6 +1,6 @@
 name: wormhole
 description: A magic-wormhole client
-version: 1.1.6
+version: 1.1.7
 publish_to: 'none'
 
 environment:
@@ -20,6 +20,7 @@ dependencies:
 
   # file chooser / open / share
   file_picker: ^10.3.3
+  image_picker: ^1.2.0
   path_provider: ^2.0.13
   share_plus: ^12.0.0
   open_filex: ^4.3.4
@@ -56,7 +57,7 @@ dev_dependencies:
 
   dmg: ^0.1.7
   flutter_lints: ^6.0.0
-  ffigen: 20.0.0
+  ffigen: 20.1.1
   flutter_launcher_icons:
   build_runner:
   freezed: ^3.2.3
@@ -93,7 +94,7 @@ msix_config:
   display_name: Wormhole
   publisher_display_name: Wormhole
   identity_name: eu.heili.wormhole
-  msix_version: 1.1.4.0
+  msix_version: 1.1.7.0
   logo_path: assets/bitmap.png
   capabilities: internetClient, privateNetworkClientServer
   publisher: CN=Wormhole

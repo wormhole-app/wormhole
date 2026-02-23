@@ -15,7 +15,7 @@ jobs:
       run:
         working-directory: ./rust
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Update local toolchain
         run: |
@@ -45,7 +45,7 @@ jobs:
       run:
         working-directory: ./
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: ./.github/actions/setup-flutter
@@ -63,7 +63,7 @@ jobs:
       run:
         working-directory: ./
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: ./.github/actions/setup-flutter

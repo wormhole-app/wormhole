@@ -10,31 +10,31 @@ import '../src/rust/wormhole/types/value.dart';
 /// This is used for App Store review demonstrations.
 Stream<TUpdate> generateDemoReceiveStream(String downloadPath) async* {
   // Step 1: Connecting
-  yield const TUpdate(
+  yield TUpdate(
     event: Events.connecting,
-    value: Value.int(0),
+    value: Value.int(BigInt.zero),
   );
   await Future.delayed(const Duration(milliseconds: 800));
 
   // Step 2: Start transfer
-  yield const TUpdate(
+  yield TUpdate(
     event: Events.startTransfer,
-    value: Value.int(0),
+    value: Value.int(BigInt.zero),
   );
   await Future.delayed(const Duration(milliseconds: 500));
 
   // Step 3: Send total size (1MB demo file)
-  const int totalBytes = 1048576; // 1 MB
-  yield const TUpdate(
+  final BigInt totalBytes = BigInt.from(1048576); // 1 MB
+  yield TUpdate(
     event: Events.total,
     value: Value.int(totalBytes),
   );
   await Future.delayed(const Duration(milliseconds: 200));
 
   // Step 4: Simulate progress in chunks
-  const int chunkSize = 131072; // 128 KB chunks
-  for (int sent = chunkSize; sent <= totalBytes; sent += chunkSize) {
-    final int bytesToSend = sent > totalBytes ? totalBytes : sent;
+  final BigInt chunkSize = BigInt.from(131072); // 128 KB chunks
+  for (BigInt sent = chunkSize; sent <= totalBytes; sent += chunkSize) {
+    final BigInt bytesToSend = sent > totalBytes ? totalBytes : sent;
     yield TUpdate(
       event: Events.sent,
       value: Value.int(bytesToSend),

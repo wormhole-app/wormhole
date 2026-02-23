@@ -7,6 +7,7 @@ An open source Android, iOS, macOS, and Windows App for sending/receiveing files
 
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play Store" height="75">](https://play.google.com/store/apps/details?id=eu.heili.wormhole)[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="75">](https://apt.izzysoft.de/packages/eu.heili.wormhole)
 
+[<img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="75">](https://apps.apple.com/de/app/wormhole-file-transfer/id6753897991)
 [<img src="https://img.shields.io/badge/TestFlight-Join_Beta-0D96F6?style=for-the-badge&logo=apple&logoColor=white" alt="Join TestFlight Beta" height="75">](https://testflight.apple.com/join/dUGWPGtc)
 
 ## Preview
@@ -28,6 +29,26 @@ An open source Android, iOS, macOS, and Windows App for sending/receiveing files
 - [Warp](https://apps.gnome.org/app/app.drey.Warp/)
 
 (feel free to add yours)
+
+## Installation
+
+### Linux
+
+**Debian/Ubuntu:**
+```bash
+# Download the .deb package from releases, then install:
+sudo apt install ./wormhole_{version}_amd64.deb
+```
+
+**Fedora/RHEL/openSUSE:**
+```bash
+# Download the .rpm package from releases, then install:
+sudo rpm -i wormhole-{version}.x86_64.rpm
+# Or on Fedora:
+sudo dnf localinstall ./wormhole-{version}.x86_64.rpm
+```
+
+Download the latest packages from the [Releases](https://github.com/wormhole-app/wormhole/releases) page.
 
 # Translation
 We use [Codeberg Translate](https://translate.codeberg.org/projects/wormhole/).
@@ -62,6 +83,20 @@ Build APK + App Bundle:\
 
 Dev build:\
 `just linux`
+
+Create distribution packages:\
+```bash
+# Activate fastforge first (one-time setup)
+dart pub global activate fastforge
+
+# Build DEB package (for Debian/Ubuntu)
+fastforge package --platform linux --targets deb
+
+# Build RPM package (for Fedora/RHEL)
+fastforge package --platform linux --targets rpm
+```
+
+Packages will be created in the `dist/` directory.
 
 #### macOS
 

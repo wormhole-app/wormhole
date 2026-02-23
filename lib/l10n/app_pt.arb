@@ -7,6 +7,7 @@
   "send_page_send_label": "Enviar Arquivo",
   "send_page_send_sublabel": "Selecione um arquivo para enviar",
   "send_page_button": "Selecionar Arquivo",
+  "send_page_media_button": "Enviar Mídia",
   "send_page_folder_button": "Selecionar Pasta",
 
   "receive_page_label": "Receber Arquivo",
@@ -43,6 +44,8 @@
   "settings_page_dark_theme": "Escuro",
   "settings_page_light_theme": "Claro",
   "settings_page_system_theme": "Sistema",
+  "settings_page_language": "Idioma:",
+  "settings_page_system_language": "Sistema",
   "settings_page_advanced": "Avançado:",
   "settings_page_serversettings": "Configurações do Servidor",
   "settings_page_rendezvousserver": "Servidor Rendezvous:",

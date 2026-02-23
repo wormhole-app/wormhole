@@ -7,6 +7,7 @@
     "send_page_send_label" : "Datei senden",
     "send_page_send_sublabel" : "Zu sendende Datei auswählen",
     "send_page_button" : "Dateiauswahl",
+    "send_page_media_button" : "Medien senden",
     "send_page_folder_button" : "Ordnerauswahl",
 
     "receive_page_label" : "Datei empfangen",
@@ -36,6 +37,8 @@
 
     "settings_page_wordlength" : "Wortlänge:",
     "settings_page_code_type" : "Code Typ:",
+    "settings_page_qr_code" : "QR Code",
+    "settings_page_aztec_code" : "Aztec Code",
     "settings_page_show_code" : "Zeige QR Code an:",
     "settings_page_show_always" : "Immer",
     "settings_page_show_never" : "Nie",
@@ -43,6 +46,8 @@
     "settings_page_dark_theme" : "Dunkel",
     "settings_page_light_theme" : "Hell",
     "settings_page_system_theme" : "System",
+    "settings_page_language" : "Sprache:",
+    "settings_page_system_language" : "System",
     "settings_page_advanced" : "Fortgeschritten:",
     "settings_page_serversettings" : "Server Einstellungen",
     "settings_page_rendezvousserver" : "Rendezvous Server:",

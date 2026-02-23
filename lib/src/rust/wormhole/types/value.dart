@@ -21,7 +21,7 @@ sealed class Value with _$Value {
 
   /// Integer value
   const factory Value.int(
-    int field0,
+    BigInt field0,
   ) = Value_Int;
 
   /// String value

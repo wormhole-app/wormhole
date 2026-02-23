@@ -7,6 +7,7 @@
   "send_page_send_label" : "Skicka fil",
   "send_page_send_sublabel" : "Välj en fil att skicka",
   "send_page_button" : "Välj fil",
+  "send_page_media_button" : "Skicka media",
   "send_page_folder_button" : "Välj mapp",
 
   "receive_page_label" : "Ta emot fil",
@@ -43,6 +44,8 @@
   "settings_page_dark_theme" : "Mörkt",
   "settings_page_light_theme" : "Ljus",
   "settings_page_system_theme" : "System",
+  "settings_page_language" : "Språk:",
+  "settings_page_system_language" : "System",
   "settings_page_advanced" : "Avancerad:",
   "settings_page_serversettings" : "Serverinställningar",
   "settings_page_rendezvousserver" : "Rendezvous Server:",

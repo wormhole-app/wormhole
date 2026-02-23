@@ -19,25 +19,37 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Download Windows artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: windows
           path: ./artifacts/windows
 
       - name: Download macOS artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: macos
           path: ./artifacts/macos
 
       - name: Download Android APK artifact
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: android-apk
           path: ./artifacts/android
+
+      - name: Download Linux DEB artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: linux-deb
+          path: ./artifacts/linux
+
+      - name: Download Linux RPM artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: linux-rpm
+          path: ./artifacts/linux
 
       - name: Extract changelog for current version
         id: changelog
@@ -74,3 +86,5 @@ jobs:
             ./artifacts/android/wormhole-android-openSource-x86_64.apk
             ./artifacts/windows/wormhole.zip
             ./artifacts/macos/wormhole.dmg
+            ./artifacts/linux/*.deb
+            ./artifacts/linux/*.rpm
