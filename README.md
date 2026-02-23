@@ -27,6 +27,7 @@ An open source Android, iOS, macOS, and Windows App for sending/receiveing files
 ## Compatible Desktop Applications:
 
 - [Warp](https://apps.gnome.org/app/app.drey.Warp/)
+- [Magic Wormhole CLI](https://magic-wormhole.readthedocs.io/en/latest/welcome.html#installation)
 
 (feel free to add yours)
 
