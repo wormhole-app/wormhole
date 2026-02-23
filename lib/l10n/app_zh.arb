@@ -52,5 +52,6 @@
     "settings_page_logs": "",
     "settings_page_advanced": "",
     "logs_dialog_title": "",
-    "transfer_zipping": ""
+    "transfer_zipping": "",
+    "send_page_media_button": ""
 }
