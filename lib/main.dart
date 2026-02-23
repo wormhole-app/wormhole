@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -137,7 +138,10 @@ class _MyAppState extends State<MyApp> {
               themeMode: themeProvider.isDarkThemeActive()
                   ? ThemeMode.dark
                   : ThemeMode.light,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              localizationsDelegates: [
+                ...AppLocalizations.localizationsDelegates,
+                const _FallbackMaterialLocalizationsDelegate(),
+              ],
               supportedLocales: AppLocalizations.supportedLocales,
               home: const Navigation(),
             );
@@ -146,4 +150,20 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+class _FallbackMaterialLocalizationsDelegate
+    extends LocalizationsDelegate<MaterialLocalizations> {
+  const _FallbackMaterialLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) =>
+      !GlobalMaterialLocalizations.delegate.isSupported(locale);
+
+  @override
+  Future<MaterialLocalizations> load(Locale locale) =>
+      GlobalMaterialLocalizations.delegate.load(const Locale('en'));
+
+  @override
+  bool shouldReload(_FallbackMaterialLocalizationsDelegate old) => false;
 }

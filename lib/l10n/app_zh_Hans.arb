@@ -1,4 +1,5 @@
 {
+    "@@locale": "zh_Hans",
     "title": "Wormhole",
     "@title": {},
     "menu_send": "发送",
