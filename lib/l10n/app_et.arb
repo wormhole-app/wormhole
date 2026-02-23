@@ -50,5 +50,7 @@
     "toast_error_qr_invalid": "Skaneeritud QR-kood on vigane",
     "toast_info_passphrase_copy": "Kopeerisin salafraasi lõikelauale",
     "settings_page_language": "Keel:",
-    "settings_page_system_language": "Süsteem"
+    "settings_page_system_language": "Süsteem",
+    "settings_page_aztec_code": "",
+    "settings_page_qr_code": ""
 }
