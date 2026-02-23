@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_close_app/flutter_close_app.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:share_handler/share_handler.dart';
@@ -33,6 +34,39 @@ class TransferReceiver extends StatefulWidget {
 
 class _TransferReceiverState extends State<TransferReceiver> {
   final provider = TransferProvider();
+
+  /// Copy files from iOS shared app group container to app's temp directory
+  /// This is needed because files from share intent may be in a restricted container
+  Future<List<String>> _copyIntentFilesToTempDir(List<String> paths) async {
+    if (!Platform.isIOS) return paths;
+
+    try {
+      final tempDir = await getTemporaryDirectory();
+      final copiedPaths = <String>[];
+
+      for (final filePath in paths) {
+        final sourceFile = File(filePath);
+        if (!await sourceFile.exists()) {
+          AppLogger.warn('Intent file not found: $filePath');
+          continue;
+        }
+
+        final fileName = filePath.split('/').last;
+        final destPath = '${tempDir.path}/$fileName';
+
+        // Copy file to temp directory
+        await sourceFile.copy(destPath);
+        AppLogger.debug('Copied intent file to temp: $destPath');
+        copiedPaths.add(destPath);
+      }
+
+      return copiedPaths.isNotEmpty ? copiedPaths : paths;
+    } catch (e) {
+      AppLogger.warn('Failed to copy intent files: $e');
+      // Fall back to original paths if copy fails
+      return paths;
+    }
+  }
 
   void _sendFolder(String name, String path, bool causedByIntent) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
@@ -203,7 +237,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
     });
   }
 
-  void _sendIntentFile(List<SharedAttachment?> attachments) {
+  void _sendIntentFile(List<SharedAttachment?> attachments) async {
     final paths = attachments
         .where((e) => e != null)
         .map((e) => e!.path)
@@ -213,7 +247,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
     }
 
     AppLogger.info('Sending file via intent: ${paths.toString()}');
-    _sendFiles(paths[0].split('/').last, paths, true);
+
+    // Copy intent files from shared container to temp directory on iOS
+    final accessiblePaths = await _copyIntentFilesToTempDir(paths);
+    _sendFiles(accessiblePaths[0].split('/').last, accessiblePaths, true);
   }
 
   _TransferReceiverState() {
