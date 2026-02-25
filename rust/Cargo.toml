@@ -7,17 +7,17 @@ edition = "2024"
 crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
-anyhow = "1.0.100"
+anyhow = "1.0.102"
 flutter_rust_bridge = "=2.11.1"
 magic-wormhole = {version = "0.7.6", features = ["tls", "transfer", "transit", "forwarding"]}
-futures = "0.3.31"
+futures = "0.3.32"
 async-std = "1.13.2"
-url = { version = "2.5.7", features = ["serde"] }
+url = { version = "2.5.8", features = ["serde"] }
 zip = { version = "8.1.0", default-features = false, features = ["deflate"] }
 macros = { path = "macros", version = "1" }
 fastrand = "2.3.0"
 flutter_logger = "0.6.1"
-log = "0.4.28"
+log = "0.4.29"
 
 [profile.release]
 opt-level = 'z'     # Optimize for size.
