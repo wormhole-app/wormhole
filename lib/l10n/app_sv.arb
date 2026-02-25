@@ -51,6 +51,6 @@
     "toast_error_qr_fail": "Misslyckades med att scanna QR-kod",
     "toast_error_qr_invalid": "Scannad QR-kod är ogiltig",
     "toast_info_passphrase_copy": "Lösenord har kopierats till urklipp",
-    "settings_page_aztec_code": "",
-    "settings_page_qr_code": ""
+    "settings_page_aztec_code": "Aztec kod",
+    "settings_page_qr_code": "QR kod"
 }
