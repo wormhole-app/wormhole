@@ -92,9 +92,8 @@ platform :ios do
       key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
     )
 
-    # Make a simple read-only API call to validate the key
-    app_info = get_app_store_connect_app(api_key: api_key)
-    puts "✅ API Key is valid!"
-    puts "App Name: #{app_info.name}"
+    # Validate the API key by fetching the latest TestFlight build number
+    latest_testflight_build_number(api_key: api_key)
+    UI.success("✅ API Key is valid!")
   end
 end
