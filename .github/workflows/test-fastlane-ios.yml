@@ -1,0 +1,37 @@
+name: Test Fastlane iOS
+
+on:
+  push:
+    branches:
+      - 'test-fastlane-ios'
+
+jobs:
+  test-api-key:
+    runs-on: macos-26
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
+      - name: Deps
+        run: |
+          flutter pub get
+          flutter gen-l10n
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '4.0.1'
+          bundler-cache: true
+          working-directory: ios
+      - name: Install fastlane dependencies
+        run: |
+          cd ios
+          bundle install
+      - name: Test App Store Connect API Key
+        run: |
+          cd ios
+          bundle exec fastlane test_api_key
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_API_KEY_CONTENT }}

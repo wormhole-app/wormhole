@@ -83,4 +83,18 @@ platform :ios do
       skip_waiting_for_build_processing: true
     )
   end
+
+  desc "Test App Store Connect API credentials"
+  lane :test_api_key do
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_API_ISSUER_ID"],
+      key_content: ENV["APP_STORE_CONNECT_API_KEY_CONTENT"]
+    )
+
+    # Make a simple read-only API call to validate the key
+    app_info = get_app_store_connect_app(api_key: api_key)
+    puts "✅ API Key is valid!"
+    puts "App Name: #{app_info.name}"
+  end
 end
