@@ -57,6 +57,10 @@ class QrScannerPage extends StatelessWidget {
   Widget _buildFlutterZxingWidget(BuildContext context) {
     return ReaderWidget(
       tryInverted: true,
+      cropPercent: 1.0,
+      showScannerOverlay: false,
+      tryDownscale: true,
+      scanDelay: const Duration(milliseconds: 16),
       onScan: (result) async {
         _onQrDetect(result.text, context);
       },
