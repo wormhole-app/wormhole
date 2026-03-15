@@ -131,6 +131,9 @@ jobs:
         run: echo "${{ secrets.ANDROID_KEY_PROPERTIES_BASE64 }}" | base64 -d > android/key.properties
       - name: Deps
         run: |
+          export RUST_VERSION=$(sed -n -E 's/channel = "(.*)"/\1/p' rust/rust-toolchain.toml)
+          rustup default $RUST_VERSION
+          sed -i -e "s/'stable'/'$RUST_VERSION'/" rust_builder/cargokit/build_tool/lib/src/builder.dart
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
           cargo install cargo-ndk
           flutter pub get
