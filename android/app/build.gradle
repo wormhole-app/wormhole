@@ -4,22 +4,6 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
-/* calculated from git commits to give sequential integers */
-
-def getGitVersion() {
-    def process = "git rev-list --count HEAD".execute()
-    def text = process.text
-    if (text == "") {
-        println('git executeable might be unavailable!')
-        return -1
-    } else {
-        return text.toInteger()
-    }
-}
-
-def googleVer = getGitVersion()
-
-
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -74,7 +58,7 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode googleVer
+        versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
