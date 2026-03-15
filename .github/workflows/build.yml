@@ -137,6 +137,7 @@ jobs:
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
           cargo install cargo-ndk
           flutter pub get
+          sed -i -e 's/-Wl,/-Wl,--build-id=none,/' /home/runner/.pub-cache/hosted/pub.dev/flutter_zxing-*/src/CMakeLists.txt
           flutter gen-l10n
       - name: Build Android APK
         run: flutter build apk --release
