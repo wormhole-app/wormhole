@@ -1,8 +1,8 @@
 {
     "transfer_finished_share": "Поделиться",
-    "settings_page_show_code": "Показывать штрихкод сразу при отправке:",
+    "settings_page_show_code": "При отправке сразу показывать штрихкод:",
     "transfer_code_help_title": "Как использовать код?",
-    "settings_page_wordlength": "Кол-во слов в коде передачи:",
+    "settings_page_wordlength": "Слов в коде передачи:",
     "menu_receive": "Получение",
     "settings_page_export_logs": "Экспорт журналов",
     "dev_build_warning": "Внимание: вы используете тестовую сборку приложения!",
