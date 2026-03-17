@@ -135,7 +135,6 @@ jobs:
           rustup default $RUST_VERSION
           sed -i -e "s/'stable'/'$RUST_VERSION'/" rust_builder/cargokit/build_tool/lib/src/builder.dart
           rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
-          cargo install cargo-ndk
           flutter pub get
           sed -i -e 's/-Wl,/-Wl,--build-id=none,/' /home/runner/.pub-cache/hosted/pub.dev/flutter_zxing-*/src/CMakeLists.txt
           flutter gen-l10n

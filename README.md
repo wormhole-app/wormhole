@@ -74,9 +74,6 @@ We use [Codeberg Translate](https://translate.codeberg.org/projects/wormhole/).
 Add Rust Android targets:\
 `rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android`
 
-Install cargo-ndk:\
-`cargo install cargo-ndk`
-
 Build APK + App Bundle:\
 `just apk`
 
