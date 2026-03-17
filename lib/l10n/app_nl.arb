@@ -48,9 +48,9 @@
     "toast_error_qr_fail": "De QR-code kan niet worden gescand",
     "toast_error_qr_invalid": "De QR-code is ongeldig",
     "toast_info_passphrase_copy": "De toegangszin is gekopieerd naar het klembord",
-    "settings_page_aztec_code": "",
-    "settings_page_language": "",
-    "settings_page_system_language": "",
-    "send_page_media_button": "",
-    "settings_page_qr_code": ""
+    "settings_page_aztec_code": "Aztec-code",
+    "settings_page_language": "Taal:",
+    "settings_page_system_language": "Systeemtaal",
+    "send_page_media_button": "Media versturen",
+    "settings_page_qr_code": "QR-code"
 }
