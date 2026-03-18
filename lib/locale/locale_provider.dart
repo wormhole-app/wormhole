@@ -15,7 +15,7 @@ class LocaleProvider with ChangeNotifier {
     LanguageType.kab: 'Taqbaylit',
     LanguageType.nl: 'Nederlands',
     LanguageType.pt: 'Português',
-    // LanguageType.ru: 'Русский', (not translated yet, so disabled to avoid confusion)
+    LanguageType.ru: 'Русский',
     LanguageType.sv: 'Svenska',
     LanguageType.uk: 'Українська',
     LanguageType.zhHans: '简体中文',
