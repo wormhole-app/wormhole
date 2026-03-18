@@ -164,7 +164,7 @@ pub fn get_passphrase_uri(passphrase: String, rendezvous_server: Option<String>)
     .to_string()
 }
 
-pub fn get_build_time() -> BuildInfo {
+pub fn get_build_info() -> BuildInfo {
     BuildInfo::new()
 }
 

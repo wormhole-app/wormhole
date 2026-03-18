@@ -114,7 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildBottomVersion() {
     return FastFutureBuilder<BuildInfo>(
-      future: getBuildTime(),
+      future: getBuildInfo(),
       onData: (data) => Column(
         children: [
           Text('Version: ${data.version}'),

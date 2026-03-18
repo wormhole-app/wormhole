@@ -63,8 +63,8 @@ Future<String> getPassphraseUri(
     RustLib.instance.api.crateApiWormholeGetPassphraseUri(
         passphrase: passphrase, rendezvousServer: rendezvousServer);
 
-Future<BuildInfo> getBuildTime() =>
-    RustLib.instance.api.crateApiWormholeGetBuildTime();
+Future<BuildInfo> getBuildInfo() =>
+    RustLib.instance.api.crateApiWormholeGetBuildInfo();
 
 Future<String> defaultRendezvousUrl() =>
     RustLib.instance.api.crateApiWormholeDefaultRendezvousUrl();
