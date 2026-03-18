@@ -186,7 +186,8 @@ jobs:
         if: ${{ !inputs.release }}
         run: |
           cd android
-          flutter build appbundle --release
+          BUILD_NUMBER=$(git rev-list --count HEAD)
+          flutter build appbundle --release --build-number=$BUILD_NUMBER
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             fastlane deploy
           fi
