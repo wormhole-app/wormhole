@@ -7,25 +7,22 @@ import '../../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 class BuildInfo {
-  final BigInt buildTime;
   final bool devBuild;
   final String version;
 
   const BuildInfo({
-    required this.buildTime,
     required this.devBuild,
     required this.version,
   });
 
   @override
-  int get hashCode => buildTime.hashCode ^ devBuild.hashCode ^ version.hashCode;
+  int get hashCode => devBuild.hashCode ^ version.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is BuildInfo &&
           runtimeType == other.runtimeType &&
-          buildTime == other.buildTime &&
           devBuild == other.devBuild &&
           version == other.version;
 }

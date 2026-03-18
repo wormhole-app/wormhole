@@ -73,7 +73,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1333549542;
+  int get rustContentHash => 1104816079;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -88,7 +88,7 @@ abstract class RustLibApi extends BaseApi {
 
   Future<String> crateApiWormholeDefaultTransitUrl();
 
-  Future<BuildInfo> crateApiWormholeGetBuildTime();
+  Future<BuildInfo> crateApiWormholeGetBuildInfo();
 
   Future<String> crateApiWormholeGetPassphraseUri(
       {required String passphrase, String? rendezvousServer});
@@ -172,7 +172,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<BuildInfo> crateApiWormholeGetBuildTime() {
+  Future<BuildInfo> crateApiWormholeGetBuildInfo() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -183,15 +183,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_build_info,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiWormholeGetBuildTimeConstMeta,
+      constMeta: kCrateApiWormholeGetBuildInfoConstMeta,
       argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiWormholeGetBuildTimeConstMeta =>
+  TaskConstMeta get kCrateApiWormholeGetBuildInfoConstMeta =>
       const TaskConstMeta(
-        debugName: 'get_build_time',
+        debugName: 'get_build_info',
         argNames: [],
       );
 
@@ -426,12 +426,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   BuildInfo dco_decode_build_info(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return BuildInfo(
-      buildTime: dco_decode_u_64(arr[0]),
-      devBuild: dco_decode_bool(arr[1]),
-      version: dco_decode_String(arr[2]),
+      devBuild: dco_decode_bool(arr[0]),
+      version: dco_decode_String(arr[1]),
     );
   }
 
@@ -620,11 +619,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   BuildInfo sse_decode_build_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_buildTime = sse_decode_u_64(deserializer);
     var var_devBuild = sse_decode_bool(deserializer);
     var var_version = sse_decode_String(deserializer);
-    return BuildInfo(
-        buildTime: var_buildTime, devBuild: var_devBuild, version: var_version);
+    return BuildInfo(devBuild: var_devBuild, version: var_version);
   }
 
   @protected
@@ -828,7 +825,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_build_info(BuildInfo self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_u_64(self.buildTime, serializer);
     sse_encode_bool(self.devBuild, serializer);
     sse_encode_String(self.version, serializer);
   }

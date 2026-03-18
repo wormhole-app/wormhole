@@ -1,4 +1,3 @@
-use std::time::{SystemTime, UNIX_EPOCH};
 extern crate proc_macro;
 use proc_macro::TokenStream;
 use std::fs::read_to_string;
@@ -14,16 +13,3 @@ pub fn version_str(_item: TokenStream) -> TokenStream {
     let version = doc["version"].as_str().expect("couldnt get version from yaml object");
     format!("\"{}\"", version).parse().expect("couldn't parse string to tokenstream")
 }
-
-
-
-#[proc_macro]
-pub fn build_time(_item: TokenStream) -> TokenStream {
-    let start = SystemTime::now();
-    let since_the_epoch = start
-        .duration_since(UNIX_EPOCH)
-        .expect("Time went backwards");
-
-    since_the_epoch.as_millis().to_string().parse().unwrap()
-}
-

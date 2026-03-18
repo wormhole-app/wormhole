@@ -1,10 +1,11 @@
 name: wormhole
 description: A magic-wormhole client
-version: 1.1.7
+version: 1.1.7+545
 publish_to: 'none'
 
 environment:
   sdk: ">=3.4.0"
+  flutter: 3.35.5
 
 dependencies:
   flutter:
