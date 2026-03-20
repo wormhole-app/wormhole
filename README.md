@@ -12,9 +12,9 @@ An open source Android, iOS, macOS, and Windows App for sending/receiveing files
 
 ## Preview
 
-<p><img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799885.007992.png" width="32%"  alt=""/> 
-<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799886.892108.png" width="32%"  alt=""/> 
-<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/screenshot--1705799914.5084915.png" width="32%"  alt=""/></p>
+<p><img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/2_receive_dark.png" width="32%"  alt=""/> 
+<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/5_settings_dark.png" width="32%"  alt=""/> 
+<img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/3_transfer_code_dark.png" width="32%"  alt=""/></p>
 
 ## Features
 
@@ -122,7 +122,28 @@ Generate translations:\
 Generate Flutter-Rust-Bridge code bindings:\
 `just codegen`
 
-### Cleanup 
+### Screenshots
+
+Generate store screenshots for all devices (from the repo root):
+
+```bash
+flutter test test/screenshots/screenshot_test.dart --update-goldens
+```
+
+Add device frames and replace the originals:
+
+```bash
+cd android
+fastlane frame_screenshots
+fastlane apply_frames
+cd ..
+cd ios
+fastlane frame_screenshots
+fastlane apply_frames
+cd ..
+```
+
+### Cleanup
 
 Clean build files:\
 `just clean`
