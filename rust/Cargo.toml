@@ -14,7 +14,7 @@ serde = {version = "1.0.228", features = ["derive"]}
 futures = "0.3.32"
 async-std = "1.13.2"
 url = { version = "2.5.8", features = ["serde"] }
-zip = { version = "8.3.0", default-features = false, features = ["deflate"] }
+zip = { version = "8.3.1", default-features = false, features = ["deflate"] }
 macros = { path = "macros", version = "1" }
 fastrand = "2.3.0"
 flutter_logger = "0.6.1"
