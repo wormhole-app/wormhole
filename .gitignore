@@ -50,3 +50,4 @@ Cargo.lock
 pubspec.lock
 lib/l10n/*.dart
 ios/fastlane/report.xml
+android/fastlane/report.xml
