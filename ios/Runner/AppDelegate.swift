@@ -8,6 +8,7 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+    FolderPickerPlugin.register(with: self.registrar(forPlugin: "FolderPickerPlugin")!)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }

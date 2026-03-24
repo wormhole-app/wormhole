@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -61,7 +62,19 @@ class _SendPageState extends State<SendPage> {
   }
 
   void _onSendFolderButtonClick() async {
-    String? result = await FilePicker.platform.getDirectoryPath();
+    String? result;
+
+    if (Platform.isIOS) {
+      const channel = MethodChannel('io.wormhole.app/folder_picker');
+      try {
+        result = await channel.invokeMethod<String>('pickFolder');
+      } on PlatformException catch (e) {
+        AppLogger.error('Folder picker error: ${e.message}');
+        return;
+      }
+    } else {
+      result = await FilePicker.platform.getDirectoryPath();
+    }
 
     if (result != null) {
       if (!mounted) return;
