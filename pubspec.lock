@@ -349,10 +349,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: f2d9f173c2c14635cc0e9b14c143c49ef30b4934e8d1d274d6206fcb0086a06f
+      sha256: "27c58ff4ec17d8e05b8b27fa66175bf5786b9ff9bd94ca418a571c7f6771b27b"
       url: "https://pub.dev"
     source: hosted
-    version: "10.3.3"
+    version: "11.0.0"
   file_selector_linux:
     dependency: transitive
     description:
