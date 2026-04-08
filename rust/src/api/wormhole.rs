@@ -11,6 +11,7 @@ use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::rc::Rc;
+use std::str::FromStr;
 use std::string::ToString;
 use std::sync::Mutex;
 
@@ -157,7 +158,7 @@ pub fn get_passphrase_uri(passphrase: String, rendezvous_server: Option<String>)
     let url = rendezvous_server.and_then(|a| url::Url::parse(a.as_str()).ok());
 
     magic_wormhole::uri::WormholeTransferUri {
-        code: Code(passphrase),
+        code: Code::from_str(&passphrase).unwrap(),
         rendezvous_server: url,
         is_leader: false,
     }
