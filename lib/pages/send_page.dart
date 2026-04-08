@@ -45,7 +45,7 @@ class _SendPageState extends State<SendPage> {
 
   void _onSendButtonClick() async {
     FilePickerResult? result =
-        await FilePicker.platform.pickFiles(allowMultiple: true);
+        await FilePicker.pickFiles(allowMultiple: true);
 
     if (result != null) {
       final files =
@@ -73,7 +73,7 @@ class _SendPageState extends State<SendPage> {
         return;
       }
     } else {
-      result = await FilePicker.platform.getDirectoryPath();
+      result = await FilePicker.getDirectoryPath();
     }
 
     if (result != null) {

@@ -99,7 +99,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
         finish: (file) {
           if (Platform.isAndroid || Platform.isIOS) {
             // delete temporary files cached by file_picker
-            FilePicker.platform.clearTemporaryFiles();
+            FilePicker.clearTemporaryFiles();
 
             // auto close app if share cause was an intent
             // this happens only if share was successful
