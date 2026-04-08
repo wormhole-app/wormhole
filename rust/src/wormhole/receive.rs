@@ -7,6 +7,7 @@ use async_std::fs::OpenOptions;
 use magic_wormhole::{Code, MailboxConnection, Wormhole, transfer, transit};
 use std::path::Path;
 use std::rc::Rc;
+use std::str::FromStr as _;
 
 pub async fn request_file_impl(
     passphrase: String,
@@ -31,16 +32,19 @@ pub async fn request_file_impl(
     };
     let appconfig = gen_app_config(&server_config);
 
-    let connection = match MailboxConnection::connect(appconfig, Code(passphrase), true).await {
-        Ok(v) => v,
-        Err(e) => {
-            _ = actions.add(TUpdate::new(
-                Events::Error,
-                Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
-            ));
-            return;
-        }
-    };
+    let connection =
+        match MailboxConnection::connect(appconfig, Code::from_str(&passphrase).unwrap(), true)
+            .await
+        {
+            Ok(v) => v,
+            Err(e) => {
+                _ = actions.add(TUpdate::new(
+                    Events::Error,
+                    Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
+                ));
+                return;
+            }
+        };
 
     let wormhole = match Wormhole::connect(connection).await {
         Ok(v) => v,
