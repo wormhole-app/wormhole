@@ -1,3 +1,24 @@
+## 1.1.8
+### Added
+- French translation. Thanks @loutr for the translation!
+- Dutch translation. Thanks @Vistaus for the translation!
+- Kabyle translation. Thanks @butterflyoffire for the translation!
+- Chinese (Simplified) translation. Thanks @Outbreak2096 for the translation!
+- Swedish translation. Thanks @bittin for the translation!
+- Russian translation and store listing. Thanks JesterInk and Otto_Ball for the translations and @Korb for the store metadata!
+- Updated Estonian translation. Thanks Priit Jõerüüt for the contribution!
+- Reproducible builds for F-Droid compatibility. Thanks @UjuiUjuMandan for the contribution!
+- Automated screenshot generation using golden_screenshot and fastlane frameit. Thanks @Korb for opening the issue!
+
+### Changed
+- Update dependencies
+
+### Fixed
+- Fix sending folders on iOS. Thanks @JesterInk for opening the issue!
+- Fix downloaded files going to wrong directory on Android secondary user profiles. Thanks @NinthRebuild for opening the issue!
+- Fix share intent on iOS not working
+- Improve QR code scanning reliability. Thanks @UjuiUjuMandan for opening the issue!
+
 ## 1.1.7
 ### Added
 - Media picker for selecting photos and videos on mobile (Android SDK >= 33 and iOS)
