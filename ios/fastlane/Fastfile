@@ -15,6 +15,12 @@
 
 default_platform(:ios)
 
+def prepare_screenshots(pattern, dimensions)
+  Dir.glob(pattern).sort.each do |path|
+    sh("magick", path, "-background", "white", "-alpha", "remove", "-alpha", "off", "-resize", "#{dimensions}!", path)
+  end
+end
+
 platform :ios do
   desc "Generate screenshots for App Store"
   lane :screenshots do
@@ -35,6 +41,9 @@ platform :ios do
   desc "Replace original screenshots with their framed counterparts"
   lane :apply_frames do
     sh("find screenshots -name '*_framed.png' -exec sh -c 'mv \"$1\" \"${1%_framed.png}.png\"' _ {} \\;")
+
+    prepare_screenshots("screenshots/*/iphoneScreenshots/*.png", "1320x2868")
+    prepare_screenshots("screenshots/*/ipadScreenshots/*.png", "2064x2752")
   end
 
   desc "Upload to TestFlight"
