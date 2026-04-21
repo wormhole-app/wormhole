@@ -168,7 +168,7 @@ jobs:
         if: ${{ inputs.release || github.ref == 'refs/heads/main' }}
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '4.0.2'
+          ruby-version: '4.0.3'
           bundler-cache: true
           working-directory: android
       - name: Install fastlane
@@ -258,7 +258,7 @@ jobs:
         if: ${{ inputs.release }}
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '4.0.2'
+          ruby-version: '4.0.3'
           bundler-cache: true
           working-directory: ios
       - name: Install fastlane dependencies
