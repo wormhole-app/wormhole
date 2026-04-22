@@ -32,6 +32,12 @@
 
   "transfer_progress_connection_direct" : "Connection via direct link",
   "transfer_progress_connection_relay" : "Connection via relay",
+  "transfer_progress_average_speed" : "Average speed",
+  "transfer_progress_remaining" : "Remaining",
+  "transfer_progress_calculating" : "Calculating...",
+  "transfer_progress_duration_hours" : "{hours, plural, =1{1 hour} other{{hours} hours}}",
+  "transfer_progress_duration_minutes" : "{minutes, plural, =1{1 minute} other{{minutes} minutes}}",
+  "transfer_progress_duration_seconds" : "{seconds, plural, =1{1 second} other{{seconds} seconds}}",
 
   "dev_build_warning" : "Attention, this is a development build!",
 

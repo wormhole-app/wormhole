@@ -193,11 +193,9 @@ void _screenshotGroup(ScreenshotDevice device, String deviceName,
       device,
       '4_transfer_progress$suffix',
       TransferProgress(
-        data: TUpdate(
-          event: Events.sent,
-          value: Value.int(BigInt.from(524288)),
-        ),
+        sent: BigInt.from(524288),
         total: BigInt.from(1048576),
+        estimatedBytesPerSecond: 104857.6,
       ),
       brightness,
       locale,

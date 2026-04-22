@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,8 +27,16 @@ class ConnectingPage extends StatefulWidget {
 }
 
 class _ConnectingPageState extends State<ConnectingPage> {
+  static const Duration _transferEstimateInterval = Duration(seconds: 1);
+  static const Duration _transferEstimateSmoothingWindow = Duration(seconds: 3);
+
   BigInt? total;
   BigInt? totalFileNr;
+  BigInt sent = BigInt.zero;
+  BigInt estimateSampleSent = BigInt.zero;
+  DateTime? transferStartedAt;
+  double? estimatedBytesPerSecond;
+  Timer? estimateTimer;
   ConnectionType? connectionType;
   String? connectionTypeName;
 
@@ -41,6 +50,17 @@ class _ConnectingPageState extends State<ConnectingPage> {
       switch (e.event) {
         case Events.total:
           total = e.getValue();
+          break;
+        case Events.startTransfer:
+          sent = BigInt.zero;
+          estimateSampleSent = sent;
+          transferStartedAt = DateTime.now();
+          estimatedBytesPerSecond = null;
+          _startEstimateTimer();
+          break;
+        case Events.sent:
+          sent = e.getValue();
+          _setFirstTransferEstimate();
           break;
         case Events.connectionType:
           connectionType = (e.value as Value_ConnectionType).field0;
@@ -71,12 +91,14 @@ class _ConnectingPageState extends State<ConnectingPage> {
       case Events.sent:
         return DisallowPopContext(
           child: TransferProgress(
-              data: event,
+              sent: sent,
               total: total,
+              estimatedBytesPerSecond: estimatedBytesPerSecond,
               linkType: connectionType,
               linkName: connectionTypeName),
         );
       case Events.error:
+        _stopEstimateTimer();
         return BackPopContext(
             child: TransferError(
                 error: event.value.field0 as ErrorType,
@@ -84,6 +106,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
                     ? (event.value as Value_ErrorValue).field1
                     : null));
       case Events.finished:
+        _stopEstimateTimer();
         final String file = event.getValue();
         if (Platform.isAndroid) {
           // register the new device to the Android Media Database
@@ -127,5 +150,84 @@ class _ConnectingPageState extends State<ConnectingPage> {
       },
       stream: controller.stream,
     );
+  }
+
+  @override
+  void dispose() {
+    _stopEstimateTimer();
+    super.dispose();
+  }
+
+  void _startEstimateTimer() {
+    _stopEstimateTimer();
+    estimateTimer = Timer.periodic(
+      _transferEstimateInterval,
+      (_) => _updateTransferEstimates(),
+    );
+  }
+
+  void _stopEstimateTimer() {
+    estimateTimer?.cancel();
+    estimateTimer = null;
+  }
+
+  void _setFirstTransferEstimate() {
+    if (estimatedBytesPerSecond != null || sent <= BigInt.zero) {
+      return;
+    }
+
+    final startedAt = transferStartedAt;
+    if (startedAt == null) {
+      return;
+    }
+
+    final elapsedSeconds =
+        DateTime.now().difference(startedAt).inMilliseconds / 1000;
+    if (elapsedSeconds <= 0) {
+      return;
+    }
+
+    estimatedBytesPerSecond = sent.toDouble() / elapsedSeconds;
+  }
+
+  void _updateTransferEstimates() {
+    final updatedSent = sent;
+    final sampleSent = estimateSampleSent;
+    estimateSampleSent = updatedSent;
+
+    if (updatedSent <= sampleSent) {
+      estimatedBytesPerSecond = null;
+      return;
+    }
+
+    final transferredBytes = updatedSent - sampleSent;
+    final instantBytesPerSecond =
+        transferredBytes.toDouble() / _transferEstimateInterval.inSeconds;
+    estimatedBytesPerSecond = _ema(
+      current: estimatedBytesPerSecond,
+      sample: instantBytesPerSecond,
+      alpha: _emaAlpha(),
+    );
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  double _emaAlpha() {
+    return 1 -
+        math.exp(-_transferEstimateInterval.inMilliseconds /
+            _transferEstimateSmoothingWindow.inMilliseconds);
+  }
+
+  double _ema({
+    required double? current,
+    required double sample,
+    required double alpha,
+  }) {
+    if (current == null) {
+      return sample;
+    }
+    return current + alpha * (sample - current);
   }
 }
