@@ -1,9 +1,27 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'logger.dart';
 
-Future<String?> getDownloadPath() async {
+bool _canAskForDownloadFolder() =>
+    Platform.isAndroid || Platform.isWindows || Platform.isMacOS;
+
+Future<String?> getDownloadPath({bool askForFolder = false}) async {
+  if (askForFolder && _canAskForDownloadFolder()) {
+    try {
+      final selectedDirectory = await FilePicker.getDirectoryPath();
+      if (selectedDirectory != null) {
+        return selectedDirectory;
+      }
+      AppLogger.info('Download folder selection cancelled');
+      return null;
+    } catch (err) {
+      AppLogger.error('Cannot select download folder path: $err');
+      return null;
+    }
+  }
+
   Directory? directory;
   try {
     if (Platform.isIOS) {

@@ -42,6 +42,7 @@
   "settings_page_show_code" : "Show QR Code:",
   "settings_page_show_always" : "Always",
   "settings_page_show_never" : "Never",
+  "settings_page_ask_for_folder" : "Ask for download folder:",
   "settings_page_theming" : "App Theming:",
   "settings_page_dark_theme" : "Dark",
   "settings_page_light_theme" : "Light",

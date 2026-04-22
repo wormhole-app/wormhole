@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../locale/locale_provider.dart' show LanguageType;
@@ -11,6 +13,8 @@ class Defaults {
   static CodeType get codetype => CodeType.qrCode;
 
   static bool get codeAlwaysVisible => false;
+
+  static bool get askForFolder => Platform.isWindows || Platform.isMacOS;
 }
 
 class Settings {
@@ -21,6 +25,7 @@ class Settings {
   static const _language = 'LANGUAGE';
   static const _rendezvousUrl = 'RENDEZVOUSSERVER';
   static const _transitUrl = 'TRANSITURL';
+  static const _askForFolder = 'ASKFORFOLDER';
 
   static Future<void> setRendezvousUrl(String? value) async {
     await _setField(value, _rendezvousUrl);
@@ -40,6 +45,10 @@ class Settings {
 
   static Future<void> setCodeAlwaysVisible(bool value) async {
     await _setField(value, _codeAlwaysVisible);
+  }
+
+  static Future<void> setAskForFolder(bool value) async {
+    await _setField(value, _askForFolder);
   }
 
   static Future<void> setTheme(ThemeType theme) async {
@@ -79,6 +88,11 @@ class Settings {
   static Future<bool> getCodeAlwaysVisible() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_codeAlwaysVisible) ?? Defaults.codeAlwaysVisible;
+  }
+
+  static Future<bool> getAskForFolder() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_askForFolder) ?? Defaults.askForFolder;
   }
 
   /// get current theme : true if darkmode
