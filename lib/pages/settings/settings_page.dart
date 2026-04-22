@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -12,7 +15,6 @@ import '../../widgets/fast_future_builder.dart';
 import '../../widgets/number_input.dart';
 import '../../widgets/settings_row.dart';
 import '../../widgets/settings_section_button.dart';
-import 'package:share_plus/share_plus.dart';
 import 'server_settings_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -25,6 +27,9 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final _controllerWordLength = TextEditingController();
   final _exportLogsKey = GlobalKey();
+
+  bool get _showAskForFolderSetting =>
+      Platform.isAndroid || Platform.isWindows || Platform.isMacOS;
 
   @override
   void initState() {
@@ -244,6 +249,33 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
           )),
+      if (_showAskForFolderSetting)
+        SettingsRow(
+            name: AppLocalizations.of(context)!.settings_page_ask_for_folder,
+            child: FutureBuilder<bool>(
+              future: Settings.getAskForFolder(),
+              builder: (context, snapshot) => ToggleSwitch(
+                minWidth: 125.0,
+                cornerRadius: 15.0,
+                activeBgColors: [
+                  [theme.colorScheme.primary],
+                  [theme.colorScheme.primary]
+                ],
+                inactiveBgColor: theme.colorScheme.secondary,
+                customTextStyles: [theme.textTheme.bodyMedium],
+                initialLabelIndex:
+                    (snapshot.data ?? Defaults.askForFolder) ? 0 : 1,
+                totalSwitches: 2,
+                labels: [
+                  AppLocalizations.of(context)!.settings_page_show_always,
+                  AppLocalizations.of(context)!.settings_page_show_never
+                ],
+                radiusStyle: true,
+                onToggle: (index) {
+                  Settings.setAskForFolder(index == 0);
+                },
+              ),
+            )),
       SettingsRow(
           name: AppLocalizations.of(context)!.settings_page_theming,
           child: ToggleSwitch(
