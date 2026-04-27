@@ -52,5 +52,12 @@
     "settings_page_language": "Keel:",
     "settings_page_system_language": "Süsteem",
     "settings_page_aztec_code": "Aztec-kood",
-    "settings_page_qr_code": "QR-kood"
+    "settings_page_qr_code": "QR-kood",
+    "transfer_progress_average_speed": "Keskmine kiirus",
+    "transfer_progress_remaining": "Lõpuni jäänud",
+    "transfer_progress_calculating": "Arvutan...",
+    "transfer_progress_duration_hours": "{hours, plural, =1{1 tund} other{{hours} tundi}}",
+    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minut} other{{minutes} minutit}}",
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 sekund} other{{seconds} sekundit}}",
+    "settings_page_ask_for_folder": "Küsi allalaadimise kausta:"
 }

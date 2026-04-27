@@ -53,5 +53,12 @@
     "settings_page_language": "语言：",
     "settings_page_system_language": "系统",
     "send_page_media_button": "发送媒体",
-    "settings_page_qr_code": "QR 码"
+    "settings_page_qr_code": "QR 码",
+    "transfer_progress_average_speed": "平均速度",
+    "transfer_progress_remaining": "剩余时间",
+    "transfer_progress_calculating": "正在计算…",
+    "transfer_progress_duration_hours": "{hours, plural, =1{1 小时} other{{hours} 小时}}",
+    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 分钟} other{{minutes} 分钟}}",
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 秒} other{{seconds} 秒}}",
+    "settings_page_ask_for_folder": "请求下载文件夹："
 }
