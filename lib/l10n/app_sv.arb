@@ -52,5 +52,12 @@
     "toast_error_qr_invalid": "Scannad QR-kod är ogiltig",
     "toast_info_passphrase_copy": "Lösenord har kopierats till urklipp",
     "settings_page_aztec_code": "Aztec kod",
-    "settings_page_qr_code": "QR kod"
+    "settings_page_qr_code": "QR kod",
+    "transfer_progress_average_speed": "Genomsnittshastighet",
+    "transfer_progress_remaining": "Återstående",
+    "transfer_progress_calculating": "Beräknar...",
+    "transfer_progress_duration_hours": "{hours, plural, =1{1 timme} other{{hours} timmar}}",
+    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minut} other{{minutes} minuter}}",
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 sekund} other{{seconds} sekunder}}",
+    "settings_page_ask_for_folder": "Fråga efter nedladdningsmapp:"
 }
