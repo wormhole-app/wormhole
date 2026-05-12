@@ -1,6 +1,6 @@
 {
     "transfer_finished_share": "Поделиться",
-    "settings_page_show_code": "Показывать штрихкод:",
+    "settings_page_show_code": "Показывать QR-код:",
     "transfer_code_help_title": "Как использовать код?",
     "settings_page_wordlength": "Слов в коде передачи:",
     "menu_receive": "Получение",
@@ -41,7 +41,7 @@
     "transfer_error_storagepermission": "Недостаточно прав доступа к накопителю",
     "transfer_finished_label": "Получение завершено!",
     "logs_dialog_share": "Поделиться",
-    "settings_page_rendezvousserver": "Адрес cервера рандеву (mailbox):",
+    "settings_page_rendezvousserver": "Адрес cервера Rendezvous:",
     "send_page_media_button": "Выбрать медиа",
     "settings_page_qr_code": "QR",
     "receive_page_sublabel": "Введите код передачи от отправителя",
@@ -52,5 +52,8 @@
     "settings_page_logs": "Журналы:",
     "settings_page_advanced": "Дополнительные настройки:",
     "logs_dialog_title": "Экспорт журналов приложения",
-    "transfer_zipping": "Сжатие"
+    "transfer_zipping": "Сжатие",
+    "transfer_progress_remaining": "Осталось",
+    "settings_page_ask_for_folder": "Запрашивать папку для загрузок:",
+    "transfer_progress_average_speed": "Средняя скорость"
 }
