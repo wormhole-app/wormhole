@@ -57,7 +57,7 @@
     "toast_error_qr_invalid": "Taranan QR Kodu Geçerli Değil",
     "toast_info_passphrase_copy": "Parola panoya kopyalandı",
     "dev_build_warning": "Dikkat, bu bir geliştirme sürümüdür!",
-    "transfer_progress_duration_hours": "{hours, plural, =1{1 hour} other{{hours} hours}}",
-    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minute} other{{minutes} minutes}}",
-    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 second} other{{seconds} seconds}}"
+    "transfer_progress_duration_hours": "{hours, plural, =1{1 saat} other{{hours} saat}}",
+    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 dakika} other{{minutes} dakika}}",
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 saniye} other{{seconds} saniye}}"
 }
