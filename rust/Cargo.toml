@@ -9,7 +9,7 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 anyhow = "1.0.102"
 flutter_rust_bridge = "=2.12.0"
-magic-wormhole = {version = "0.8.0", features = ["tls", "transfer", "transit"]}
+magic-wormhole = {version = "0.8.1", features = ["tls", "transfer", "transit"]}
 serde = {version = "1.0.228", features = ["derive"]}
 futures = "0.3.32"
 async-std = {version = "1.13.2", features = ["unstable"] }
