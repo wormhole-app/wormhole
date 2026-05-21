@@ -36,12 +36,12 @@
     "settings_page_wordlength": "Wortlänge:",
     "settings_page_code_type": "Code Typ:",
     "settings_page_qr_code": "QR Code",
-    "settings_page_aztec_code": "Aztec Code",
+    "settings_page_aztec_code": "Aztec-Code",
     "settings_page_show_code": "Zeige QR Code an:",
     "settings_page_show_always": "Immer",
     "settings_page_show_never": "Nie",
-    "settings_page_ask_for_folder" : "Frage nach Download-Ordner:",
-    "settings_page_theming": "App Theming:",
+    "settings_page_ask_for_folder": "Frage nach Download-Ordner:",
+    "settings_page_theming": "App-Thema:",
     "settings_page_dark_theme": "Dunkel",
     "settings_page_light_theme": "Hell",
     "settings_page_system_theme": "System",
@@ -49,8 +49,8 @@
     "settings_page_system_language": "System",
     "settings_page_advanced": "Fortgeschritten:",
     "settings_page_serversettings": "Server Einstellungen",
-    "settings_page_rendezvousserver": "Rendezvous Server:",
-    "settings_page_transitserver": "Transit Server:",
+    "settings_page_rendezvousserver": "Rendezvous-Server:",
+    "settings_page_transitserver": "Transit-Server:",
     "settings_page_error_url": "Fehlerhafte Url",
     "settings_page_server_saved": "Server Einstellungen gespeichert!",
     "settings_page_logs": "Protokolle:",
@@ -59,5 +59,5 @@
     "logs_dialog_share": "Protokolle teilen",
     "toast_error_qr_fail": "Fehler beim scannen des QR Codes",
     "toast_error_qr_invalid": "Fehlerhafter QR Code gescannt",
-    "toast_info_passphrase_copy": "Code kopiert!"
+    "toast_info_passphrase_copy": "Code in der Zwischenablage kopiert"
 }

@@ -52,5 +52,12 @@
     "toast_error_qr_fail": "Fallo al Escanear el Código QR",
     "toast_error_qr_invalid": "Código QR Escaneado Inválido",
     "toast_info_passphrase_copy": "Contraseña copiada al portapapeles",
-    "title": "Wormhole"
+    "title": "Wormhole",
+    "transfer_progress_average_speed": "Velocidad media",
+    "transfer_progress_remaining": "Restante",
+    "transfer_progress_calculating": "Calculando...",
+    "transfer_progress_duration_hours": "{hours, plural, =1{1 hora} other{{hours} horas}}",
+    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minuto} other{{minutes} minutos}}",
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 segundo} other{{seconds} segundos}}",
+    "settings_page_ask_for_folder": "Preguntar por la carpeta de descargas:"
 }
