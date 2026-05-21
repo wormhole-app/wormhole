@@ -51,6 +51,19 @@ jobs:
           name: linux-rpm
           path: ./artifacts/linux
 
+      - name: Rename release assets
+        run: |
+          VERSION=${GITHUB_REF_NAME}
+          VERSION=${VERSION//\//-}
+          mkdir -p ./release-assets
+
+          cp ./artifacts/android/app-release.apk "./release-assets/wormhole-${VERSION}-android-play.apk"
+          cp ./artifacts/android/wormhole-android-openSource-armeabi-v7a.apk "./release-assets/wormhole-${VERSION}-android-fdroid-armeabi-v7a.apk"
+          cp ./artifacts/android/wormhole-android-openSource-arm64-v8a.apk "./release-assets/wormhole-${VERSION}-android-fdroid-arm64-v8a.apk"
+          cp ./artifacts/android/wormhole-android-openSource-x86_64.apk "./release-assets/wormhole-${VERSION}-android-fdroid-x86_64.apk"
+          cp ./artifacts/windows/wormhole.zip "./release-assets/wormhole-${VERSION}-windows-x64.zip"
+          cp ./artifacts/macos/wormhole.dmg "./release-assets/wormhole-${VERSION}-macos.dmg"
+
       - name: Extract changelog for current version
         id: changelog
         run: |
@@ -80,11 +93,8 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            ./artifacts/android/app-release.apk
-            ./artifacts/android/wormhole-android-openSource-armeabi-v7a.apk
-            ./artifacts/android/wormhole-android-openSource-arm64-v8a.apk
-            ./artifacts/android/wormhole-android-openSource-x86_64.apk
-            ./artifacts/windows/wormhole.zip
-            ./artifacts/macos/wormhole.dmg
+            ./release-assets/*.apk
+            ./release-assets/*.zip
+            ./release-assets/*.dmg
             ./artifacts/linux/*.deb
             ./artifacts/linux/*.rpm
