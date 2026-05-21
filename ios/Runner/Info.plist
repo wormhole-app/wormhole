@@ -69,6 +69,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>The camera is used to scan QR codes</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Wormhole does not collect or use your location. This entry is included because a linked permission library references location APIs.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photos can be shared to and used in this app</string>
 	<key>NSUserActivityTypes</key>
