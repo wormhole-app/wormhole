@@ -14,6 +14,8 @@ import '../l10n/app_localizations.dart';
 import '../src/rust/api/wormhole.dart';
 import '../navigation/navigation_provider.dart';
 import '../pages/connecting_page.dart';
+import '../pages/receive_page.dart';
+import '../pages/send_page.dart';
 import '../pages/toasts/error_toast.dart';
 import '../pages/transfer_widgets/transfer_finished.dart';
 import '../settings/settings.dart';
@@ -96,6 +98,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
     Provider.of<NavigationProvider>(context, listen: false).push(ConnectingPage(
         key: UniqueKey(),
         stream: stream,
+        retryPage: const SendPage(),
         finish: (file) {
           if (Platform.isAndroid || Platform.isIOS) {
             // delete temporary files cached by file_picker
@@ -157,6 +160,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
         ConnectingPage(
           key: UniqueKey(),
           stream: s,
+          retryPage: const ReceivePage(),
           finish: (file) => ReceiveFinished(file: file),
         ),
       );
@@ -177,6 +181,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
         ConnectingPage(
           key: UniqueKey(),
           stream: s,
+          retryPage: const ReceivePage(),
           finish: (file) => ReceiveFinished(file: file),
         ),
       );

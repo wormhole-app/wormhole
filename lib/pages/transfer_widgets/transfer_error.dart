@@ -4,12 +4,17 @@ import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
 import '../../src/rust/api/wormhole.dart';
 import '../../navigation/navigation_provider.dart';
-import '../receive_page.dart';
 
 class TransferError extends StatelessWidget {
-  const TransferError({super.key, required this.error, this.message});
+  const TransferError({
+    super.key,
+    required this.error,
+    required this.retryPage,
+    this.message,
+  });
 
   final ErrorType error;
+  final Widget retryPage;
   final String? message;
 
   @override
@@ -48,7 +53,7 @@ class TransferError extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () {
                       Provider.of<NavigationProvider>(context, listen: false)
-                          .setActivePage(const ReceivePage());
+                          .setActivePage(retryPage);
                     },
                     child: Text(
                       AppLocalizations.of(context)!.transfer_error_retry,

@@ -17,10 +17,16 @@ import 'transfer_widgets/transfer_zip_progress.dart';
 import 'type_helpers.dart';
 
 class ConnectingPage extends StatefulWidget {
-  const ConnectingPage({super.key, required this.stream, required this.finish});
+  const ConnectingPage({
+    super.key,
+    required this.stream,
+    required this.finish,
+    required this.retryPage,
+  });
 
   final Stream<TUpdate> stream;
   final Widget Function(String file) finish;
+  final Widget retryPage;
 
   @override
   State<ConnectingPage> createState() => _ConnectingPageState();
@@ -102,6 +108,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
         return BackPopContext(
             child: TransferError(
                 error: event.value.field0 as ErrorType,
+                retryPage: widget.retryPage,
                 message: event.value is Value_ErrorValue
                     ? (event.value as Value_ErrorValue).field1
                     : null));
@@ -141,9 +148,10 @@ class _ConnectingPageState extends State<ConnectingPage> {
             final d = snapshot.data!;
             return _handleEvent(d);
           case ConnectionState.done:
-            return const BackPopContext(
+            return BackPopContext(
                 child: TransferError(
               error: ErrorType.connectionError,
+              retryPage: widget.retryPage,
               message: 'Connection Stream closed',
             ));
         }

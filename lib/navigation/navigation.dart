@@ -20,8 +20,7 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
-  int _selectedIndex = 0;
-  final navigation = NavigationProvider(_widgetOptions[0]);
+  final navigation = NavigationProvider(_widgetOptions);
 
   static const List<Widget> _widgetOptions = <Widget>[
     SendPage(),
@@ -36,11 +35,7 @@ class _NavigationState extends State<Navigation> {
   }
 
   void _onItemTapped(int index) {
-    navigation.setActivePage(_widgetOptions[index]);
-
-    setState(() {
-      _selectedIndex = index;
-    });
+    navigation.setActiveTab(index);
   }
 
   void _onQrButtonPress() {
@@ -52,40 +47,46 @@ class _NavigationState extends State<Navigation> {
     return ChangeNotifierProvider(
       builder: (context, child) {
         return TransferReceiver(
-            child: Scaffold(
-          appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.title),
-            actions: [
-              if (Platform.isAndroid || Platform.isIOS)
-                IconButton(
-                  onPressed: _onQrButtonPress,
-                  icon: const Icon(Icons.qr_code),
+          child: Consumer<NavigationProvider>(
+            builder: (context, value, child) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(AppLocalizations.of(context)!.title),
+                  actions: [
+                    if (Platform.isAndroid || Platform.isIOS)
+                      IconButton(
+                        onPressed: _onQrButtonPress,
+                        icon: const Icon(Icons.qr_code),
+                      ),
+                  ],
                 ),
-            ],
+                bottomNavigationBar: BottomNavigationBar(
+                  items: <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.upload),
+                      label: AppLocalizations.of(context)!.menu_send,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.download),
+                      label: AppLocalizations.of(context)!.menu_receive,
+                    ),
+                    BottomNavigationBarItem(
+                      icon: const Icon(Icons.settings),
+                      label: AppLocalizations.of(context)!.menu_settings,
+                    ),
+                  ],
+                  currentIndex: value.getSelectedIndex(),
+                  selectedItemColor: Colors.amber[800],
+                  onTap: _onItemTapped,
+                ),
+                body: IndexedStack(
+                  index: value.getSelectedIndex(),
+                  children: value.getActivePages(),
+                ),
+              );
+            },
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.upload),
-                label: AppLocalizations.of(context)!.menu_send,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.download),
-                label: AppLocalizations.of(context)!.menu_receive,
-              ),
-              BottomNavigationBarItem(
-                icon: const Icon(Icons.settings),
-                label: AppLocalizations.of(context)!.menu_settings,
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.amber[800],
-            onTap: _onItemTapped,
-          ),
-          body: Consumer<NavigationProvider>(builder: (context, value, child) {
-            return value.getActivePage();
-          }),
-        ));
+        );
       },
       create: (context) => navigation,
     );
