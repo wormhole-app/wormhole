@@ -3,21 +3,36 @@ import 'package:flutter/cupertino.dart';
 import '../l10n/app_localizations.dart';
 import '../settings/settings.dart';
 
-enum LanguageType { system, de, en, et, pt, sv, uk, fr, kab, nl, ru, zhHans }
+enum LanguageType {
+  system,
+  de,
+  et,
+  en,
+  es,
+  fr,
+  nl,
+  pt,
+  sv,
+  kab,
+  uk,
+  ru,
+  zhHans,
+}
 
 class LocaleProvider with ChangeNotifier {
   // Native language names - displayed in their native form universally, and thus not localized
   static const Map<LanguageType, String> nativeLanguageNames = {
     LanguageType.de: 'Deutsch',
-    LanguageType.en: 'English',
     LanguageType.et: 'Eesti',
+    LanguageType.en: 'English',
+    LanguageType.es: 'Español',
     LanguageType.fr: 'Français',
-    LanguageType.kab: 'Taqbaylit',
     LanguageType.nl: 'Nederlands',
     LanguageType.pt: 'Português',
-    LanguageType.ru: 'Русский',
     LanguageType.sv: 'Svenska',
+    LanguageType.kab: 'Taqbaylit',
     LanguageType.uk: 'Українська',
+    LanguageType.ru: 'Русский',
     LanguageType.zhHans: '简体中文',
   };
 
