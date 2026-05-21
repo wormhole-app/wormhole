@@ -52,5 +52,12 @@
     "settings_page_language": "Taal:",
     "settings_page_system_language": "Systeemtaal",
     "send_page_media_button": "Media versturen",
-    "settings_page_qr_code": "QR-code"
+    "settings_page_qr_code": "QR-code",
+    "transfer_progress_average_speed": "Gemiddelde snelheid",
+    "transfer_progress_remaining": "Resterend",
+    "transfer_progress_calculating": "Bezig met berekenen…",
+    "transfer_progress_duration_hours": "{hours, plural, =1{1 uur} other{{hours} uur}}",
+    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minuut} other{{minutes} minuten}}",
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 seconde} other{{seconds} seconden}}",
+    "settings_page_ask_for_folder": "Vragen om downloadmap:"
 }
