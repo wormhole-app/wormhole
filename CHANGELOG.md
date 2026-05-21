@@ -1,3 +1,24 @@
+## 1.1.9
+### Added
+- Transfer progress now shows speed and remaining time estimate. Thanks @valivia for opening the issue!
+- Download directory picker in settings. Thanks @valivia for opening the issue!
+- F-Droid badge and fastlane metadata links for Android screenshots and icon assets. Thanks @UjuiUjuMandan for the contributions!
+- Bulgarian translation. Thanks @trunars for the translation!
+- Spanish translation. Thanks @acr994 and @cyanwolfg for the translations, and @Iiridayn for opening the issue!
+- Italian translation. Thanks @agguato for the translation!
+- Turkish translation. Thanks @umitseyhan for the translation!
+
+### Changed
+- Update translations for Chinese (Simplified), Dutch, Estonian, French, German, Portuguese, Russian, Spanish, Swedish, and Turkish. Thanks @Outbreak2096, @Vistaus, @jrtcdbrg, @agguato, @JesterInk, @Otto_Ball, @marksista, @acr994, @cyanwolfg, @bittin, and @umitseyhan for the translations!
+- Update dependencies, including Flutter, magic-wormhole, Gradle, Kotlin, fastlane, Ruby, and release actions.
+- Rename release assets more consistently
+
+### Fixed
+- Preserve active transfers when switching tabs. Thanks @valivia for opening the issue!
+- Rescale iOS screenshots to match App Store requirements.
+
+All changes not attributed to a specific person were made by @emmiebyte.
+
 ## 1.1.8
 ### Added
 - French translation. Thanks @loutr for the translation!
