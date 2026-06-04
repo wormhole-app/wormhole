@@ -18,7 +18,7 @@ zip = { version = "8.6.0", default-features = false, features = ["deflate"] }
 macros = { path = "macros", version = "1" }
 fastrand = "2.4.1"
 flutter_logger = "0.6.1"
-log = "0.4.29"
+log = "0.4.32"
 
 [profile.release]
 opt-level = 'z'     # Optimize for size.
