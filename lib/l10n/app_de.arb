@@ -32,6 +32,20 @@
     "transfer_progress_duration_hours": "{hours, plural, =1{1 Stunde} other{{hours} Stunden}}",
     "transfer_progress_duration_minutes": "{minutes, plural, =1{1 Minute} other{{minutes} Minuten}}",
     "transfer_progress_duration_seconds": "{seconds, plural, =1{1 Sekunde} other{{seconds} Sekunden}}",
+    "notification_transfer_title" : "Wormhole Übertragung",
+    "notification_transfer_channel" : "Dateiübertragungen",
+    "notification_transfer_connecting" : "Verbinde...",
+    "notification_transfer_waiting" : "Warte auf Empfänger...",
+    "notification_transfer_preparing" : "Übertragung vorbereiten...",
+    "notification_transfer_transferring" : "Übertrage...",
+    "notification_transfer_progress" : "Übertrage... {percent}%",
+    "@notification_transfer_progress" : {
+        "placeholders": {
+        "percent": {
+            "type": "int"
+        }
+        }
+    },
     "dev_build_warning": "Achtung, das ist eine Entwicklungsversion!",
     "settings_page_wordlength": "Wortlänge:",
     "settings_page_code_type": "Code Typ:",

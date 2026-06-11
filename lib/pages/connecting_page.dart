@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_scanner/media_scanner.dart';
 
+import '../l10n/app_localizations.dart';
 import '../src/rust/api/wormhole.dart';
 import '../navigation/back_pop_context.dart';
 import '../navigation/disallow_pop_context.dart';
+import '../transfer/transfer_activity.dart';
 import 'transfer_widgets/transfer_code.dart';
 import 'transfer_widgets/transfer_connecting.dart';
 import 'transfer_widgets/transfer_error.dart';
@@ -45,14 +47,32 @@ class _ConnectingPageState extends State<ConnectingPage> {
   Timer? estimateTimer;
   ConnectionType? connectionType;
   String? connectionTypeName;
+  late final TransferActivity transferActivity;
+  StreamSubscription<TUpdate>? transferSubscription;
 
   late StreamController<TUpdate> controller =
       StreamController<TUpdate>.broadcast()..addStream(widget.stream);
 
   @override
-  void initState() {
-    super.initState();
-    controller.stream.listen((e) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (transferSubscription != null) return;
+
+    final localizations = AppLocalizations.of(context)!;
+    transferActivity = TransferActivity(
+      strings: TransferActivityStrings(
+        title: localizations.notification_transfer_title,
+        channel: localizations.notification_transfer_channel,
+        connecting: localizations.notification_transfer_connecting,
+        waiting: localizations.notification_transfer_waiting,
+        preparing: localizations.notification_transfer_preparing,
+        transferring: localizations.notification_transfer_transferring,
+        progress: localizations.notification_transfer_progress,
+      ),
+    );
+    unawaited(transferActivity.start());
+    transferSubscription = controller.stream.listen((e) {
+      unawaited(transferActivity.handleUpdate(e));
       switch (e.event) {
         case Events.total:
           total = e.getValue();
@@ -78,7 +98,9 @@ class _ConnectingPageState extends State<ConnectingPage> {
         default:
           break;
       }
-    });
+    },
+        onError: (_, __) => unawaited(transferActivity.stop()),
+        onDone: () => unawaited(transferActivity.stop()));
   }
 
   Widget _handleEvent(TUpdate event) {
@@ -163,6 +185,11 @@ class _ConnectingPageState extends State<ConnectingPage> {
   @override
   void dispose() {
     _stopEstimateTimer();
+    final subscription = transferSubscription;
+    if (subscription != null) {
+      unawaited(subscription.cancel());
+      unawaited(transferActivity.stop());
+    }
     super.dispose();
   }
 

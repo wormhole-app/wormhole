@@ -39,6 +39,21 @@
   "transfer_progress_duration_minutes" : "{minutes, plural, =1{1 minute} other{{minutes} minutes}}",
   "transfer_progress_duration_seconds" : "{seconds, plural, =1{1 second} other{{seconds} seconds}}",
 
+  "notification_transfer_title" : "Wormhole transfer",
+  "notification_transfer_channel" : "File transfers",
+  "notification_transfer_connecting" : "Connecting...",
+  "notification_transfer_waiting" : "Waiting for receiver...",
+  "notification_transfer_preparing" : "Preparing transfer...",
+  "notification_transfer_transferring" : "Transferring...",
+  "notification_transfer_progress" : "Transferring... {percent}%",
+  "@notification_transfer_progress" : {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+
   "dev_build_warning" : "Attention, this is a development build!",
 
   "settings_page_wordlength" : "Word length:",
