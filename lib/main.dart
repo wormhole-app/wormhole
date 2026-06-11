@@ -1,6 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:image_picker_android/image_picker_android.dart';
+import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +22,7 @@ Future<void> main() async {
   // Run app with global error logging
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    _configureImagePicker();
     await AppLogger.initialize();
 
     debugPrint = (String? message, {int? wrapWidth}) {
@@ -36,6 +40,13 @@ Future<void> main() async {
     AppLogger.error('Uncaught error: $error');
     AppLogger.error('Stack trace: $stackTrace');
   });
+}
+
+void _configureImagePicker() {
+  final imagePickerImplementation = ImagePickerPlatform.instance;
+  if (imagePickerImplementation is ImagePickerAndroid) {
+    imagePickerImplementation.useAndroidPhotoPicker = true;
+  }
 }
 
 /// Setup Rust logger to bridge Rust logs into Flutter logging system
