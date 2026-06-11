@@ -188,15 +188,19 @@ jobs:
           cd android
           BUILD_NUMBER=$(git rev-list --count HEAD)
           flutter build appbundle --release --build-number=$BUILD_NUMBER
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            fastlane deploy
-          fi
       - name: Upload AAB artifact
-        if: ${{ !inputs.release }}
         uses: actions/upload-artifact@v7
         with:
           name: android-aab
           path: ./build/app/outputs/bundle/release/app-release.aab
+      - name: Build and deploy to Internal track (only if main branch)
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          cd android
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            fastlane deploy
+          fi
+
       - name: Promote to Beta track (only if release)
         if: ${{ inputs.release }}
         run: |
