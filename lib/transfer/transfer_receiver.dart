@@ -225,22 +225,32 @@ class _TransferReceiverState extends State<TransferReceiver> {
   void registerIntentShareHandler() {
     final handler = ShareHandlerPlatform.instance;
     handler.getInitialSharedMedia().then((media) {
-      if (media?.attachments != null) {
-        _sendIntentFile(media!.attachments!);
-      }
+      if (media != null) _handleSharedMedia(media);
     });
 
-    handler.sharedMediaStream.listen((SharedMedia media) {
-      if (media.attachments != null) {
-        _sendIntentFile(media.attachments!);
-      }
-    });
+    handler.sharedMediaStream.listen(_handleSharedMedia);
+  }
+
+  void _handleSharedMedia(SharedMedia media) {
+    if (media.attachments != null && media.attachments!.isNotEmpty) {
+      _sendIntentFile(media.attachments!);
+    } else if (media.content != null) {
+      _sendIntentText(media.content!);
+    }
   }
 
   void registerIntentReceiveHandler() {
     AppLinks().uriLinkStream.listen((uri) {
       _receiveFile(uri.path);
     });
+  }
+
+  void _sendIntentText(String text) async {
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File('${tempDir.path}/message.txt');
+    await tempFile.writeAsString(text);
+    AppLogger.info('Sending text via intent (${text.length} chars)');
+    _sendFiles('message.txt', [tempFile.path], true);
   }
 
   void _sendIntentFile(List<SharedAttachment?> attachments) async {
