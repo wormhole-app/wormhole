@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// a button with text and icon
+/// A responsive button with text and an icon.
 class IconTextButton extends StatelessWidget {
   const IconTextButton(
       {super.key,
@@ -14,40 +14,26 @@ class IconTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15.0),
-      child: SizedBox(
-          width: 145,
-          height: 50,
-          child: Material(
-            color: theme.colorScheme.primary,
-            child: InkWell(
-              highlightColor: theme.colorScheme.secondary,
-              onTap: onClick,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 45,
-                    child: Center(
-                      child: Icon(
-                        icon,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 95,
-                    child: Text(
-                      text,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minWidth: 250,
+        maxWidth: 320,
+        minHeight: 56,
+      ),
+      child: FilledButton.icon(
+        onPressed: onClick,
+        icon: Icon(icon, size: 24),
+        label: Text(
+          text,
+          textAlign: TextAlign.center,
+        ),
+        style: FilledButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      ),
     );
   }
 }
