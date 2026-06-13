@@ -59,5 +59,19 @@
     "transfer_progress_duration_hours": "{hours, plural, =1{1 tund} other{{hours} tundi}}",
     "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minut} other{{minutes} minutit}}",
     "transfer_progress_duration_seconds": "{seconds, plural, =1{1 sekund} other{{seconds} sekundit}}",
-    "settings_page_ask_for_folder": "Küsi allalaadimise kausta:"
+    "settings_page_ask_for_folder": "Küsi allalaadimise kausta:",
+    "notification_transfer_title": "Failiedastus Wormhole'i protokolliga",
+    "notification_transfer_channel": "Failiedastused",
+    "notification_transfer_connecting": "Ühendan…",
+    "notification_transfer_waiting": "Oota vastuvõtjat…",
+    "notification_transfer_preparing": "Valmistun edastama…",
+    "notification_transfer_transferring": "Edastan…",
+    "notification_transfer_progress": "Edastan… {percent}%",
+    "@notification_transfer_progress": {
+        "placeholders": {
+            "percent": {
+                "type": "int"
+            }
+        }
+    }
 }

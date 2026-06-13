@@ -59,5 +59,19 @@
     "transfer_progress_duration_hours": "{hours, plural, =1{1 hora} other{{hours} horas}}",
     "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minuto} other{{minutes} minutos}}",
     "transfer_progress_duration_seconds": "{seconds, plural, =1{1 segundo} other{{seconds} segundos}}",
-    "settings_page_ask_for_folder": "Preguntar por la carpeta de descargas:"
+    "settings_page_ask_for_folder": "Preguntar por la carpeta de descargas:",
+    "notification_transfer_title": "Transferencia de archivos de Wormhole",
+    "notification_transfer_channel": "transferencias de archivos",
+    "notification_transfer_connecting": "Conectando…",
+    "notification_transfer_waiting": "Esperando al receptor…",
+    "notification_transfer_preparing": "Preparando la transferencia…",
+    "notification_transfer_transferring": "Transfiriendo…",
+    "notification_transfer_progress": "Transfiriendo el {percent}% …",
+    "@notification_transfer_progress": {
+        "placeholders": {
+            "percent": {
+                "type": "int"
+            }
+        }
+    }
 }
