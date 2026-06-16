@@ -21,6 +21,8 @@
     "transfer_finished_share": "Datei teilen",
     "transfer_finished_send_label": "Vollständig übertragen!",
     "transfer_zipping": "Komprimiere Datei",
+    "transfer_saving_label": "Wird im ausgewählten Ordner gespeichert ...",
+    "transfer_save_error": "Konnte nicht im ausgewählten Ordner gespeichert werden:",
     "transfer_connecting": "Verbinde...",
     "transfer_code_label": "Dein Übertragungscode ist:",
     "transfer_code_help": "Der Empfänger muss den Code scannen oder eingeben. \nEr muss eine kompatible Client-App benutzen die das magic-wormhole Protokoll unterstützt, so wie diese oder <link> für den Desktop.",
