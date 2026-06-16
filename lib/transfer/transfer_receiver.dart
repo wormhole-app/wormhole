@@ -206,6 +206,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
       _sendFolder(name, path, false);
     });
 
+    provider.addOnSendTextListener((text) {
+      _sendText(text);
+    });
+
     provider.addOnReceiveListener((passphrase) {
       _receiveFile(passphrase);
     });
@@ -235,7 +239,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
     if (media.attachments != null && media.attachments!.isNotEmpty) {
       _sendIntentFile(media.attachments!);
     } else if (media.content != null) {
-      _sendIntentText(media.content!);
+      _sendText(media.content!, causedByIntent: true);
     }
   }
 
@@ -245,12 +249,12 @@ class _TransferReceiverState extends State<TransferReceiver> {
     });
   }
 
-  void _sendIntentText(String text) async {
+  void _sendText(String text, {bool causedByIntent = false}) async {
     final tempDir = await getTemporaryDirectory();
     final tempFile = File('${tempDir.path}/message.txt');
     await tempFile.writeAsString(text);
-    AppLogger.info('Sending text via intent (${text.length} chars)');
-    _sendFiles('message.txt', [tempFile.path], true);
+    AppLogger.info('Sending text (${text.length} chars)');
+    _sendFiles('message.txt', [tempFile.path], causedByIntent);
   }
 
   void _sendIntentFile(List<SharedAttachment?> attachments) async {

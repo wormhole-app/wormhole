@@ -9,6 +9,10 @@
   "send_page_button" : "Select File",
   "send_page_media_button" : "Send Media",
   "send_page_folder_button" : "Select Folder",
+  "send_page_text_button" : "Send Text",
+  "send_page_more_button" : "More Options",
+  "send_page_text_hint" : "Enter text to send",
+  "send_page_text_send" : "Send",
 
   "receive_page_label" : "Receive File",
   "receive_page_sublabel" : "Enter the transmit code from the sender",

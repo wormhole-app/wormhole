@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 class TransferProvider with ChangeNotifier {
   final List<Function(String name, List<String> paths)> _sendHandlers = [];
   final List<Function(String name, String path)> _sendFolderHandlers = [];
+  final List<void Function(String text)> _sendTextHandlers = [];
   final List<void Function(String passphrase)> _receiveHandlers = [];
 
   TransferProvider();
@@ -15,6 +16,10 @@ class TransferProvider with ChangeNotifier {
   void addOnSendFolderListener(
       void Function(String name, String path) listener) {
     _sendFolderHandlers.add(listener);
+  }
+
+  void addOnSendTextListener(void Function(String text) listener) {
+    _sendTextHandlers.add(listener);
   }
 
   void addOnReceiveListener(void Function(String passphrase) listener) {
@@ -30,6 +35,12 @@ class TransferProvider with ChangeNotifier {
   void sendFolder(String name, String path) {
     for (final h in _sendFolderHandlers) {
       h(name, path);
+    }
+  }
+
+  void sendText(String text) {
+    for (final h in _sendTextHandlers) {
+      h(text);
     }
   }
 
