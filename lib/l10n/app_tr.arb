@@ -15,14 +15,14 @@
     "transfer_finished_label": "Alım tamamlandı!",
     "transfer_finished_open": "Dosyayı aç",
     "transfer_finished_share": "Dosyayı paylaş",
-    "transfer_finished_send_label": "Transfer tamamlandı!",
+    "transfer_finished_send_label": "Aktarım tamamlandı!",
     "transfer_zipping": "Dosya sıkıştırılıyor",
     "transfer_connecting": "Bağlantı kuruluyor...",
-    "transfer_code_label": "Teslimat kodunuz:",
+    "transfer_code_label": "Aktarım kodunuz:",
     "transfer_code_help": "Teslim alacak kişi kodu yazmalı ya da QR'ı taramalıdır.\nBunun için alıcının magic-wormhole protokolüyle uyumlu bir uygulama kullanması gerekmektedir. Bu uygulama ya da <link> masaüstü sürümü bu tür uygulamalara örnek verilebilir.",
     "transfer_code_help_title": "Bu kod nasıl kullanılır?",
     "transfer_error_retry": "Tekrar dene",
-    "transfer_error_base": "Transfer sırasında hata meydana geldi:",
+    "transfer_error_base": "Aktarım sırasında hata meydana geldi:",
     "transfer_error_storagepermission": "Depolama İzinleri Eksik",
     "transfer_progress_connection_direct": "Doğrudan bağlantı kuruldu",
     "transfer_progress_connection_relay": "Aracı sunucu üzerinden bağlantı kuruldu",
@@ -59,5 +59,19 @@
     "dev_build_warning": "Dikkat, bu bir geliştirme sürümüdür!",
     "transfer_progress_duration_hours": "{hours, plural, =1{1 saat} other{{hours} saat}}",
     "transfer_progress_duration_minutes": "{minutes, plural, =1{1 dakika} other{{minutes} dakika}}",
-    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 saniye} other{{seconds} saniye}}"
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 saniye} other{{seconds} saniye}}",
+    "notification_transfer_title": "Wormhole aktarımı",
+    "notification_transfer_channel": "Dosya aktarımları",
+    "notification_transfer_connecting": "Bağlanılıyor...",
+    "notification_transfer_waiting": "Teslim alacak kişi bekleniliyor...",
+    "notification_transfer_preparing": "Aktarım hazırlanıyor...",
+    "notification_transfer_transferring": "Aktarılıyor...",
+    "notification_transfer_progress": "Aktarılıyor... {percent}%",
+    "@notification_transfer_progress": {
+        "placeholders": {
+            "percent": {
+                "type": "int"
+            }
+        }
+    }
 }
