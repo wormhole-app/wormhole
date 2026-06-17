@@ -73,5 +73,11 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "send_page_text_button": "Tekst versturen",
+    "send_page_more_button": "Meer opties",
+    "send_page_text_hint": "Voer tekst in om te versturen",
+    "send_page_text_send": "Versturen",
+    "transfer_saving_label": "Bezig met opslaan in gekozen map…",
+    "transfer_save_error": "Het opslaan in de gekozen map is mislukt:"
 }
