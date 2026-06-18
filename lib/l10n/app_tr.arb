@@ -73,5 +73,11 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "send_page_more_button": "Daha Fazla Seçenek",
+    "send_page_text_button": "Metin Gönder",
+    "send_page_text_hint": "Gönderilecek metni yazın",
+    "send_page_text_send": "Gönder",
+    "transfer_saving_label": "Seçilen klasöre kaydediliyor...",
+    "transfer_save_error": "Seçilen klasöre kaydedilemedi:"
 }
