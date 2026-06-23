@@ -76,5 +76,8 @@
         }
     },
     "notification_transfer_channel": "Передачи файлов",
-    "transfer_progress_calculating": "Расчёт..."
+    "transfer_progress_calculating": "Расчёт...",
+    "transfer_progress_duration_hours": "{hours, plural, =1{1 час} one{{hours} час} few{{hours} часа} many{{hours} часов} other{{hours} часа}}",
+    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 минута} one{{minutes} минута} few{{minutes} минуты} many{{minutes} минут} other{{minutes} минуты}}",
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 секунда} one{{seconds} секунда} few{{seconds} секунды} many{{seconds} секунд} other{{seconds} секунды}}"
 }
