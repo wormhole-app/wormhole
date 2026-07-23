@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -7,6 +9,7 @@ import 'package:vibration/vibration.dart';
 import '../l10n/app_localizations.dart';
 import '../navigation/back_pop_context.dart';
 import '../navigation/navigation_provider.dart';
+import '../settings/settings.dart';
 import '../transfer/transfer_provider.dart';
 import '../utils/code.dart';
 import '../utils/logger.dart';
@@ -18,7 +21,6 @@ class QrScannerPage extends StatelessWidget {
   void _onQrDetect(String? code, BuildContext context) async {
     if (code != null) {
       AppLogger.info('Barcode found: $code');
-      Vibration.vibrate();
 
       final uri = Uri.parse(code);
 
@@ -27,6 +29,11 @@ class QrScannerPage extends StatelessWidget {
         final passphrase = uri.path;
 
         if (isCodeValid(passphrase)) {
+          unawaited(Settings.getHapticFeedback().then((enabled) {
+            if (enabled) {
+              Vibration.vibrate();
+            }
+          }));
           Provider.of<TransferProvider>(context, listen: false)
               .receiveFile(passphrase);
           return;

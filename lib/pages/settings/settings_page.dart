@@ -31,6 +31,8 @@ class _SettingsPageState extends State<SettingsPage> {
   bool get _showAskForFolderSetting =>
       Platform.isAndroid || Platform.isWindows || Platform.isMacOS;
 
+  bool get _showHapticsSetting => Platform.isAndroid || Platform.isIOS;
+
   @override
   void initState() {
     super.initState();
@@ -273,6 +275,33 @@ class _SettingsPageState extends State<SettingsPage> {
                 radiusStyle: true,
                 onToggle: (index) {
                   Settings.setAskForFolder(index == 0);
+                },
+              ),
+            )),
+      if (_showHapticsSetting)
+        SettingsRow(
+            name: AppLocalizations.of(context)!.settings_page_haptics,
+            child: FutureBuilder<bool>(
+              future: Settings.getHapticFeedback(),
+              builder: (context, snapshot) => ToggleSwitch(
+                minWidth: 125.0,
+                cornerRadius: 15.0,
+                activeBgColors: [
+                  [theme.colorScheme.primary],
+                  [theme.colorScheme.primary]
+                ],
+                inactiveBgColor: theme.colorScheme.secondary,
+                customTextStyles: [theme.textTheme.bodyMedium],
+                initialLabelIndex:
+                    (snapshot.data ?? Defaults.hapticFeedback) ? 0 : 1,
+                totalSwitches: 2,
+                labels: [
+                  AppLocalizations.of(context)!.settings_page_haptics_on,
+                  AppLocalizations.of(context)!.settings_page_haptics_off
+                ],
+                radiusStyle: true,
+                onToggle: (index) {
+                  Settings.setHapticFeedback(index == 0);
                 },
               ),
             )),

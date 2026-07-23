@@ -15,6 +15,8 @@ class Defaults {
   static bool get codeAlwaysVisible => false;
 
   static bool get askForFolder => Platform.isWindows || Platform.isMacOS;
+
+  static bool get hapticFeedback => true;
 }
 
 class Settings {
@@ -26,6 +28,7 @@ class Settings {
   static const _rendezvousUrl = 'RENDEZVOUSSERVER';
   static const _transitUrl = 'TRANSITURL';
   static const _askForFolder = 'ASKFORFOLDER';
+  static const _hapticFeedback = 'HAPTICFEEDBACK';
 
   static Future<void> setRendezvousUrl(String? value) async {
     await _setField(value, _rendezvousUrl);
@@ -49,6 +52,10 @@ class Settings {
 
   static Future<void> setAskForFolder(bool value) async {
     await _setField(value, _askForFolder);
+  }
+
+  static Future<void> setHapticFeedback(bool value) async {
+    await _setField(value, _hapticFeedback);
   }
 
   static Future<void> setTheme(ThemeType theme) async {
@@ -93,6 +100,11 @@ class Settings {
   static Future<bool> getAskForFolder() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_askForFolder) ?? Defaults.askForFolder;
+  }
+
+  static Future<bool> getHapticFeedback() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_hapticFeedback) ?? Defaults.hapticFeedback;
   }
 
   /// get current theme : true if darkmode

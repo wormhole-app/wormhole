@@ -85,6 +85,9 @@
   "settings_page_server_saved" : "Server Settings Saved!",
   "settings_page_logs" : "Logs:",
   "settings_page_export_logs" : "Export Logs",
+  "settings_page_haptics" : "Haptic feedback:",
+  "settings_page_haptics_on" : "On",
+  "settings_page_haptics_off" : "Off",
 
   "logs_dialog_title" : "Export Application Logs",
   "logs_dialog_share" : "Share Logs",
