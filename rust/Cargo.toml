@@ -9,7 +9,11 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 anyhow = "1.0.102"
 flutter_rust_bridge = "=2.12.0"
-magic-wormhole = {version = "0.8.1", features = ["tls", "transfer", "transit"]}
+magic-wormhole = {version = "0.8.1", features = ["transfer", "transit"]}
+# magic-wormhole's "tls" feature is a no-op for its smol-runtime websocket connect,
+# so enable it in async-tungstenite and rustls directly instead.
+async-tungstenite = {version = "0.34.1", features = ["smol-runtime", "futures-rustls-webpki-roots"]}
+rustls = {version = "0.23", default-features = false, features = ["ring"]}
 serde = {version = "1.0.228", features = ["derive"]}
 futures = "0.3.32"
 async-std = {version = "1.13.2", features = ["unstable"] }
