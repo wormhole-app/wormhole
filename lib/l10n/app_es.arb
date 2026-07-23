@@ -73,5 +73,11 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "send_page_text_button": "Enviar texto",
+    "send_page_more_button": "Más opciones",
+    "send_page_text_hint": "Introduzca el texto que se va a enviar",
+    "send_page_text_send": "Enviar",
+    "transfer_saving_label": "Guardando en la carpeta seleccionada...",
+    "transfer_save_error": "No se pudo guardar en la carpeta seleccionada:"
 }
