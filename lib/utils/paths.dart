@@ -4,8 +4,43 @@ import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'logger.dart';
 
-bool _canAskForDownloadFolder() =>
-    Platform.isAndroid || Platform.isWindows || Platform.isMacOS;
+// Android is intentionally excluded: scoped storage blocks raw writes into a
+// user-picked folder, so the Android receive flow uses the Storage Access
+// Framework instead (see [Saf] and TransferReceiver). Desktop platforms get a
+// real, writable filesystem path here.
+bool _canAskForDownloadFolder() => Platform.isWindows || Platform.isMacOS;
+
+/// App-owned scratch directory the Rust backend can always write to without
+/// permissions. Used to stage received files before copying them into a
+/// SAF-picked folder on Android. Prefers external cache for the larger quota.
+Future<Directory> getReceiveTempDir() async {
+  Directory base;
+  if (Platform.isAndroid) {
+    final extCaches = await getExternalCacheDirectories();
+    base = (extCaches != null && extCaches.isNotEmpty)
+        ? extCaches.first
+        : await getTemporaryDirectory();
+  } else {
+    base = await getTemporaryDirectory();
+  }
+  final dir = Directory('${base.path}/received');
+  if (!await dir.exists()) {
+    await dir.create(recursive: true);
+  }
+  return dir;
+}
+
+/// Remove staged files left behind by previous SAF receives.
+Future<void> clearReceiveTempDir() async {
+  try {
+    final dir = await getReceiveTempDir();
+    await for (final entity in dir.list()) {
+      await entity.delete(recursive: true);
+    }
+  } catch (err) {
+    AppLogger.warn('Could not clear receive temp dir: $err');
+  }
+}
 
 Future<String?> getDownloadPath({bool askForFolder = false}) async {
   if (askForFolder && _canAskForDownloadFolder()) {

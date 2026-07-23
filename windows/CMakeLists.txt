@@ -57,6 +57,13 @@ add_subdirectory("runner")
 # them to the application.
 include(flutter/generated_plugins.cmake)
 
+if(TARGET permission_handler_windows_plugin)
+  # permission_handler_windows 0.2.1 still passes /await, which MSVC 14.51
+  # rejects through <experimental/coroutine>.
+  target_compile_definitions(permission_handler_windows_plugin PRIVATE
+    _SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+endif()
+
 # Everything is set up, we include the CMake build file of our Rust project here.
 include(./rust.cmake)
 

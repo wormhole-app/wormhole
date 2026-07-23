@@ -1,3 +1,19 @@
+## 1.1.10
+### Added
+- Transfer notification on Android that keeps the app awake during background transfers, preventing battery savers from interrupting them (#174). Thanks @bigfakelaugh for opening the issue!
+
+### Changed
+- Use the Android system photo picker for selecting media (#178). Thanks @pablogila for opening the issue, and @luckmagnet for the feedback!
+- Update translations for Chinese (Simplified), Dutch, Estonian, and Spanish. Thanks @Vistaus, @[Outbreak2096](https://translate.codeberg.org/user/Outbreak2096/), @[jrtcdbrg](https://translate.codeberg.org/user/jrtcdbrg/), and @[gallegonovato](https://translate.codeberg.org/user/gallegonovato/) for the translations!
+- Update dependencies, including Kotlin, Rust crates, and fastlane.
+- Add iOS usage description and demo assets required for App Store submission.
+
+### Fixed
+- Fix sharing text to the app (#171). Thanks @abitrolly for opening the issue, and @luckmagnet for the feedback!
+- Make the send buttons responsive so their labels are no longer cut off (#177). Thanks @pablogila for opening the issue!
+
+All changes not attributed to a specific person were made by @emmiebyte.
+
 ## 1.1.9
 ### Added
 - Transfer progress now shows speed and remaining time estimate. Thanks @valivia for opening the issue!

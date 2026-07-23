@@ -18,8 +18,10 @@ import '../pages/receive_page.dart';
 import '../pages/send_page.dart';
 import '../pages/toasts/error_toast.dart';
 import '../pages/transfer_widgets/transfer_finished.dart';
+import '../pages/transfer_widgets/receive_saf_finalize.dart';
 import '../settings/settings.dart';
 import '../utils/paths.dart';
+import '../utils/saf.dart';
 import '../utils/logger.dart';
 import '../utils/code.dart';
 import 'transfer_provider.dart';
@@ -144,8 +146,24 @@ class _TransferReceiverState extends State<TransferReceiver> {
   }
 
   void _receiveFile(String passphrase) async {
-    final dpath =
-        await getDownloadPath(askForFolder: await Settings.getAskForFolder());
+    final askForFolder = await Settings.getAskForFolder();
+
+    // On Android, scoped storage blocks raw writes into a user-picked folder.
+    // When "ask for folder" is enabled we instead grant access through the
+    // Storage Access Framework: pick a content tree, stage the download in
+    // app-owned storage, then copy it into the chosen folder once finished.
+    final String? safTreeUri =
+        (Platform.isAndroid && askForFolder) ? await Saf.pickDirectory() : null;
+    final String? dpath;
+    if (Platform.isAndroid && askForFolder) {
+      if (safTreeUri == null) {
+        AppLogger.info('Download folder selection cancelled');
+        return;
+      }
+      dpath = (await getReceiveTempDir()).path;
+    } else {
+      dpath = await getDownloadPath(askForFolder: askForFolder);
+    }
     if (dpath == null) {
       AppLogger.warn('No download path available');
       return;
@@ -167,8 +185,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
       return;
     }
 
-    // we need storage permission to store files
-    if (!(Platform.isAndroid || Platform.isIOS) ||
+    // we need storage permission to store files. The SAF staging directory is
+    // app-owned, so writing there never requires a runtime permission.
+    if (safTreeUri != null ||
+        !(Platform.isAndroid || Platform.isIOS) ||
         (Platform.isAndroid &&
             (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33) ||
         await Permission.storage.request().isGranted) {
@@ -182,7 +202,9 @@ class _TransferReceiverState extends State<TransferReceiver> {
           key: UniqueKey(),
           stream: s,
           retryPage: const ReceivePage(),
-          finish: (file) => ReceiveFinished(file: file),
+          finish: (file) => safTreeUri == null
+              ? ReceiveFinished(file: file)
+              : ReceiveSafFinalize(tempPath: file, treeUri: safTreeUri),
         ),
       );
     } else {
@@ -198,12 +220,22 @@ class _TransferReceiverState extends State<TransferReceiver> {
   void initState() {
     super.initState();
 
+    // Clean up any files staged by a previous SAF receive that were never
+    // cleared (e.g. the app was killed mid-transfer).
+    if (Platform.isAndroid) {
+      clearReceiveTempDir();
+    }
+
     provider.addOnSendListener((name, path) {
       _sendFiles(name, path, false);
     });
 
     provider.addOnSendFolderListener((name, path) {
       _sendFolder(name, path, false);
+    });
+
+    provider.addOnSendTextListener((text) {
+      _sendText(text);
     });
 
     provider.addOnReceiveListener((passphrase) {
@@ -235,7 +267,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
     if (media.attachments != null && media.attachments!.isNotEmpty) {
       _sendIntentFile(media.attachments!);
     } else if (media.content != null) {
-      _sendIntentText(media.content!);
+      _sendText(media.content!, causedByIntent: true);
     }
   }
 
@@ -245,12 +277,12 @@ class _TransferReceiverState extends State<TransferReceiver> {
     });
   }
 
-  void _sendIntentText(String text) async {
+  void _sendText(String text, {bool causedByIntent = false}) async {
     final tempDir = await getTemporaryDirectory();
     final tempFile = File('${tempDir.path}/message.txt');
     await tempFile.writeAsString(text);
-    AppLogger.info('Sending text via intent (${text.length} chars)');
-    _sendFiles('message.txt', [tempFile.path], true);
+    AppLogger.info('Sending text (${text.length} chars)');
+    _sendFiles('message.txt', [tempFile.path], causedByIntent);
   }
 
   void _sendIntentFile(List<SharedAttachment?> attachments) async {

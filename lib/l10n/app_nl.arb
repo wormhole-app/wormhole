@@ -59,5 +59,19 @@
     "transfer_progress_duration_hours": "{hours, plural, =1{1 uur} other{{hours} uur}}",
     "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minuut} other{{minutes} minuten}}",
     "transfer_progress_duration_seconds": "{seconds, plural, =1{1 seconde} other{{seconds} seconden}}",
-    "settings_page_ask_for_folder": "Vragen om downloadmap:"
+    "settings_page_ask_for_folder": "Vragen om downloadmap:",
+    "notification_transfer_title": "Wormgat-overdracht",
+    "notification_transfer_channel": "Bestandsoverdrachten",
+    "notification_transfer_connecting": "Bezig met verbinden…",
+    "notification_transfer_waiting": "Aan het wachten op de ontvanger…",
+    "notification_transfer_preparing": "Bezig met voorbereiden…",
+    "notification_transfer_transferring": "Bezig met overdracht…",
+    "notification_transfer_progress": "Bezig met overdracht… {percent}%",
+    "@notification_transfer_progress": {
+        "placeholders": {
+            "percent": {
+                "type": "int"
+            }
+        }
+    }
 }
