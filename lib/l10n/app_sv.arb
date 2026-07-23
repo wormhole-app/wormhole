@@ -59,5 +59,25 @@
     "transfer_progress_duration_hours": "{hours, plural, =1{1 timme} other{{hours} timmar}}",
     "transfer_progress_duration_minutes": "{minutes, plural, =1{1 minut} other{{minutes} minuter}}",
     "transfer_progress_duration_seconds": "{seconds, plural, =1{1 sekund} other{{seconds} sekunder}}",
-    "settings_page_ask_for_folder": "Fråga efter nedladdningsmapp:"
+    "settings_page_ask_for_folder": "Fråga efter nedladdningsmapp:",
+    "send_page_text_button": "Skicka text",
+    "send_page_more_button": "Mer alternativ",
+    "send_page_text_hint": "Ange text att skicka",
+    "send_page_text_send": "Skicka",
+    "transfer_saving_label": "Sparar till vald mapp...",
+    "transfer_save_error": "Kunde inte spara till den valda mappen:",
+    "notification_transfer_title": "Wormhole överföring",
+    "notification_transfer_channel": "Filöverföringar",
+    "notification_transfer_connecting": "Ansluter...",
+    "notification_transfer_waiting": "Väntar på mottagare...",
+    "notification_transfer_preparing": "Förbereder överföring...",
+    "notification_transfer_transferring": "Överför...",
+    "notification_transfer_progress": "Överför... {percent}%",
+    "@notification_transfer_progress": {
+        "placeholders": {
+            "percent": {
+                "type": "int"
+            }
+        }
+    }
 }
