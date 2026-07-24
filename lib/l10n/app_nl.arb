@@ -79,5 +79,8 @@
     "send_page_text_hint": "Voer tekst in om te versturen",
     "send_page_text_send": "Versturen",
     "transfer_saving_label": "Bezig met opslaan in gekozen map…",
-    "transfer_save_error": "Het opslaan in de gekozen map is mislukt:"
+    "transfer_save_error": "Het opslaan in de gekozen map is mislukt:",
+    "settings_page_haptics": "Haptische feedback:",
+    "settings_page_haptics_on": "Aan",
+    "settings_page_haptics_off": "Uit"
 }
