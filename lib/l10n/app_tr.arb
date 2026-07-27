@@ -79,5 +79,8 @@
     "send_page_text_hint": "Gönderilecek metni yazın",
     "send_page_text_send": "Gönder",
     "transfer_saving_label": "Seçilen klasöre kaydediliyor...",
-    "transfer_save_error": "Seçilen klasöre kaydedilemedi:"
+    "transfer_save_error": "Seçilen klasöre kaydedilemedi:",
+    "settings_page_haptics": "Dokunsal dönüt:",
+    "settings_page_haptics_on": "Açık",
+    "settings_page_haptics_off": "Kapalı"
 }
