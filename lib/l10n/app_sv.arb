@@ -79,5 +79,8 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "settings_page_haptics": "Haptisk feedback:",
+    "settings_page_haptics_on": "På",
+    "settings_page_haptics_off": "Av"
 }
