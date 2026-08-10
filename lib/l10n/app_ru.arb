@@ -55,5 +55,29 @@
     "transfer_zipping": "Сжатие",
     "transfer_progress_remaining": "Осталось",
     "settings_page_ask_for_folder": "Запрашивать папку для загрузок:",
-    "transfer_progress_average_speed": "Средняя скорость"
+    "transfer_progress_average_speed": "Средняя скорость",
+    "send_page_text_button": "Отправка текста",
+    "send_page_more_button": "Дополнительные опции",
+    "send_page_text_hint": "Введите текст для отправки",
+    "send_page_text_send": "Отправить",
+    "transfer_saving_label": "Сохранение в выбранную папку...",
+    "transfer_save_error": "Не удалось сохранить в выбранную папку:",
+    "notification_transfer_title": "Передача по Wormhole",
+    "notification_transfer_connecting": "Соединение…",
+    "notification_transfer_waiting": "Ожидание получателя...",
+    "notification_transfer_preparing": "Подготовка передачи...",
+    "notification_transfer_transferring": "Передача...",
+    "notification_transfer_progress": "Передача... {percent}%",
+    "@notification_transfer_progress": {
+        "placeholders": {
+            "percent": {
+                "type": "int"
+            }
+        }
+    },
+    "notification_transfer_channel": "Передачи файлов",
+    "transfer_progress_calculating": "Расчёт...",
+    "transfer_progress_duration_hours": "{hours, plural, =1{1 час} one{{hours} час} few{{hours} часа} many{{hours} часов} other{{hours} часа}}",
+    "transfer_progress_duration_minutes": "{minutes, plural, =1{1 минута} one{{minutes} минута} few{{minutes} минуты} many{{minutes} минут} other{{minutes} минуты}}",
+    "transfer_progress_duration_seconds": "{seconds, plural, =1{1 секунда} one{{seconds} секунда} few{{seconds} секунды} many{{seconds} секунд} other{{seconds} секунды}}"
 }
