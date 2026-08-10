@@ -82,5 +82,7 @@
     "transfer_save_error": "Valitud kausta salvestamine ei õnnestunud:",
     "settings_page_haptics": "Haptiline tagasiside:",
     "settings_page_haptics_on": "Sees",
-    "settings_page_haptics_off": "Väljas"
+    "settings_page_haptics_off": "Väljas",
+    "transfer_finished_send_another": "Saada mõni muu fail",
+    "transfer_finished_receive_another": "Võta vastu mõni muu fail"
 }
