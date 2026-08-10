@@ -73,5 +73,14 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "send_page_text_button": "Edasta teksti",
+    "send_page_more_button": "Täiendavad valikud",
+    "send_page_text_hint": "Sisesta edastatav/saadetav tekst",
+    "send_page_text_send": "Saada",
+    "transfer_saving_label": "Salvestan valitud kausta…",
+    "transfer_save_error": "Valitud kausta salvestamine ei õnnestunud:",
+    "settings_page_haptics": "Haptiline tagasiside:",
+    "settings_page_haptics_on": "Sees",
+    "settings_page_haptics_off": "Väljas"
 }
