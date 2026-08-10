@@ -74,5 +74,14 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "send_page_text_button": "发送文本",
+    "send_page_more_button": "更多选项",
+    "send_page_text_hint": "输入要发送的文本",
+    "send_page_text_send": "发送",
+    "transfer_saving_label": "正在保存到所选文件夹…",
+    "transfer_save_error": "无法保存到所选文件夹：",
+    "settings_page_haptics": "触感反馈：",
+    "settings_page_haptics_on": "已开启",
+    "settings_page_haptics_off": "已关闭"
 }
