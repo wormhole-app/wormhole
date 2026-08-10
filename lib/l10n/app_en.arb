@@ -4,8 +4,7 @@
   "menu_receive" : "Receive",
   "menu_settings" : "Settings",
 
-  "send_page_send_label" : "Send File",
-  "send_page_send_sublabel" : "Select a file to send",
+  "send_page_send_label" : "Send Anything",
   "send_page_button" : "Select File",
   "send_page_media_button" : "Send Media",
   "send_page_folder_button" : "Select Folder",

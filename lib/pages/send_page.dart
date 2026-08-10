@@ -33,7 +33,7 @@ class _SendPageState extends State<SendPage> {
   final bool _showMediaButton = Platform.isAndroid || Platform.isIOS;
 
   // Estimated extents used to decide how many actions fit on screen.
-  static const double _headerHeight = 210;
+  static const double _headerHeight = 185;
   static const double _buttonSpacing = 15;
   static const double _buttonExtent = 56 + _buttonSpacing;
 
@@ -282,10 +282,6 @@ class _SendPageState extends State<SendPage> {
                   l10n.send_page_send_label,
                   style: theme.textTheme.headlineLarge,
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(l10n.send_page_send_sublabel),
                 const SizedBox(
                   height: 25,
                 ),
