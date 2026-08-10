@@ -19,6 +19,9 @@ enum LanguageType {
   uk,
   ru,
   zhHans,
+  // Out of order on purpose: Settings persists this enum by index, so new
+  // entries have to be appended until that changes.
+  el,
 }
 
 class LocaleProvider with ChangeNotifier {
@@ -38,6 +41,7 @@ class LocaleProvider with ChangeNotifier {
     LanguageType.uk: 'Українська',
     LanguageType.ru: 'Русский',
     LanguageType.zhHans: '简体中文',
+    LanguageType.el: 'Ελληνικά',
   };
 
   static String getLanguageDisplayName(

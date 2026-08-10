@@ -1,3 +1,24 @@
+## 1.1.11
+### Added
+- Send text directly from the send page. The text is transferred as a `message.txt` file so it stays compatible with other magic-wormhole clients (#171). Thanks @abitrolly for opening the issue!
+- Options to send or receive another file right after a transfer finishes, so the app no longer has to be restarted between transfers (#188). Thanks @fuguesoft for opening the issue!
+- Setting to turn off haptic feedback (#185). Thanks @pablogila for opening the issue!
+- Greek translation. Thanks @[theoasim](https://translate.codeberg.org/user/theoasim/) for the translation!
+
+### Changed
+- Rework the send page around a single "Send Anything" action, with the remaining ways to send moved behind "More Options" (#182). Thanks @abitrolly for opening the issue and for the feedback!
+- The QR scanner now only vibrates when it detects a valid transmit code, instead of on every barcode.
+- Update translations for Chinese (Simplified), Dutch, Estonian, Russian, Spanish, Swedish, and Turkish. Thanks @Vistaus, @bittin, @umitseyhan75, @[Outbreak2096](https://translate.codeberg.org/user/Outbreak2096/), @[jrtcdbrg](https://translate.codeberg.org/user/jrtcdbrg/), @[gallegonovato](https://translate.codeberg.org/user/gallegonovato/), @[marksista](https://translate.codeberg.org/user/marksista/), and @[code_gremlin](https://translate.codeberg.org/user/code_gremlin/) for the translations!
+- Update dependencies, including Kotlin, the Android Gradle plugin, androidx.documentfile, and fastlane.
+
+### Fixed
+- Support `wss://` rendezvous servers (#186). Thanks @Slayerx96 for opening the issue!
+- Fix sharing files into the app on iOS closing the app instead of starting a transfer (#187). Thanks @deviant for opening the issue!
+- Fix downloads on Android freezing after a download folder was picked (#181). Thanks @gityhubi for opening the issue!
+- Fix the Windows build failing on MSVC coroutine deprecation warnings in permission_handler_windows.
+
+All changes not attributed to a specific person were made by @emmiebyte.
+
 ## 1.1.10
 ### Added
 - Transfer notification on Android that keeps the app awake during background transfers, preventing battery savers from interrupting them (#174). Thanks @bigfakelaugh for opening the issue!
