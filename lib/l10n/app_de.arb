@@ -20,6 +20,8 @@
     "transfer_finished_open": "Datei öffnen",
     "transfer_finished_share": "Datei teilen",
     "transfer_finished_send_label": "Vollständig übertragen!",
+    "transfer_finished_send_another": "Weitere Datei senden",
+    "transfer_finished_receive_another": "Weitere Datei empfangen",
     "transfer_zipping": "Komprimiere Datei",
     "transfer_saving_label": "Wird im ausgewählten Ordner gespeichert ...",
     "transfer_save_error": "Konnte nicht im ausgewählten Ordner gespeichert werden:",

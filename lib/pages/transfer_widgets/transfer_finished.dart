@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../navigation/navigation_provider.dart';
 import '../../widgets/icon_text_button.dart';
+import '../receive_page.dart';
 
 class ReceiveFinished extends StatelessWidget {
   const ReceiveFinished({super.key, required this.file});
@@ -53,6 +56,15 @@ class ReceiveFinished extends StatelessWidget {
                   text: AppLocalizations.of(context)!.transfer_finished_share,
                   icon: Icons.share);
             },
+          ),
+          const SizedBox(height: 15),
+          TextButton.icon(
+            onPressed: () =>
+                Provider.of<NavigationProvider>(context, listen: false)
+                    .setActivePage(const ReceivePage()),
+            icon: const Icon(Icons.arrow_back),
+            label: Text(AppLocalizations.of(context)!
+                .transfer_finished_receive_another),
           ),
         ],
       ),

@@ -24,6 +24,8 @@
   "transfer_finished_share" : "Share file",
 
   "transfer_finished_send_label" : "Finished transfer!",
+  "transfer_finished_send_another" : "Send another file",
+  "transfer_finished_receive_another" : "Receive another file",
   "transfer_zipping": "Compressing file",
 
   "transfer_saving_label" : "Saving to selected folder...",

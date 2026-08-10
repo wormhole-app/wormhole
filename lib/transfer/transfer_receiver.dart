@@ -130,6 +130,15 @@ class _TransferReceiverState extends State<TransferReceiver> {
                     child: Text(AppLocalizations.of(context)!
                         .transfer_finished_send_label),
                   ),
+                  const SizedBox(height: 25),
+                  TextButton.icon(
+                    onPressed: () =>
+                        Provider.of<NavigationProvider>(context, listen: false)
+                            .setActivePage(const SendPage()),
+                    icon: const Icon(Icons.arrow_back),
+                    label: Text(AppLocalizations.of(context)!
+                        .transfer_finished_send_another),
+                  ),
                 ]),
           );
         }));
