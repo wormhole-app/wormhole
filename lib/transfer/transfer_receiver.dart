@@ -273,7 +273,12 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
   void registerIntentReceiveHandler() {
     AppLinks().uriLinkStream.listen((uri) {
-      _receiveFile(uri.path);
+      final passphrase = passphraseFromTransferUri(uri);
+      if (passphrase == null) {
+        AppLogger.debug('Ignoring non-transfer URI scheme: ${uri.scheme}');
+        return;
+      }
+      _receiveFile(passphrase);
     });
   }
 

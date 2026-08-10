@@ -9,6 +9,10 @@ use std::path::Path;
 use std::rc::Rc;
 use std::str::FromStr as _;
 
+fn parse_code(passphrase: &str) -> Result<Code, String> {
+    Code::from_str(passphrase).map_err(|error| error.to_string())
+}
+
 pub async fn request_file_impl(
     passphrase: String,
     storage_folder: String,
@@ -32,19 +36,27 @@ pub async fn request_file_impl(
     };
     let appconfig = gen_app_config(&server_config);
 
-    let connection =
-        match MailboxConnection::connect(appconfig, Code::from_str(&passphrase).unwrap(), true)
-            .await
-        {
-            Ok(v) => v,
-            Err(e) => {
-                _ = actions.add(TUpdate::new(
-                    Events::Error,
-                    Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
-                ));
-                return;
-            }
-        };
+    let code = match parse_code(&passphrase) {
+        Ok(code) => code,
+        Err(e) => {
+            _ = actions.add(TUpdate::new(
+                Events::Error,
+                Value::ErrorValue(ErrorType::ConnectionError, e),
+            ));
+            return;
+        }
+    };
+
+    let connection = match MailboxConnection::connect(appconfig, code, true).await {
+        Ok(v) => v,
+        Err(e) => {
+            _ = actions.add(TUpdate::new(
+                Events::Error,
+                Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
+            ));
+            return;
+        }
+    };
 
     let wormhole = match Wormhole::connect(connection).await {
         Ok(v) => v,
