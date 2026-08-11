@@ -82,5 +82,7 @@
     "transfer_save_error": "Seçilen klasöre kaydedilemedi:",
     "settings_page_haptics": "Dokunsal geri bildirim:",
     "settings_page_haptics_on": "Açık",
-    "settings_page_haptics_off": "Kapalı"
+    "settings_page_haptics_off": "Kapalı",
+    "transfer_finished_send_another": "Başka bir dosya daha gönder",
+    "transfer_finished_receive_another": "Başka bir dosya daha al"
 }
