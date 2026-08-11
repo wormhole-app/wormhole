@@ -3,7 +3,7 @@
     "menu_send": "Versturen",
     "menu_receive": "Ontvangen",
     "menu_settings": "Instellingen",
-    "send_page_send_label": "Bestand versturen",
+    "send_page_send_label": "Verstuur van alles",
     "send_page_send_sublabel": "Kies een bestand om te versturen",
     "send_page_button": "Bestand kiezen",
     "send_page_folder_button": "Map kiezen",
@@ -82,5 +82,7 @@
     "transfer_save_error": "Het opslaan in de gekozen map is mislukt:",
     "settings_page_haptics": "Haptische feedback:",
     "settings_page_haptics_on": "Aan",
-    "settings_page_haptics_off": "Uit"
+    "settings_page_haptics_off": "Uit",
+    "transfer_finished_send_another": "Nog een bestand versturen",
+    "transfer_finished_receive_another": "Nog een bestand ontvangen"
 }
