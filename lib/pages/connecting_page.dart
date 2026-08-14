@@ -8,7 +8,6 @@ import 'package:media_scanner/media_scanner.dart';
 
 import '../l10n/app_localizations.dart';
 import '../src/rust/api/wormhole.dart';
-import '../navigation/back_pop_context.dart';
 import '../navigation/disallow_pop_context.dart';
 import '../transfer/transfer_activity.dart';
 import 'transfer_widgets/transfer_code.dart';
@@ -23,12 +22,10 @@ class ConnectingPage extends StatefulWidget {
     super.key,
     required this.stream,
     required this.finish,
-    required this.retryPage,
   });
 
   final Stream<TUpdate> stream;
   final Widget Function(String file) finish;
-  final Widget retryPage;
 
   @override
   State<ConnectingPage> createState() => _ConnectingPageState();
@@ -50,13 +47,23 @@ class _ConnectingPageState extends State<ConnectingPage> {
   late final TransferActivity transferActivity;
   StreamSubscription<TUpdate>? transferSubscription;
 
-  late StreamController<TUpdate> controller =
-      StreamController<TUpdate>.broadcast()..addStream(widget.stream);
+  final StreamController<TUpdate> controller =
+      StreamController<TUpdate>.broadcast();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (transferSubscription != null) return;
+
+    // The transfer stream from the Rust bridge is single-subscription. If this
+    // page ever gets remounted (its State recreated) the stream is already
+    // consumed; closing the controller shows the connection-closed error
+    // instead of crashing the build (see issue #196).
+    try {
+      unawaited(controller.addStream(widget.stream));
+    } on StateError {
+      unawaited(controller.close());
+    }
 
     final localizations = AppLocalizations.of(context)!;
     transferActivity = TransferActivity(
@@ -108,10 +115,8 @@ class _ConnectingPageState extends State<ConnectingPage> {
       case Events.connecting:
         return const TransferConnecting();
       case Events.code:
-        return BackPopContext(
-          child: TransferCode(
-            data: event,
-          ),
+        return TransferCode(
+          data: event,
         );
       case Events.startTransfer:
       case Events.connectionType:
@@ -127,13 +132,11 @@ class _ConnectingPageState extends State<ConnectingPage> {
         );
       case Events.error:
         _stopEstimateTimer();
-        return BackPopContext(
-            child: TransferError(
-                error: event.value.field0 as ErrorType,
-                retryPage: widget.retryPage,
-                message: event.value is Value_ErrorValue
-                    ? (event.value as Value_ErrorValue).field1
-                    : null));
+        return TransferError(
+            error: event.value.field0 as ErrorType,
+            message: event.value is Value_ErrorValue
+                ? (event.value as Value_ErrorValue).field1
+                : null);
       case Events.finished:
         _stopEstimateTimer();
         final String file = event.getValue();
@@ -145,7 +148,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
             debugPrint('Failed to trigger media scan for $file');
           }
         }
-        return BackPopContext(child: widget.finish(file));
+        return widget.finish(file);
       case Events.zipFilesTotal:
       case Events.zipFiles:
         return DisallowPopContext(
@@ -170,12 +173,10 @@ class _ConnectingPageState extends State<ConnectingPage> {
             final d = snapshot.data!;
             return _handleEvent(d);
           case ConnectionState.done:
-            return BackPopContext(
-                child: TransferError(
+            return TransferError(
               error: ErrorType.connectionError,
-              retryPage: widget.retryPage,
               message: 'Connection Stream closed',
-            ));
+            );
         }
       },
       stream: controller.stream,

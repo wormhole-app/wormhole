@@ -340,7 +340,9 @@ class _SettingsPageState extends State<SettingsPage> {
         name: AppLocalizations.of(context)!.settings_page_advanced,
         child: SettingsSectionButton(
           onButtonClick: () {
-            Navigator.of(context).push(MaterialPageRoute(
+            // Full-screen page with its own Scaffold/AppBar, so it goes on the
+            // root navigator, above the tab shell.
+            Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
               builder: (context) => const ServerSettingsPage(),
             ));
           },
