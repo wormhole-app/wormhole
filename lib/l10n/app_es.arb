@@ -2,7 +2,7 @@
     "menu_send": "Enviar",
     "menu_receive": "Recibir",
     "menu_settings": "Ajustes",
-    "send_page_send_label": "Enviar Archivo",
+    "send_page_send_label": "Enviar algo",
     "send_page_send_sublabel": "Selecciona archivo para enviar",
     "send_page_button": "Selecciona archivo",
     "send_page_media_button": "Enviar Multimedia",
@@ -82,5 +82,7 @@
     "transfer_save_error": "No se pudo guardar en la carpeta seleccionada:",
     "settings_page_haptics": "Interfaz táctil activa:",
     "settings_page_haptics_on": "Encender",
-    "settings_page_haptics_off": "Apagar"
+    "settings_page_haptics_off": "Apagar",
+    "transfer_finished_send_another": "Enviar otro archivo",
+    "transfer_finished_receive_another": "Recibir otro archivo"
 }

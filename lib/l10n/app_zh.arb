@@ -4,7 +4,7 @@
     "menu_send": "发送",
     "menu_receive": "接收",
     "menu_settings": "设置",
-    "send_page_send_label": "发送文件",
+    "send_page_send_label": "发送任意内容",
     "send_page_send_sublabel": "选择要发送的文件",
     "send_page_button": "选择文件",
     "send_page_folder_button": "选择文件夹",
@@ -83,5 +83,7 @@
     "transfer_save_error": "无法保存到所选文件夹：",
     "settings_page_haptics": "触感反馈：",
     "settings_page_haptics_on": "已开启",
-    "settings_page_haptics_off": "已关闭"
+    "settings_page_haptics_off": "已关闭",
+    "transfer_finished_send_another": "发送另一个文件",
+    "transfer_finished_receive_another": "接收另一个文件"
 }
