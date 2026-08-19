@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_close_app/flutter_close_app.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +10,8 @@ import 'package:app_links/app_links.dart';
 
 import '../l10n/app_localizations.dart';
 import '../src/rust/api/wormhole.dart';
-import '../navigation/navigation_provider.dart';
+import '../navigation/navigation.dart';
 import '../pages/connecting_page.dart';
-import '../pages/receive_page.dart';
-import '../pages/send_page.dart';
 import '../pages/toasts/error_toast.dart';
 import '../pages/transfer_widgets/transfer_finished.dart';
 import '../pages/transfer_widgets/receive_saf_finalize.dart';
@@ -28,9 +24,14 @@ import 'transfer_provider.dart';
 import 'demo_transfer.dart';
 
 class TransferReceiver extends StatefulWidget {
-  const TransferReceiver({super.key, required this.child});
+  const TransferReceiver(
+      {super.key, required this.child, required this.pushPage});
 
   final Widget child;
+
+  /// Switches to the given tab and pushes the page onto its navigator.
+  /// Provided by [Navigation], which owns the per-tab navigators.
+  final void Function(AppTab tab, Widget page) pushPage;
 
   @override
   State<TransferReceiver> createState() => _TransferReceiverState();
@@ -97,51 +98,13 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
   void _showConnectionPage(Stream<TUpdate> stream, bool causedByIntent) {
     if (!mounted) return;
-    Provider.of<NavigationProvider>(context, listen: false).push(ConnectingPage(
-        key: UniqueKey(),
+    widget.pushPage(
+      AppTab.send,
+      ConnectingPage(
         stream: stream,
-        retryPage: const SendPage(),
-        finish: (file) {
-          if (Platform.isAndroid || Platform.isIOS) {
-            // delete temporary files cached by file_picker
-            FilePicker.clearTemporaryFiles();
-
-            // auto close app if share cause was an intent
-            // this happens only if share was successful
-            if (causedByIntent) {
-              Future.delayed(const Duration(seconds: 1)).then((value) async {
-                await FlutterCloseApp().closeAndRemoveApp();
-              });
-            }
-          }
-
-          return Center(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.check_circle_outline,
-                    color: Colors.green,
-                    size: 60,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(AppLocalizations.of(context)!
-                        .transfer_finished_send_label),
-                  ),
-                  const SizedBox(height: 25),
-                  TextButton.icon(
-                    onPressed: () =>
-                        Provider.of<NavigationProvider>(context, listen: false)
-                            .setActivePage(const SendPage()),
-                    icon: const Icon(Icons.arrow_back),
-                    label: Text(AppLocalizations.of(context)!
-                        .transfer_finished_send_another),
-                  ),
-                ]),
-          );
-        }));
+        finish: (file) => SendFinished(causedByIntent: causedByIntent),
+      ),
+    );
   }
 
   Future<ServerConfig> _getServerConfig() async {
@@ -183,11 +146,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
       // Use demo transfer stream instead of real wormhole connection
       final s = generateDemoReceiveStream(dpath);
       if (!mounted) return;
-      Provider.of<NavigationProvider>(context, listen: false).push(
+      widget.pushPage(
+        AppTab.receive,
         ConnectingPage(
-          key: UniqueKey(),
           stream: s,
-          retryPage: const ReceivePage(),
           finish: (file) => ReceiveFinished(file: file),
         ),
       );
@@ -206,11 +168,10 @@ class _TransferReceiverState extends State<TransferReceiver> {
           storageFolder: dpath,
           serverConfig: await _getServerConfig());
       if (!mounted) return;
-      Provider.of<NavigationProvider>(context, listen: false).push(
+      widget.pushPage(
+        AppTab.receive,
         ConnectingPage(
-          key: UniqueKey(),
           stream: s,
-          retryPage: const ReceivePage(),
           finish: (file) => safTreeUri == null
               ? ReceiveFinished(file: file)
               : ReceiveSafFinalize(tempPath: file, treeUri: safTreeUri),
