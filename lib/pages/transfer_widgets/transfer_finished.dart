@@ -46,12 +46,12 @@ class ReceiveFinished extends StatelessWidget {
               return IconTextButton(
                   onClick: () {
                     final box = context.findRenderObject() as RenderBox?;
-                    Share.shareXFiles(
-                      [XFile(file)],
+                    SharePlus.instance.share(ShareParams(
+                      files: [XFile(file)],
                       text: file.split('/').last,
                       sharePositionOrigin:
                           box!.localToGlobal(Offset.zero) & box.size,
-                    );
+                    ));
                   },
                   text: AppLocalizations.of(context)!.transfer_finished_share,
                   icon: Icons.share);
