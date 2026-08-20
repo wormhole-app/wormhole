@@ -93,7 +93,7 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.4.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.4.10"
     implementation "androidx.documentfile:documentfile:1.1.0"
 }
 
