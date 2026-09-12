@@ -3,7 +3,7 @@
     "menu_send": "Skicka",
     "menu_receive": "Ta emot",
     "menu_settings": "Inställningar",
-    "send_page_send_label": "Skicka fil",
+    "send_page_send_label": "Skicka vad som helst",
     "send_page_send_sublabel": "Välj en fil att skicka",
     "send_page_button": "Välj fil",
     "send_page_media_button": "Skicka media",
@@ -82,5 +82,7 @@
     },
     "settings_page_haptics": "Haptisk feedback:",
     "settings_page_haptics_on": "På",
-    "settings_page_haptics_off": "Av"
+    "settings_page_haptics_off": "Av",
+    "transfer_finished_send_another": "Skicka en till fil",
+    "transfer_finished_receive_another": "Ta emot en till fil"
 }
