@@ -1,6 +1,6 @@
-use crate::api::{ErrorType, Events, ServerConfig, TUpdate, Value};
+use crate::api::{CancelToken, ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::frb_generated::StreamSink;
-use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
+use crate::wormhole::handler::{gen_progress_handler, gen_transit_handler};
 use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
 use crate::wormhole::zip::create_zip_file;
 use magic_wormhole::transfer::TransferError;
@@ -16,9 +16,12 @@ pub async fn send_files_impl(
     temp_file_path: String,
     server_config: ServerConfig,
     actions: Rc<StreamSink<TUpdate>>,
+    cancel: &CancelToken,
 ) {
-    let temp_file = match create_zip_file(files, temp_file_path, actions.clone()) {
-        Ok(v) => v,
+    let temp_file = match create_zip_file(files, temp_file_path, actions.clone(), cancel) {
+        Ok(Some(v)) => v,
+        // cancelled while zipping
+        Ok(None) => return,
         Err(e) => {
             _ = actions.add(TUpdate::new(
                 Events::Error,
@@ -34,6 +37,7 @@ pub async fn send_files_impl(
         code_length,
         server_config,
         actions,
+        cancel,
     )
     .await;
 
@@ -47,6 +51,7 @@ pub async fn send_file_impl(
     code_length: u8,
     server_config: ServerConfig,
     actions: Rc<StreamSink<TUpdate>>,
+    cancel: &CancelToken,
 ) {
     // push event that we are in connection state
     _ = actions.add(TUpdate::new(Events::Connecting, Value::Int(0)));
@@ -63,9 +68,15 @@ pub async fn send_file_impl(
     };
     let appconfig = gen_app_config(&server_config);
 
-    let connection = match MailboxConnection::create(appconfig, code_length as usize).await {
-        Ok(v) => v,
-        Err(e) => {
+    // the connection phase has no cancel handler of its own, so drop the
+    // connection futures on cancel
+    let connection = match cancel
+        .guard(MailboxConnection::create(appconfig, code_length as usize))
+        .await
+    {
+        None => return,
+        Some(Ok(v)) => v,
+        Some(Err(e)) => {
             _ = actions.add(TUpdate::new(
                 Events::Error,
                 Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
@@ -79,9 +90,10 @@ pub async fn send_file_impl(
         Value::String(connection.code().to_string()),
     ));
 
-    let wormhole = match Wormhole::connect(connection).await {
-        Ok(v) => v,
-        Err(e) => {
+    let wormhole = match cancel.guard(Wormhole::connect(connection)).await {
+        None => return,
+        Some(Ok(v)) => v,
+        Some(Err(e)) => {
             _ = actions.add(TUpdate::new(
                 Events::Error,
                 Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
@@ -90,25 +102,29 @@ pub async fn send_file_impl(
         }
     };
 
-    match Box::pin(send(
+    let result = Box::pin(send(
         wormhole,
         relay_hints,
         file_path.as_str(),
         file_name.as_str(),
         transit::Abilities::ALL,
         Rc::clone(&actions),
+        cancel,
     ))
-    .await
-    {
-        Ok(_) => (),
-        Err(e) => {
-            _ = actions.add(TUpdate::new(
-                Events::Error,
-                Value::ErrorValue(ErrorType::TransferError, e.to_string()),
-            ));
-            return;
-        }
-    };
+    .await;
+
+    // magic-wormhole notifies the peer and returns Ok when cancelled
+    if cancel.is_cancelled() {
+        return;
+    }
+
+    if let Err(e) = result {
+        _ = actions.add(TUpdate::new(
+            Events::Error,
+            Value::ErrorValue(ErrorType::TransferError, e.to_string()),
+        ));
+        return;
+    }
     _ = actions.add(TUpdate::new(Events::Finished, Value::String(file_name)));
 }
 
@@ -119,8 +135,8 @@ async fn send(
     file_name: &str,
     transit_abilities: transit::Abilities,
     actions: Rc<StreamSink<TUpdate>>,
+    cancel: &CancelToken,
 ) -> Result<(), TransferError> {
-    let handler = gen_handler_dummy();
     let transit_handler = gen_transit_handler(Rc::clone(&actions));
     let progress_handler = gen_progress_handler(Rc::clone(&actions));
 
@@ -132,7 +148,7 @@ async fn send(
         transit_abilities,
         transit_handler,
         progress_handler,
-        handler,
+        cancel.future(),
     )
     .await?;
     Ok(())
