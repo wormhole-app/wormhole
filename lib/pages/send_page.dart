@@ -99,6 +99,9 @@ class _SendPageState extends State<SendPage> {
 
     final text = await showModalBottomSheet<String>(
       context: context,
+      // The page sits inside a per-tab navigator; the sheet should cover the
+      // whole screen including the bottom navigation bar.
+      useRootNavigator: true,
       isScrollControlled: true,
       showDragHandle: true,
       shape: _sheetShape(context),
@@ -183,6 +186,7 @@ class _SendPageState extends State<SendPage> {
   void _showMoreOptions(List<_SendAction> actions) {
     showModalBottomSheet<void>(
       context: context,
+      useRootNavigator: true,
       showDragHandle: true,
       shape: _sheetShape(context),
       builder: (context) {

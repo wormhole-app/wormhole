@@ -1,7 +1,7 @@
-use crate::api::{Events, TUpdate, Value};
+use crate::api::{CancelToken, Events, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use std::collections::HashMap;
-use std::fs::{File, metadata};
+use std::fs::{File, metadata, remove_file};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
@@ -50,7 +50,8 @@ pub fn create_zip_file(
     files: HashMap<String, String>,
     temp_file_path: String,
     actions: Rc<StreamSink<TUpdate>>,
-) -> anyhow::Result<String> {
+    cancel: &CancelToken,
+) -> anyhow::Result<Option<String>> {
     let n = fastrand::u32(..);
 
     let mut temp_file = PathBuf::from(temp_file_path);
@@ -74,6 +75,12 @@ pub fn create_zip_file(
 
     // zip files
     for (file_counter, (fs_path, zip_path)) in (1_u64..).zip(files) {
+        if cancel.is_cancelled() {
+            drop(zip);
+            let _ = remove_file(&temp_file);
+            return Ok(None);
+        }
+
         _ = actions.add(TUpdate::new(Events::ZipFiles, Value::Int(file_counter)));
 
         zip.start_file(zip_path, options.clone())?;
@@ -90,5 +97,5 @@ pub fn create_zip_file(
         .to_str()
         .ok_or(anyhow::Error::msg("invalid tempfile path"))?
         .to_string();
-    Ok(tmp_file_name)
+    Ok(Some(tmp_file_name))
 }

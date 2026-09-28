@@ -1,9 +1,9 @@
-use crate::api::{ErrorType, Events, ServerConfig, TUpdate, Value};
+use crate::api::{CancelToken, ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::frb_generated::StreamSink;
-use crate::wormhole::handler::{gen_handler_dummy, gen_progress_handler, gen_transit_handler};
+use crate::wormhole::handler::{gen_progress_handler, gen_transit_handler};
 use crate::wormhole::helpers::{gen_app_config, gen_relay_hints, sanitize_filename};
 use crate::wormhole::path::find_free_filepath;
-use async_std::fs::OpenOptions;
+use async_std::fs::{OpenOptions, remove_file};
 use magic_wormhole::{Code, MailboxConnection, Wormhole, transfer, transit};
 use std::path::Path;
 use std::rc::Rc;
@@ -18,6 +18,7 @@ pub async fn request_file_impl(
     storage_folder: String,
     server_config: ServerConfig,
     actions: StreamSink<TUpdate>,
+    cancel: &CancelToken,
 ) {
     let actions = Rc::new(actions);
 
@@ -47,9 +48,15 @@ pub async fn request_file_impl(
         }
     };
 
-    let connection = match MailboxConnection::connect(appconfig, code, true).await {
-        Ok(v) => v,
-        Err(e) => {
+    // the connection phase has no cancel handler of its own, so drop the
+    // connection futures on cancel
+    let connection = match cancel
+        .guard(MailboxConnection::connect(appconfig, code, true))
+        .await
+    {
+        None => return,
+        Some(Ok(v)) => v,
+        Some(Err(e)) => {
             _ = actions.add(TUpdate::new(
                 Events::Error,
                 Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
@@ -58,9 +65,10 @@ pub async fn request_file_impl(
         }
     };
 
-    let wormhole = match Wormhole::connect(connection).await {
-        Ok(v) => v,
-        Err(e) => {
+    let wormhole = match cancel.guard(Wormhole::connect(connection)).await {
+        None => return,
+        Some(Ok(v)) => v,
+        Some(Err(e)) => {
             _ = actions.add(TUpdate::new(
                 Events::Error,
                 Value::ErrorValue(ErrorType::ConnectionError, e.to_string()),
@@ -73,7 +81,7 @@ pub async fn request_file_impl(
         wormhole,
         relay_hints,
         transit::Abilities::ALL,
-        gen_handler_dummy(),
+        cancel.future(),
     )
     .await
     {
@@ -134,10 +142,18 @@ pub async fn request_file_impl(
     let on_progress = gen_progress_handler(Rc::clone(&actions));
     let transit_handler = gen_transit_handler(Rc::clone(&actions));
 
-    match req
-        .accept(transit_handler, on_progress, &mut file, gen_handler_dummy())
-        .await
-    {
+    let result = req
+        .accept(transit_handler, on_progress, &mut file, cancel.future())
+        .await;
+
+    // magic-wormhole notifies the peer and returns Ok when cancelled
+    if cancel.is_cancelled() {
+        drop(file);
+        let _ = remove_file(&file_path).await;
+        return;
+    }
+
+    match result {
         Ok(_) => {}
         Err(e) => {
             // todo better handling

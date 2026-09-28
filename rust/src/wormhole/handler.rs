@@ -1,25 +1,9 @@
 use crate::api;
 use crate::api::{Events, TUpdate, Value};
 use crate::frb_generated::StreamSink;
-use async_std::sync::{Arc, Condvar, Mutex};
-use futures::FutureExt;
-use futures::future::BoxFuture;
 use magic_wormhole::transit;
 use magic_wormhole::transit::TransitInfo;
 use std::rc::Rc;
-
-/// generate dummy implementation for cancel handler
-pub fn gen_handler_dummy<'a>() -> BoxFuture<'a, ()> {
-    let notifier = Arc::new((Mutex::new(false), Condvar::new()));
-    async move {
-        let (lock, cvar) = &*notifier;
-        let mut started = lock.lock().await;
-        while !*started {
-            started = cvar.wait(started).await;
-        }
-    }
-    .boxed()
-}
 
 /// generate new transithandler which callbacks connectiontype through streamsink
 pub fn gen_transit_handler(actions: Rc<StreamSink<TUpdate>>) -> Box<dyn Fn(TransitInfo)> {
