@@ -76,33 +76,42 @@ class _TransferReceiverState extends State<TransferReceiver> {
   void _sendFolder(String name, String path, bool causedByIntent) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
 
+    final cancelToken = CancelToken();
     final stream = sendFolder(
         folderPath: path,
         name: name,
         codeLength: codeLength,
-        serverConfig: await _getServerConfig());
-    _showConnectionPage(stream, causedByIntent);
+        serverConfig: await _getServerConfig(),
+        cancel: cancelToken);
+    _showConnectionPage(stream, cancelToken, causedByIntent);
   }
 
   void _sendFiles(
       String name, List<String> filepaths, bool causedByIntent) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
+    final cancelToken = CancelToken();
     final stream = sendFiles(
         name: name,
         filePaths: filepaths,
         codeLength: codeLength,
-        serverConfig: await _getServerConfig());
+        serverConfig: await _getServerConfig(),
+        cancel: cancelToken);
 
-    _showConnectionPage(stream, causedByIntent);
+    _showConnectionPage(stream, cancelToken, causedByIntent);
   }
 
-  void _showConnectionPage(Stream<TUpdate> stream, bool causedByIntent) {
-    if (!mounted) return;
+  void _showConnectionPage(
+      Stream<TUpdate> stream, CancelToken cancelToken, bool causedByIntent) {
+    if (!mounted) {
+      cancelToken.cancel();
+      return;
+    }
     widget.pushPage(
       AppTab.send,
       ConnectingPage(
         stream: stream,
         finish: (file) => SendFinished(causedByIntent: causedByIntent),
+        onCancel: cancelToken.cancel,
       ),
     );
   }
@@ -163,11 +172,16 @@ class _TransferReceiverState extends State<TransferReceiver> {
         (Platform.isAndroid &&
             (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33) ||
         await Permission.storage.request().isGranted) {
+      final cancelToken = CancelToken();
       final s = requestFile(
           passphrase: passphrase,
           storageFolder: dpath,
-          serverConfig: await _getServerConfig());
-      if (!mounted) return;
+          serverConfig: await _getServerConfig(),
+          cancel: cancelToken);
+      if (!mounted) {
+        cancelToken.cancel();
+        return;
+      }
       widget.pushPage(
         AppTab.receive,
         ConnectingPage(
@@ -175,6 +189,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
           finish: (file) => safTreeUri == null
               ? ReceiveFinished(file: file)
               : ReceiveSafFinalize(tempPath: file, treeUri: safTreeUri),
+          onCancel: cancelToken.cancel,
         ),
       );
     } else {

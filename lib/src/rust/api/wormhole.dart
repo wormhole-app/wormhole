@@ -18,6 +18,7 @@ export '../wormhole/types/events.dart';
 export '../wormhole/types/t_update.dart';
 export '../wormhole/types/value.dart';
 
+// These functions are ignored because they are not marked as `pub`: `future`, `guard`, `is_cancelled`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `send`
 
 Stream<LogEntry> setupLogStream() =>
@@ -31,32 +32,38 @@ Stream<TUpdate> sendFiles(
         {required List<String> filePaths,
         required String name,
         required int codeLength,
-        required ServerConfig serverConfig}) =>
+        required ServerConfig serverConfig,
+        required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeSendFiles(
         filePaths: filePaths,
         name: name,
         codeLength: codeLength,
-        serverConfig: serverConfig);
+        serverConfig: serverConfig,
+        cancel: cancel);
 
 Stream<TUpdate> sendFolder(
         {required String folderPath,
         required String name,
         required int codeLength,
-        required ServerConfig serverConfig}) =>
+        required ServerConfig serverConfig,
+        required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeSendFolder(
         folderPath: folderPath,
         name: name,
         codeLength: codeLength,
-        serverConfig: serverConfig);
+        serverConfig: serverConfig,
+        cancel: cancel);
 
 Stream<TUpdate> requestFile(
         {required String passphrase,
         required String storageFolder,
-        required ServerConfig serverConfig}) =>
+        required ServerConfig serverConfig,
+        required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeRequestFile(
         passphrase: passphrase,
         storageFolder: storageFolder,
-        serverConfig: serverConfig);
+        serverConfig: serverConfig,
+        cancel: cancel);
 
 Future<String> getPassphraseUri(
         {required String passphrase, String? rendezvousServer}) =>
@@ -71,6 +78,14 @@ Future<String> defaultRendezvousUrl() =>
 
 Future<String> defaultTransitUrl() =>
     RustLib.instance.api.crateApiWormholeDefaultTransitUrl();
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<CancelToken>>
+abstract class CancelToken implements RustOpaqueInterface {
+  void cancel();
+
+  factory CancelToken() =>
+      RustLib.instance.api.crateApiWormholeCancelTokenNew();
+}
 
 enum Level {
   error,

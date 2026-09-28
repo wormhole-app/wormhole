@@ -1,6 +1,9 @@
+// generated RustLibApi member names
+// ignore_for_file: non_constant_identifier_names
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_screenshot/golden_screenshot.dart';
 import 'package:provider/provider.dart';
@@ -45,27 +48,47 @@ class _MockRustLibApi implements RustLibApi {
   }
 
   @override
+  void crateApiWormholeCancelTokenCancel({required CancelToken that}) =>
+      throw UnimplementedError();
+  @override
+  CancelToken crateApiWormholeCancelTokenNew() => throw UnimplementedError();
+  @override
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_CancelToken =>
+          throw UnimplementedError();
+  @override
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_CancelToken =>
+          throw UnimplementedError();
+  @override
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_CancelTokenPtr =>
+          throw UnimplementedError();
+  @override
   Future<void> crateApiWormholeInit({required String tempFilePath}) =>
       throw UnimplementedError();
   @override
   Stream<TUpdate> crateApiWormholeRequestFile(
           {required String passphrase,
           required String storageFolder,
-          required ServerConfig serverConfig}) =>
+          required ServerConfig serverConfig,
+          required CancelToken cancel}) =>
       throw UnimplementedError();
   @override
   Stream<TUpdate> crateApiWormholeSendFiles(
           {required List<String> filePaths,
           required String name,
           required int codeLength,
-          required ServerConfig serverConfig}) =>
+          required ServerConfig serverConfig,
+          required CancelToken cancel}) =>
       throw UnimplementedError();
   @override
   Stream<TUpdate> crateApiWormholeSendFolder(
           {required String folderPath,
           required String name,
           required int codeLength,
-          required ServerConfig serverConfig}) =>
+          required ServerConfig serverConfig,
+          required CancelToken cancel}) =>
       throw UnimplementedError();
   @override
   Stream<LogEntry> crateApiWormholeSetupLogStream() =>

@@ -73,17 +73,22 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.12.0';
 
   @override
-  int get rustContentHash => 1104816079;
+  int get rustContentHash => 195598710;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
     stem: 'rust_lib_wormhole',
     ioDirectory: 'rust/target/release/',
     webPrefix: 'pkg/',
+    wasmBindgenName: 'wasm_bindgen',
   );
 }
 
 abstract class RustLibApi extends BaseApi {
+  void crateApiWormholeCancelTokenCancel({required CancelToken that});
+
+  CancelToken crateApiWormholeCancelTokenNew();
+
   Future<String> crateApiWormholeDefaultRendezvousUrl();
 
   Future<String> crateApiWormholeDefaultTransitUrl();
@@ -98,21 +103,32 @@ abstract class RustLibApi extends BaseApi {
   Stream<TUpdate> crateApiWormholeRequestFile(
       {required String passphrase,
       required String storageFolder,
-      required ServerConfig serverConfig});
+      required ServerConfig serverConfig,
+      required CancelToken cancel});
 
   Stream<TUpdate> crateApiWormholeSendFiles(
       {required List<String> filePaths,
       required String name,
       required int codeLength,
-      required ServerConfig serverConfig});
+      required ServerConfig serverConfig,
+      required CancelToken cancel});
 
   Stream<TUpdate> crateApiWormholeSendFolder(
       {required String folderPath,
       required String name,
       required int codeLength,
-      required ServerConfig serverConfig});
+      required ServerConfig serverConfig,
+      required CancelToken cancel});
 
   Stream<LogEntry> crateApiWormholeSetupLogStream();
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_CancelToken;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_CancelToken;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_CancelTokenPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -124,12 +140,61 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
+  void crateApiWormholeCancelTokenCancel({required CancelToken that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiWormholeCancelTokenCancelConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiWormholeCancelTokenCancelConstMeta =>
+      const TaskConstMeta(
+        debugName: 'CancelToken_cancel',
+        argNames: ['that'],
+      );
+
+  @override
+  CancelToken crateApiWormholeCancelTokenNew() {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 2)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiWormholeCancelTokenNewConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiWormholeCancelTokenNewConstMeta =>
+      const TaskConstMeta(
+        debugName: 'CancelToken_new',
+        argNames: [],
+      );
+
+  @override
   Future<String> crateApiWormholeDefaultRendezvousUrl() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 1, port: port_);
+            funcId: 3, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -153,7 +218,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
+            funcId: 4, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -177,7 +242,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
+            funcId: 5, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_build_info,
@@ -204,7 +269,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(passphrase, serializer);
         sse_encode_opt_String(rendezvousServer, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 4, port: port_);
+            funcId: 6, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -229,7 +294,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(tempFilePath, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 5, port: port_);
+            funcId: 7, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -250,7 +315,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Stream<TUpdate> crateApiWormholeRequestFile(
       {required String passphrase,
       required String storageFolder,
-      required ServerConfig serverConfig}) {
+      required ServerConfig serverConfig,
+      required CancelToken cancel}) {
     final actions = RustStreamSink<TUpdate>();
     unawaited(handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -258,16 +324,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(passphrase, serializer);
         sse_encode_String(storageFolder, serializer);
         sse_encode_box_autoadd_server_config(serverConfig, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+            cancel, serializer);
         sse_encode_StreamSink_t_update_Sse(actions, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 6, port: port_);
+            funcId: 8, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiWormholeRequestFileConstMeta,
-      argValues: [passphrase, storageFolder, serverConfig, actions],
+      argValues: [passphrase, storageFolder, serverConfig, cancel, actions],
       apiImpl: this,
     )));
     return actions.stream;
@@ -276,7 +344,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiWormholeRequestFileConstMeta =>
       const TaskConstMeta(
         debugName: 'request_file',
-        argNames: ['passphrase', 'storageFolder', 'serverConfig', 'actions'],
+        argNames: [
+          'passphrase',
+          'storageFolder',
+          'serverConfig',
+          'cancel',
+          'actions'
+        ],
       );
 
   @override
@@ -284,7 +358,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       {required List<String> filePaths,
       required String name,
       required int codeLength,
-      required ServerConfig serverConfig}) {
+      required ServerConfig serverConfig,
+      required CancelToken cancel}) {
     final actions = RustStreamSink<TUpdate>();
     unawaited(handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -293,16 +368,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(name, serializer);
         sse_encode_u_8(codeLength, serializer);
         sse_encode_box_autoadd_server_config(serverConfig, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+            cancel, serializer);
         sse_encode_StreamSink_t_update_Sse(actions, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 7, port: port_);
+            funcId: 9, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiWormholeSendFilesConstMeta,
-      argValues: [filePaths, name, codeLength, serverConfig, actions],
+      argValues: [filePaths, name, codeLength, serverConfig, cancel, actions],
       apiImpl: this,
     )));
     return actions.stream;
@@ -315,6 +392,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           'name',
           'codeLength',
           'serverConfig',
+          'cancel',
           'actions'
         ],
       );
@@ -324,7 +402,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       {required String folderPath,
       required String name,
       required int codeLength,
-      required ServerConfig serverConfig}) {
+      required ServerConfig serverConfig,
+      required CancelToken cancel}) {
     final actions = RustStreamSink<TUpdate>();
     unawaited(handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -333,16 +412,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(name, serializer);
         sse_encode_u_8(codeLength, serializer);
         sse_encode_box_autoadd_server_config(serverConfig, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+            cancel, serializer);
         sse_encode_StreamSink_t_update_Sse(actions, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 8, port: port_);
+            funcId: 10, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiWormholeSendFolderConstMeta,
-      argValues: [folderPath, name, codeLength, serverConfig, actions],
+      argValues: [folderPath, name, codeLength, serverConfig, cancel, actions],
       apiImpl: this,
     )));
     return actions.stream;
@@ -355,6 +436,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           'name',
           'codeLength',
           'serverConfig',
+          'cancel',
           'actions'
         ],
       );
@@ -367,7 +449,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_StreamSink_log_entry_Sse(sink, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 9, port: port_);
+            funcId: 11, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -386,10 +468,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: ['sink'],
       );
 
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_CancelToken => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_CancelToken => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken;
+
   @protected
   AnyhowException dco_decode_AnyhowException(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return AnyhowException(raw as String);
+  }
+
+  @protected
+  CancelToken
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return CancelTokenImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  CancelToken
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return CancelTokenImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  CancelToken
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return CancelTokenImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -545,6 +659,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt dco_decode_usize(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeU64(raw);
+  }
+
+  @protected
   Value dco_decode_value(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     switch (raw[0]) {
@@ -580,6 +700,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_String(deserializer);
     return AnyhowException(inner);
+  }
+
+  @protected
+  CancelToken
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return CancelTokenImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  CancelToken
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return CancelTokenImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  CancelToken
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return CancelTokenImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
@@ -743,6 +890,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt sse_decode_usize(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getBigUint64();
+  }
+
+  @protected
   Value sse_decode_value(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
@@ -775,6 +928,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       AnyhowException self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.message, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          CancelToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as CancelTokenImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          CancelToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as CancelTokenImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
+          CancelToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as CancelTokenImpl).frbInternalSseEncode(move: null), serializer);
   }
 
   @protected
@@ -934,6 +1115,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_usize(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putBigUint64(self);
+  }
+
+  @protected
   void sse_encode_value(Value self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     switch (self) {
@@ -956,4 +1143,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(field1, serializer);
     }
   }
+}
+
+@sealed
+class CancelTokenImpl extends RustOpaque implements CancelToken {
+  // Not to be used by end users
+  CancelTokenImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  CancelTokenImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_CancelToken,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_CancelToken,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_CancelTokenPtr,
+  );
+
+  void cancel() => RustLib.instance.api.crateApiWormholeCancelTokenCancel(
+        that: this,
+      );
 }

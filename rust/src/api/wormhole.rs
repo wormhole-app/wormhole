@@ -3,12 +3,15 @@ use crate::frb_generated::StreamSink;
 use crate::wormhole::receive::request_file_impl;
 use crate::wormhole::send::{send_file_impl, send_files_impl};
 use crate::wormhole::zip::list_dir;
+use futures::FutureExt;
 use futures::executor::block_on;
+use futures::future::{AbortHandle, Abortable, BoxFuture, Either, Shared, pending, select};
 use log::{debug, error, info};
 use magic_wormhole::rendezvous::DEFAULT_RENDEZVOUS_SERVER;
 use magic_wormhole::{Code, transit};
 use std::cmp::Ordering;
 use std::collections::HashMap;
+use std::future::Future;
 use std::path::PathBuf;
 use std::rc::Rc;
 use std::str::FromStr;
@@ -42,11 +45,57 @@ pub struct ServerConfig {
     pub transit_url: String,
 }
 
+/// Passed to a send to cancel it from the frontend
+#[frb(opaque)]
+pub struct CancelToken {
+    handle: AbortHandle,
+    cancelled: Shared<BoxFuture<'static, ()>>,
+}
+
+impl CancelToken {
+    #[frb(sync)]
+    #[allow(clippy::new_without_default)]
+    pub fn new() -> CancelToken {
+        let (handle, registration) = AbortHandle::new_pair();
+        // the pending future never finishes, so this resolves on abort only
+        let cancelled = Abortable::new(pending::<()>(), registration)
+            .map(|_| ())
+            .boxed()
+            .shared();
+        CancelToken { handle, cancelled }
+    }
+
+    #[frb(sync)]
+    pub fn cancel(&self) {
+        info!("Cancelling transfer");
+        self.handle.abort();
+    }
+
+    pub(crate) fn is_cancelled(&self) -> bool {
+        self.handle.is_aborted()
+    }
+
+    /// future resolving on cancel, to pass as magic-wormhole cancel handler
+    pub(crate) fn future(&self) -> Shared<BoxFuture<'static, ()>> {
+        self.cancelled.clone()
+    }
+
+    /// run the future unless the transfer gets cancelled first, None on cancel
+    pub(crate) async fn guard<T>(&self, future: impl Future<Output = T>) -> Option<T> {
+        futures::pin_mut!(future);
+        match select(self.future(), future).await {
+            Either::Left(_) => None,
+            Either::Right((v, _)) => Some(v),
+        }
+    }
+}
+
 pub fn send_files(
     file_paths: Vec<String>,
     name: String,
     code_length: u8,
     server_config: ServerConfig,
+    cancel: &CancelToken,
     actions: StreamSink<TUpdate>,
 ) {
     let actions = Rc::new(actions);
@@ -69,6 +118,7 @@ pub fn send_files(
                     code_length,
                     server_config,
                     actions,
+                    cancel,
                 )
                 .await;
             });
@@ -98,7 +148,16 @@ pub fn send_files(
                 .clone()
                 .expect("set temp file func not called");
             block_on(async {
-                send_files_impl(name, files, code_length, temp_dir, server_config, actions).await;
+                send_files_impl(
+                    name,
+                    files,
+                    code_length,
+                    temp_dir,
+                    server_config,
+                    actions,
+                    cancel,
+                )
+                .await;
             });
         }
     }
@@ -109,6 +168,7 @@ pub fn send_folder(
     name: String,
     code_length: u8,
     server_config: ServerConfig,
+    cancel: &CancelToken,
     actions: StreamSink<TUpdate>,
 ) {
     let files = match list_dir(folder_path) {
@@ -138,6 +198,7 @@ pub fn send_folder(
             temp_dir,
             server_config,
             Rc::new(actions),
+            cancel,
         )
         .await;
     });
@@ -147,10 +208,11 @@ pub fn request_file(
     passphrase: String,
     storage_folder: String,
     server_config: ServerConfig,
+    cancel: &CancelToken,
     actions: StreamSink<TUpdate>,
 ) {
     block_on(async {
-        request_file_impl(passphrase, storage_folder, server_config, actions).await;
+        request_file_impl(passphrase, storage_folder, server_config, actions, cancel).await;
     });
 }
 
