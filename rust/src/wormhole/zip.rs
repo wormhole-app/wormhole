@@ -72,11 +72,9 @@ pub fn create_zip_file(
 
     let mut buffer = Vec::new();
 
-    let mut file_counter: u64 = 1;
     // zip files
-    for (fs_path, zip_path) in files.into_iter() {
+    for (file_counter, (fs_path, zip_path)) in (1_u64..).zip(files) {
         _ = actions.add(TUpdate::new(Events::ZipFiles, Value::Int(file_counter)));
-        file_counter += 1;
 
         zip.start_file(zip_path, options.clone())?;
         let mut f = File::open(fs_path)?;
