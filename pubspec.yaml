@@ -20,7 +20,7 @@ dependencies:
   freezed_annotation: ^3.1.0
 
   # file chooser / open / share
-  file_picker: ^11.0.0
+  file_picker: ^13.0.0
   image_picker: ^1.2.0
   image_picker_android: ^0.8.13+1
   image_picker_platform_interface: ^2.11.0
