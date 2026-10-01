@@ -61,7 +61,7 @@ dev_dependencies:
   golden_screenshot: 11.1.0
   dmg: ^0.1.7
   flutter_lints: ^6.0.0
-  ffigen: 20.1.1
+  ffigen: 22.0.0
   flutter_launcher_icons:
   build_runner:
   freezed: ^3.2.3
