@@ -25,3 +25,29 @@ String? passphraseFromTransferUri(Uri uri) {
   }
   return uri.path;
 }
+
+/// A `wormhole-transfer:` link: with `isLeader` (`role=leader`) whoever reads
+/// it sends to `code`, otherwise they receive from it.
+typedef TransferUri = ({String code, bool isLeader});
+
+/// Parse a Wormhole transfer link, `wormhole-transfer:<code>?role=…`.
+///
+/// Returns null for an invalid code or an unknown role. Other URL schemes are
+/// used internally on iOS (for example, the share extension's `ShareMedia-…`
+/// handoff) and must not enter a transfer flow either.
+TransferUri? parseTransferUri(Uri uri) {
+  if (uri.scheme != 'wormhole-transfer' || !isCodeValid(uri.path)) {
+    return null;
+  }
+  final String? role;
+  try {
+    role = uri.queryParameters['role'];
+  } on FormatException {
+    // a percent escape that is no valid UTF-8 (`?role=%E0`)
+    return null;
+  }
+  if (role != null && role != 'leader' && role != 'follower') {
+    return null;
+  }
+  return (code: uri.path, isLeader: role == 'leader');
+}
