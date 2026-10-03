@@ -74,25 +74,21 @@ class _QrScannerPageState extends State<QrScannerPage> {
     if (code != null) {
       AppLogger.info('Barcode found: $code');
 
-      final uri = Uri.parse(code);
-
-      // assume its a valid code if it starts with this string
-      if (uri.scheme == 'wormhole-transfer') {
-        final passphrase = uri.path;
-
-        if (isCodeValid(passphrase)) {
-          unawaited(Settings.getHapticFeedback().then((enabled) {
-            if (enabled) {
-              Vibration.vibrate();
-            }
-          }));
-          final transfer =
-              Provider.of<TransferProvider>(context, listen: false);
-          Navigator.of(context).pop();
-          transfer.receiveFile(passphrase);
-          return;
+      final transferUri = parseTransferUri(Uri.parse(code));
+      if (transferUri != null) {
+        unawaited(Settings.getHapticFeedback().then((enabled) {
+          if (enabled) {
+            Vibration.vibrate();
+          }
+        }));
+        final transfer = Provider.of<TransferProvider>(context, listen: false);
+        Navigator.of(context).pop();
+        if (transferUri.isLeader) {
+          transfer.setSendTarget(transferUri.code);
+        } else {
+          transfer.receiveFile(transferUri.code);
         }
-        // todo handle extra query parameters
+        return;
       }
 
       AppLogger.warn('Invalid QR code scanned');

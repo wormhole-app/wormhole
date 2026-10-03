@@ -97,6 +97,15 @@ class _NavigationState extends State<Navigation> {
         );
   }
 
+  /// Switches to [tab] and returns it to its root page.
+  void _showTab(AppTab tab) {
+    setState(() => _selectedIndex = tab.index);
+    _navigatorKeys[tab]!.currentState?.popUntil((route) => route.isFirst);
+  }
+
+  /// Whether a transfer that can still be cancelled runs on [tab].
+  bool _isTransferRunning(AppTab tab) => _cancelActions[tab]!.value != null;
+
   /// Whether the QR scanner page is currently open.
   bool _scannerOpen = false;
 
@@ -135,6 +144,8 @@ class _NavigationState extends State<Navigation> {
 
     return TransferReceiver(
       pushPage: _pushOnTab,
+      showTab: _showTab,
+      isTransferRunning: _isTransferRunning,
       child: Scaffold(
         appBar: AppBar(
           leading: _scannerOpen && _selectedIndex == AppTab.receive.index

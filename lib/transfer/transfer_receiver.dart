@@ -13,6 +13,7 @@ import '../src/rust/api/wormhole.dart';
 import '../navigation/navigation.dart';
 import '../pages/connecting_page.dart';
 import '../pages/toasts/error_toast.dart';
+import '../pages/toasts/info_toast.dart';
 import '../pages/transfer_widgets/transfer_finished.dart';
 import '../pages/transfer_widgets/receive_saf_finalize.dart';
 import '../settings/settings.dart';
@@ -20,18 +21,29 @@ import '../utils/paths.dart';
 import '../utils/saf.dart';
 import '../utils/logger.dart';
 import '../utils/code.dart';
+import 'send_target.dart';
 import 'transfer_provider.dart';
 import 'demo_transfer.dart';
 
 class TransferReceiver extends StatefulWidget {
   const TransferReceiver(
-      {super.key, required this.child, required this.pushPage});
+      {super.key,
+      required this.child,
+      required this.pushPage,
+      required this.showTab,
+      required this.isTransferRunning});
 
   final Widget child;
 
   /// Switches to the given tab and pushes the page onto its navigator.
   /// Provided by [Navigation], which owns the per-tab navigators.
   final void Function(AppTab tab, Widget page) pushPage;
+
+  /// Switches to the given tab and returns it to its root page.
+  final void Function(AppTab tab) showTab;
+
+  /// Whether a transfer that can still be cancelled runs on the given tab.
+  final bool Function(AppTab tab) isTransferRunning;
 
   @override
   State<TransferReceiver> createState() => _TransferReceiverState();
@@ -204,6 +216,21 @@ class _TransferReceiverState extends State<TransferReceiver> {
     }
   }
 
+  /// A receiver showed its code for us to send to: open the send page with
+  /// the code set, unless a send is still running there.
+  void _setSendTarget(String code) {
+    if (!mounted) return;
+    if (widget.isTransferRunning(AppTab.send)) {
+      InfoToast(
+              message:
+                  AppLocalizations.of(context)!.toast_info_transfer_running)
+          .show(context);
+      return;
+    }
+    widget.showTab(AppTab.send);
+    Provider.of<SendTarget>(context, listen: false).code = code;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -229,6 +256,8 @@ class _TransferReceiverState extends State<TransferReceiver> {
     provider.addOnReceiveListener((passphrase) {
       _receiveFile(passphrase);
     });
+
+    provider.addOnSendTargetListener(_setSendTarget);
   }
 
   @override
@@ -261,12 +290,16 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
   void registerIntentReceiveHandler() {
     AppLinks().uriLinkStream.listen((uri) {
-      final passphrase = passphraseFromTransferUri(uri);
-      if (passphrase == null) {
+      final transferUri = parseTransferUri(uri);
+      if (transferUri == null) {
         AppLogger.debug('Ignoring non-transfer URI scheme: ${uri.scheme}');
         return;
       }
-      _receiveFile(passphrase);
+      if (transferUri.isLeader) {
+        _setSendTarget(transferUri.code);
+      } else {
+        _receiveFile(transferUri.code);
+      }
     });
   }
 

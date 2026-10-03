@@ -15,17 +15,6 @@ bool isCodeValid(String code) {
   return _regex.hasMatch(code);
 }
 
-/// Extract a valid receive code from a Wormhole transfer deep link.
-///
-/// Other URL schemes are used internally on iOS (for example, the share
-/// extension's `ShareMedia-…` handoff) and must not enter the receive flow.
-String? passphraseFromTransferUri(Uri uri) {
-  if (uri.scheme != 'wormhole-transfer' || !isCodeValid(uri.path)) {
-    return null;
-  }
-  return uri.path;
-}
-
 /// A `wormhole-transfer:` link: with `isLeader` (`role=leader`) whoever reads
 /// it sends to `code`, otherwise they receive from it.
 typedef TransferUri = ({String code, bool isLeader});

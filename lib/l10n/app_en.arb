@@ -99,5 +99,6 @@
 
   "toast_error_qr_fail" : "Failed to Scan QR Code",
   "toast_error_qr_invalid" : "Scanned QR Code Invalid",
-  "toast_info_passphrase_copy" : "Passphrase copied to clipboard"
+  "toast_info_passphrase_copy" : "Passphrase copied to clipboard",
+  "toast_info_transfer_running" : "Finish or cancel the current transfer first"
 }
