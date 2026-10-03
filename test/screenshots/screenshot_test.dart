@@ -28,7 +28,9 @@ import 'package:wormhole/transfer/transfer_provider.dart';
 class _MockRustLibApi implements RustLibApi {
   @override
   Future<String> crateApiWormholeGetPassphraseUri(
-          {required String passphrase, String? rendezvousServer}) =>
+          {required String passphrase,
+          String? rendezvousServer,
+          required bool isLeader}) =>
       Future.value('wormhole-transfer:$passphrase');
 
   @override
@@ -70,7 +72,8 @@ class _MockRustLibApi implements RustLibApi {
       throw UnimplementedError();
   @override
   Stream<TUpdate> crateApiWormholeRequestFile(
-          {required String passphrase,
+          {String? passphrase,
+          required int codeLength,
           required String storageFolder,
           required ServerConfig serverConfig,
           required CancelToken cancel}) =>

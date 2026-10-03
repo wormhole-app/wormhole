@@ -1,10 +1,10 @@
 use crate::api::{CancelToken, ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use crate::wormhole::handler::{gen_progress_handler, gen_transit_handler};
-use crate::wormhole::helpers::{gen_app_config, gen_relay_hints, parse_code};
+use crate::wormhole::helpers::{gen_app_config, gen_relay_hints, open_mailbox, parse_code};
 use crate::wormhole::zip::create_zip_file;
 use magic_wormhole::transfer::TransferError;
-use magic_wormhole::{MailboxConnection, Wormhole, transfer, transit};
+use magic_wormhole::{Wormhole, transfer, transit};
 use std::collections::HashMap;
 use std::fs::remove_file;
 use std::rc::Rc;
@@ -87,19 +87,10 @@ pub async fn send_file_impl(
 
     // the connection phase has no cancel handler of its own, so drop the
     // connection futures on cancel
-    let connection = match code {
-        Some(code) => {
-            cancel
-                .guard(MailboxConnection::connect(appconfig, code, true))
-                .await
-        }
-        None => {
-            cancel
-                .guard(MailboxConnection::create(appconfig, code_length as usize))
-                .await
-        }
-    };
-    let connection = match connection {
+    let connection = match cancel
+        .guard(open_mailbox(appconfig, code, code_length))
+        .await
+    {
         None => return,
         Some(Ok(v)) => v,
         Some(Err(e)) => {

@@ -95,6 +95,15 @@ class _ReceivePageState extends State<ReceivePage> {
                 onClick: _onReceiveButtonClick,
                 text: AppLocalizations.of(context)!.receive_page_button,
                 icon: Icons.archive),
+            const SizedBox(
+              height: 15,
+            ),
+            IconTextButton(
+                onClick: _onOwnCodeButtonClick,
+                text:
+                    AppLocalizations.of(context)!.receive_page_own_code_button,
+                icon: Icons.qr_code_2,
+                outlined: true),
           ],
         ),
       ),
@@ -112,5 +121,10 @@ class _ReceivePageState extends State<ReceivePage> {
     }
 
     Provider.of<TransferProvider>(context, listen: false).receiveFile(text);
+  }
+
+  /// Make a code for the sender to send to.
+  void _onOwnCodeButtonClick() {
+    Provider.of<TransferProvider>(context, listen: false).receiveWithOwnCode();
   }
 }

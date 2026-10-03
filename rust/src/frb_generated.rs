@@ -246,12 +246,14 @@ fn wire__crate__api__wormhole__get_passphrase_uri_impl(
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             let api_passphrase = <String>::sse_decode(&mut deserializer);
             let api_rendezvous_server = <Option<String>>::sse_decode(&mut deserializer);
+            let api_is_leader = <bool>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(crate::api::wormhole::get_passphrase_uri(
                         api_passphrase,
                         api_rendezvous_server,
+                        api_is_leader,
                     ))?;
                     Ok(output_ok)
                 })())
@@ -316,7 +318,8 @@ fn wire__crate__api__wormhole__request_file_impl(
             };
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_passphrase = <String>::sse_decode(&mut deserializer);
+            let api_passphrase = <Option<String>>::sse_decode(&mut deserializer);
+            let api_code_length = <u8>::sse_decode(&mut deserializer);
             let api_storage_folder = <String>::sse_decode(&mut deserializer);
             let api_server_config =
                 <crate::api::wormhole::ServerConfig>::sse_decode(&mut deserializer);
@@ -349,6 +352,7 @@ fn wire__crate__api__wormhole__request_file_impl(
                     let output_ok = Result::<_, ()>::Ok({
                         crate::api::wormhole::request_file(
                             api_passphrase,
+                            api_code_length,
                             api_storage_folder,
                             api_server_config,
                             &*api_cancel_guard,

@@ -60,21 +60,29 @@ Stream<TUpdate> sendFolder(
         serverConfig: serverConfig,
         cancel: cancel);
 
+/// `passphrase`: the sender's code; `None` makes a new one for the sender to send to
 Stream<TUpdate> requestFile(
-        {required String passphrase,
+        {String? passphrase,
+        required int codeLength,
         required String storageFolder,
         required ServerConfig serverConfig,
         required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeRequestFile(
         passphrase: passphrase,
+        codeLength: codeLength,
         storageFolder: storageFolder,
         serverConfig: serverConfig,
         cancel: cancel);
 
+/// `is_leader`: the code was made by the receiver, so whoever reads the link sends
 Future<String> getPassphraseUri(
-        {required String passphrase, String? rendezvousServer}) =>
+        {required String passphrase,
+        String? rendezvousServer,
+        required bool isLeader}) =>
     RustLib.instance.api.crateApiWormholeGetPassphraseUri(
-        passphrase: passphrase, rendezvousServer: rendezvousServer);
+        passphrase: passphrase,
+        rendezvousServer: rendezvousServer,
+        isLeader: isLeader);
 
 Future<BuildInfo> getBuildInfo() =>
     RustLib.instance.api.crateApiWormholeGetBuildInfo();

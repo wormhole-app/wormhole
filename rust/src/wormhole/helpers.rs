@@ -1,6 +1,6 @@
 use crate::api::ServerConfig;
 use magic_wormhole::transfer::{APPID, AppVersion};
-use magic_wormhole::{AppConfig, Code, transit};
+use magic_wormhole::{AppConfig, Code, MailboxConnection, WormholeError, transit};
 use std::borrow::Cow;
 use std::str::FromStr as _;
 
@@ -123,6 +123,18 @@ pub fn gen_app_config(s_conf: &ServerConfig) -> AppConfig<AppVersion> {
 /// parse a code typed by the user or made by the other side
 pub fn parse_code(passphrase: &str) -> Result<Code, String> {
     Code::from_str(passphrase).map_err(|error| error.to_string())
+}
+
+/// join the mailbox of a code made by the other side, or make a new code
+pub async fn open_mailbox(
+    appconfig: AppConfig<AppVersion>,
+    code: Option<Code>,
+    code_length: u8,
+) -> Result<MailboxConnection<AppVersion>, WormholeError> {
+    match code {
+        Some(code) => MailboxConnection::connect(appconfig, code, true).await,
+        None => MailboxConnection::create(appconfig, code_length as usize).await,
+    }
 }
 
 #[cfg(test)]

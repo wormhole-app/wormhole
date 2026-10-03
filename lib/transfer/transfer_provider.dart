@@ -6,7 +6,7 @@ class TransferProvider with ChangeNotifier {
   final List<Function(String name, String path, String? code)>
       _sendFolderHandlers = [];
   final List<void Function(String text, String? code)> _sendTextHandlers = [];
-  final List<void Function(String passphrase)> _receiveHandlers = [];
+  final List<void Function(String? passphrase)> _receiveHandlers = [];
   final List<void Function(String code)> _sendTargetHandlers = [];
 
   TransferProvider();
@@ -26,7 +26,7 @@ class TransferProvider with ChangeNotifier {
     _sendTextHandlers.add(listener);
   }
 
-  void addOnReceiveListener(void Function(String passphrase) listener) {
+  void addOnReceiveListener(void Function(String? passphrase) listener) {
     _receiveHandlers.add(listener);
   }
 
@@ -58,6 +58,13 @@ class TransferProvider with ChangeNotifier {
   void receiveFile(String passphrase) {
     for (final h in _receiveHandlers) {
       h(passphrase);
+    }
+  }
+
+  /// Receive with a new code of ours, for the sender to send to.
+  void receiveWithOwnCode() {
+    for (final h in _receiveHandlers) {
+      h(null);
     }
   }
 

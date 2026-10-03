@@ -141,7 +141,8 @@ class _TransferReceiverState extends State<TransferReceiver> {
     return serverConfig;
   }
 
-  void _receiveFile(String passphrase) async {
+  /// [passphrase]: the sender's code; null makes a new one for the sender.
+  void _receiveFile(String? passphrase) async {
     final askForFolder = await Settings.getAskForFolder();
 
     // On Android, scoped storage blocks raw writes into a user-picked folder.
@@ -166,7 +167,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
     }
 
     // Check if this is a demo code for App Store review
-    if (isDemoCode(passphrase)) {
+    if (passphrase != null && isDemoCode(passphrase)) {
       // Use demo transfer stream instead of real wormhole connection
       final s = generateDemoReceiveStream(dpath);
       if (!mounted) return;
@@ -187,9 +188,12 @@ class _TransferReceiverState extends State<TransferReceiver> {
         (Platform.isAndroid &&
             (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33) ||
         await Permission.storage.request().isGranted) {
+      final codeLength =
+          (await Settings.getWordLength()) ?? Defaults.wordlength;
       final cancelToken = CancelToken();
       final s = requestFile(
           passphrase: passphrase,
+          codeLength: codeLength,
           storageFolder: dpath,
           serverConfig: await _getServerConfig(),
           cancel: cancelToken);
@@ -205,6 +209,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
               ? ReceiveFinished(file: file)
               : ReceiveSafFinalize(tempPath: file, treeUri: safTreeUri),
           onCancel: cancelToken.cancel,
+          isReceiver: passphrase == null,
         ),
       );
     } else {
