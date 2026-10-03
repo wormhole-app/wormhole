@@ -79,6 +79,7 @@ class _MockRustLibApi implements RustLibApi {
           {required List<String> filePaths,
           required String name,
           required int codeLength,
+          String? code,
           required ServerConfig serverConfig,
           required CancelToken cancel}) =>
       throw UnimplementedError();
@@ -87,6 +88,7 @@ class _MockRustLibApi implements RustLibApi {
           {required String folderPath,
           required String name,
           required int codeLength,
+          String? code,
           required ServerConfig serverConfig,
           required CancelToken cancel}) =>
       throw UnimplementedError();

@@ -386,6 +386,7 @@ fn wire__crate__api__wormhole__send_files_impl(
             let api_file_paths = <Vec<String>>::sse_decode(&mut deserializer);
             let api_name = <String>::sse_decode(&mut deserializer);
             let api_code_length = <u8>::sse_decode(&mut deserializer);
+            let api_code = <Option<String>>::sse_decode(&mut deserializer);
             let api_server_config =
                 <crate::api::wormhole::ServerConfig>::sse_decode(&mut deserializer);
             let api_cancel = <RustOpaqueMoi<
@@ -419,6 +420,7 @@ fn wire__crate__api__wormhole__send_files_impl(
                             api_file_paths,
                             api_name,
                             api_code_length,
+                            api_code,
                             api_server_config,
                             &*api_cancel_guard,
                             api_actions,
@@ -455,6 +457,7 @@ fn wire__crate__api__wormhole__send_folder_impl(
             let api_folder_path = <String>::sse_decode(&mut deserializer);
             let api_name = <String>::sse_decode(&mut deserializer);
             let api_code_length = <u8>::sse_decode(&mut deserializer);
+            let api_code = <Option<String>>::sse_decode(&mut deserializer);
             let api_server_config =
                 <crate::api::wormhole::ServerConfig>::sse_decode(&mut deserializer);
             let api_cancel = <RustOpaqueMoi<
@@ -488,6 +491,7 @@ fn wire__crate__api__wormhole__send_folder_impl(
                             api_folder_path,
                             api_name,
                             api_code_length,
+                            api_code,
                             api_server_config,
                             &*api_cancel_guard,
                             api_actions,

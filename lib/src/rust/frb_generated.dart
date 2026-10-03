@@ -110,6 +110,7 @@ abstract class RustLibApi extends BaseApi {
       {required List<String> filePaths,
       required String name,
       required int codeLength,
+      String? code,
       required ServerConfig serverConfig,
       required CancelToken cancel});
 
@@ -117,6 +118,7 @@ abstract class RustLibApi extends BaseApi {
       {required String folderPath,
       required String name,
       required int codeLength,
+      String? code,
       required ServerConfig serverConfig,
       required CancelToken cancel});
 
@@ -358,6 +360,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       {required List<String> filePaths,
       required String name,
       required int codeLength,
+      String? code,
       required ServerConfig serverConfig,
       required CancelToken cancel}) {
     final actions = RustStreamSink<TUpdate>();
@@ -367,6 +370,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_list_String(filePaths, serializer);
         sse_encode_String(name, serializer);
         sse_encode_u_8(codeLength, serializer);
+        sse_encode_opt_String(code, serializer);
         sse_encode_box_autoadd_server_config(serverConfig, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
             cancel, serializer);
@@ -379,7 +383,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: null,
       ),
       constMeta: kCrateApiWormholeSendFilesConstMeta,
-      argValues: [filePaths, name, codeLength, serverConfig, cancel, actions],
+      argValues: [
+        filePaths,
+        name,
+        codeLength,
+        code,
+        serverConfig,
+        cancel,
+        actions
+      ],
       apiImpl: this,
     )));
     return actions.stream;
@@ -391,6 +403,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           'filePaths',
           'name',
           'codeLength',
+          'code',
           'serverConfig',
           'cancel',
           'actions'
@@ -402,6 +415,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       {required String folderPath,
       required String name,
       required int codeLength,
+      String? code,
       required ServerConfig serverConfig,
       required CancelToken cancel}) {
     final actions = RustStreamSink<TUpdate>();
@@ -411,6 +425,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(folderPath, serializer);
         sse_encode_String(name, serializer);
         sse_encode_u_8(codeLength, serializer);
+        sse_encode_opt_String(code, serializer);
         sse_encode_box_autoadd_server_config(serverConfig, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCancelToken(
             cancel, serializer);
@@ -423,7 +438,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: null,
       ),
       constMeta: kCrateApiWormholeSendFolderConstMeta,
-      argValues: [folderPath, name, codeLength, serverConfig, cancel, actions],
+      argValues: [
+        folderPath,
+        name,
+        codeLength,
+        code,
+        serverConfig,
+        cancel,
+        actions
+      ],
       apiImpl: this,
     )));
     return actions.stream;
@@ -435,6 +458,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           'folderPath',
           'name',
           'codeLength',
+          'code',
           'serverConfig',
           'cancel',
           'actions'

@@ -1,7 +1,7 @@
 use crate::api::{CancelToken, ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use crate::wormhole::handler::{gen_progress_handler, gen_transit_handler};
-use crate::wormhole::helpers::{gen_app_config, gen_relay_hints};
+use crate::wormhole::helpers::{gen_app_config, gen_relay_hints, parse_code};
 use crate::wormhole::zip::create_zip_file;
 use magic_wormhole::transfer::TransferError;
 use magic_wormhole::{MailboxConnection, Wormhole, transfer, transit};
@@ -9,10 +9,12 @@ use std::collections::HashMap;
 use std::fs::remove_file;
 use std::rc::Rc;
 
+#[allow(clippy::too_many_arguments)]
 pub async fn send_files_impl(
     name: String,
     files: HashMap<String, String>,
     code_length: u8,
+    code: Option<String>,
     temp_file_path: String,
     server_config: ServerConfig,
     actions: Rc<StreamSink<TUpdate>>,
@@ -35,6 +37,7 @@ pub async fn send_files_impl(
         format!("{}.zip", name),
         temp_file.clone(),
         code_length,
+        code,
         server_config,
         actions,
         cancel,
@@ -49,6 +52,7 @@ pub async fn send_file_impl(
     file_name: String,
     file_path: String,
     code_length: u8,
+    code: Option<String>,
     server_config: ServerConfig,
     actions: Rc<StreamSink<TUpdate>>,
     cancel: &CancelToken,
@@ -68,12 +72,34 @@ pub async fn send_file_impl(
     };
     let appconfig = gen_app_config(&server_config);
 
+    // a code made by the receiver: join its mailbox instead of allocating one
+    let code = match code.as_deref().map(parse_code).transpose() {
+        Ok(v) => v,
+        Err(e) => {
+            _ = actions.add(TUpdate::new(
+                Events::Error,
+                Value::ErrorValue(ErrorType::ConnectionError, e),
+            ));
+            return;
+        }
+    };
+    let own_code = code.is_none();
+
     // the connection phase has no cancel handler of its own, so drop the
     // connection futures on cancel
-    let connection = match cancel
-        .guard(MailboxConnection::create(appconfig, code_length as usize))
-        .await
-    {
+    let connection = match code {
+        Some(code) => {
+            cancel
+                .guard(MailboxConnection::connect(appconfig, code, true))
+                .await
+        }
+        None => {
+            cancel
+                .guard(MailboxConnection::create(appconfig, code_length as usize))
+                .await
+        }
+    };
+    let connection = match connection {
         None => return,
         Some(Ok(v)) => v,
         Some(Err(e)) => {
@@ -85,10 +111,13 @@ pub async fn send_file_impl(
         }
     };
 
-    _ = actions.add(TUpdate::new(
-        Events::Code,
-        Value::String(connection.code().to_string()),
-    ));
+    // the receiver already knows its own code
+    if own_code {
+        _ = actions.add(TUpdate::new(
+            Events::Code,
+            Value::String(connection.code().to_string()),
+        ));
+    }
 
     let wormhole = match cancel.guard(Wormhole::connect(connection)).await {
         None => return,

@@ -1,7 +1,8 @@
 use crate::api::ServerConfig;
 use magic_wormhole::transfer::{APPID, AppVersion};
-use magic_wormhole::{AppConfig, transit};
+use magic_wormhole::{AppConfig, Code, transit};
 use std::borrow::Cow;
+use std::str::FromStr as _;
 
 /// Character used to replace illegal characters in filenames
 const REPLACEMENT_CHAR: char = '_';
@@ -116,5 +117,41 @@ pub fn gen_app_config(s_conf: &ServerConfig) -> AppConfig<AppVersion> {
         id: APPID,
         rendezvous_url: Cow::from(s_conf.rendezvous_url.clone()),
         app_version: AppVersion::default(),
+    }
+}
+
+/// parse a code typed by the user or made by the other side
+pub fn parse_code(passphrase: &str) -> Result<Code, String> {
+    Code::from_str(passphrase).map_err(|error| error.to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::parse_code;
+
+    #[test]
+    fn parses_a_valid_code() {
+        assert_eq!(
+            parse_code("7-guitarist-revenge").map(|code| code.to_string()),
+            Ok("7-guitarist-revenge".to_string())
+        );
+    }
+
+    #[test]
+    fn rejects_a_missing_nameplate() {
+        assert!(parse_code("guitarist-revenge").is_err());
+        assert!(parse_code("0-guitarist-revenge").is_err());
+    }
+
+    #[test]
+    fn rejects_a_short_password() {
+        // passes the app's isCodeValid regex, but not the library
+        assert!(parse_code("7-abc").is_err());
+    }
+
+    #[test]
+    fn rejects_an_empty_code() {
+        assert!(parse_code("").is_err());
+        assert!(parse_code("7").is_err());
     }
 }

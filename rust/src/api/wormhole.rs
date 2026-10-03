@@ -90,10 +90,12 @@ impl CancelToken {
     }
 }
 
+/// `code`: a code made by the receiver to send to; `None` makes a new one
 pub fn send_files(
     file_paths: Vec<String>,
     name: String,
     code_length: u8,
+    code: Option<String>,
     server_config: ServerConfig,
     cancel: &CancelToken,
     actions: StreamSink<TUpdate>,
@@ -116,6 +118,7 @@ pub fn send_files(
                     name,
                     file_paths[0].to_string(),
                     code_length,
+                    code,
                     server_config,
                     actions,
                     cancel,
@@ -152,6 +155,7 @@ pub fn send_files(
                     name,
                     files,
                     code_length,
+                    code,
                     temp_dir,
                     server_config,
                     actions,
@@ -163,10 +167,12 @@ pub fn send_files(
     }
 }
 
+/// `code`: a code made by the receiver to send to; `None` makes a new one
 pub fn send_folder(
     folder_path: String,
     name: String,
     code_length: u8,
+    code: Option<String>,
     server_config: ServerConfig,
     cancel: &CancelToken,
     actions: StreamSink<TUpdate>,
@@ -195,6 +201,7 @@ pub fn send_folder(
             name,
             files,
             code_length,
+            code,
             temp_dir,
             server_config,
             Rc::new(actions),

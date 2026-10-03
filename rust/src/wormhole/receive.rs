@@ -1,17 +1,12 @@
 use crate::api::{CancelToken, ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use crate::wormhole::handler::{gen_progress_handler, gen_transit_handler};
-use crate::wormhole::helpers::{gen_app_config, gen_relay_hints, sanitize_filename};
+use crate::wormhole::helpers::{gen_app_config, gen_relay_hints, parse_code, sanitize_filename};
 use crate::wormhole::path::find_free_filepath;
 use async_std::fs::{OpenOptions, remove_file};
-use magic_wormhole::{Code, MailboxConnection, Wormhole, transfer, transit};
+use magic_wormhole::{MailboxConnection, Wormhole, transfer, transit};
 use std::path::Path;
 use std::rc::Rc;
-use std::str::FromStr as _;
-
-fn parse_code(passphrase: &str) -> Result<Code, String> {
-    Code::from_str(passphrase).map_err(|error| error.to_string())
-}
 
 pub async fn request_file_impl(
     passphrase: String,

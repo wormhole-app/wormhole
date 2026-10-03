@@ -28,29 +28,35 @@ Stream<LogEntry> setupLogStream() =>
 Future<void> init({required String tempFilePath}) =>
     RustLib.instance.api.crateApiWormholeInit(tempFilePath: tempFilePath);
 
+/// `code`: a code made by the receiver to send to; `None` makes a new one
 Stream<TUpdate> sendFiles(
         {required List<String> filePaths,
         required String name,
         required int codeLength,
+        String? code,
         required ServerConfig serverConfig,
         required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeSendFiles(
         filePaths: filePaths,
         name: name,
         codeLength: codeLength,
+        code: code,
         serverConfig: serverConfig,
         cancel: cancel);
 
+/// `code`: a code made by the receiver to send to; `None` makes a new one
 Stream<TUpdate> sendFolder(
         {required String folderPath,
         required String name,
         required int codeLength,
+        String? code,
         required ServerConfig serverConfig,
         required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeSendFolder(
         folderPath: folderPath,
         name: name,
         codeLength: codeLength,
+        code: code,
         serverConfig: serverConfig,
         cancel: cancel);
 
