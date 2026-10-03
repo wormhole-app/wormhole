@@ -22,6 +22,7 @@ import 'package:wormhole/src/rust/frb_generated.dart';
 import 'package:wormhole/theme/dark_theme.dart';
 import 'package:wormhole/theme/light_theme.dart';
 import 'package:wormhole/theme/theme_provider.dart';
+import 'package:wormhole/transfer/send_target.dart';
 import 'package:wormhole/transfer/transfer_provider.dart';
 
 class _MockRustLibApi implements RustLibApi {
@@ -279,6 +280,7 @@ Widget _buildApp(ScreenshotDevice device, Widget page, Brightness brightness,
         ),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => TransferProvider()),
+        ChangeNotifierProvider(create: (_) => SendTarget()),
       ],
       child: _AppShell(page: page),
     ),

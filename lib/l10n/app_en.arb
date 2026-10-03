@@ -12,6 +12,18 @@
   "send_page_more_button" : "More Options",
   "send_page_text_hint" : "Enter text to send",
   "send_page_text_send" : "Send",
+  "send_page_code_button" : "Send to a Code",
+  "send_page_code_hint" : "Receiver's code",
+  "send_page_code_set" : "Continue",
+  "send_page_target_label" : "Sending to {code}",
+  "@send_page_target_label" : {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "send_page_target_clear" : "Don't send to this code",
 
   "receive_page_label" : "Receive File",
   "receive_page_sublabel" : "Enter the transmit code from the sender",
