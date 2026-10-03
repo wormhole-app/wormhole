@@ -73,7 +73,8 @@ class _TransferReceiverState extends State<TransferReceiver> {
     }
   }
 
-  void _sendFolder(String name, String path, bool causedByIntent) async {
+  void _sendFolder(String name, String path, bool causedByIntent,
+      {String? code}) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
 
     final cancelToken = CancelToken();
@@ -81,19 +82,21 @@ class _TransferReceiverState extends State<TransferReceiver> {
         folderPath: path,
         name: name,
         codeLength: codeLength,
+        code: code,
         serverConfig: await _getServerConfig(),
         cancel: cancelToken);
     _showConnectionPage(stream, cancelToken, causedByIntent);
   }
 
-  void _sendFiles(
-      String name, List<String> filepaths, bool causedByIntent) async {
+  void _sendFiles(String name, List<String> filepaths, bool causedByIntent,
+      {String? code}) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
     final cancelToken = CancelToken();
     final stream = sendFiles(
         name: name,
         filePaths: filepaths,
         codeLength: codeLength,
+        code: code,
         serverConfig: await _getServerConfig(),
         cancel: cancelToken);
 
@@ -211,16 +214,16 @@ class _TransferReceiverState extends State<TransferReceiver> {
       clearReceiveTempDir();
     }
 
-    provider.addOnSendListener((name, path) {
-      _sendFiles(name, path, false);
+    provider.addOnSendListener((name, path, code) {
+      _sendFiles(name, path, false, code: code);
     });
 
-    provider.addOnSendFolderListener((name, path) {
-      _sendFolder(name, path, false);
+    provider.addOnSendFolderListener((name, path, code) {
+      _sendFolder(name, path, false, code: code);
     });
 
-    provider.addOnSendTextListener((text) {
-      _sendText(text);
+    provider.addOnSendTextListener((text, code) {
+      _sendText(text, code: code);
     });
 
     provider.addOnReceiveListener((passphrase) {
@@ -267,12 +270,13 @@ class _TransferReceiverState extends State<TransferReceiver> {
     });
   }
 
-  void _sendText(String text, {bool causedByIntent = false}) async {
+  void _sendText(String text,
+      {bool causedByIntent = false, String? code}) async {
     final tempDir = await getTemporaryDirectory();
     final tempFile = File('${tempDir.path}/message.txt');
     await tempFile.writeAsString(text);
     AppLogger.info('Sending text (${text.length} chars)');
-    _sendFiles('message.txt', [tempFile.path], causedByIntent);
+    _sendFiles('message.txt', [tempFile.path], causedByIntent, code: code);
   }
 
   void _sendIntentFile(List<SharedAttachment?> attachments) async {
