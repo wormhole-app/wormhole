@@ -16,9 +16,12 @@ import '../type_helpers.dart';
 import 'transfer_connecting.dart';
 
 class TransferCode extends StatefulWidget {
-  const TransferCode({super.key, required this.data});
+  const TransferCode({super.key, required this.data, this.isReceiver = false});
 
   final TUpdate data;
+
+  /// The code is ours as the receiver: the sender sends to it.
+  final bool isReceiver;
 
   @override
   State<TransferCode> createState() => _TransferCodeState();
@@ -46,7 +49,9 @@ class _TransferCodeState extends State<TransferCode> {
                   height: 30,
                 )
               ],
-              Text(AppLocalizations.of(context)!.transfer_code_label),
+              Text(widget.isReceiver
+                  ? AppLocalizations.of(context)!.transfer_code_label_receiver
+                  : AppLocalizations.of(context)!.transfer_code_label),
               SelectableText(
                 widget.data.getValue(),
                 style: theme.textTheme.titleLarge,
@@ -104,7 +109,8 @@ class _TransferCodeState extends State<TransferCode> {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return FastFutureBuilder<String>(
-        future: getPassphraseUri(passphrase: widget.data.getValue()),
+        future: getPassphraseUri(
+            passphrase: widget.data.getValue(), isLeader: widget.isReceiver),
         onData: (data) {
           if (themeProvider.isDarkThemeActive()) {
             return Container(
@@ -139,7 +145,9 @@ class _TransferCodeState extends State<TransferCode> {
   }
 
   void _showHelpDialog() {
-    final text = AppLocalizations.of(context)!.transfer_code_help;
+    final text = widget.isReceiver
+        ? AppLocalizations.of(context)!.transfer_code_help_receiver
+        : AppLocalizations.of(context)!.transfer_code_help;
     final textParts = text.split('<link>');
     final theme = Theme.of(context);
 
@@ -158,18 +166,21 @@ class _TransferCodeState extends State<TransferCode> {
                   TextSpan(
                       text: textParts.first,
                       style: Theme.of(context).textTheme.bodyMedium),
-                  TextSpan(
-                    text: 'Warp',
-                    style: const TextStyle(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        launchUrl(
-                            Uri.parse(
-                                'https://apps.gnome.org/app/app.drey.Warp/'),
-                            mode: LaunchMode.externalApplication);
-                      },
-                  ),
-                  TextSpan(text: textParts.last)
+                  // the receiver's help names no app to link
+                  if (textParts.length > 1) ...[
+                    TextSpan(
+                      text: 'Warp',
+                      style: const TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(
+                              Uri.parse(
+                                  'https://apps.gnome.org/app/app.drey.Warp/'),
+                              mode: LaunchMode.externalApplication);
+                        },
+                    ),
+                    TextSpan(text: textParts.last)
+                  ],
                 ],
               ),
             ),

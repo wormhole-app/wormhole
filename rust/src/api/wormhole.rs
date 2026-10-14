@@ -90,10 +90,12 @@ impl CancelToken {
     }
 }
 
+/// `code`: a code made by the receiver to send to; `None` makes a new one
 pub fn send_files(
     file_paths: Vec<String>,
     name: String,
     code_length: u8,
+    code: Option<String>,
     server_config: ServerConfig,
     cancel: &CancelToken,
     actions: StreamSink<TUpdate>,
@@ -116,6 +118,7 @@ pub fn send_files(
                     name,
                     file_paths[0].to_string(),
                     code_length,
+                    code,
                     server_config,
                     actions,
                     cancel,
@@ -152,6 +155,7 @@ pub fn send_files(
                     name,
                     files,
                     code_length,
+                    code,
                     temp_dir,
                     server_config,
                     actions,
@@ -163,10 +167,12 @@ pub fn send_files(
     }
 }
 
+/// `code`: a code made by the receiver to send to; `None` makes a new one
 pub fn send_folder(
     folder_path: String,
     name: String,
     code_length: u8,
+    code: Option<String>,
     server_config: ServerConfig,
     cancel: &CancelToken,
     actions: StreamSink<TUpdate>,
@@ -195,6 +201,7 @@ pub fn send_folder(
             name,
             files,
             code_length,
+            code,
             temp_dir,
             server_config,
             Rc::new(actions),
@@ -204,25 +211,40 @@ pub fn send_folder(
     });
 }
 
+/// `passphrase`: the sender's code; `None` makes a new one for the sender to send to
 pub fn request_file(
-    passphrase: String,
+    passphrase: Option<String>,
+    code_length: u8,
     storage_folder: String,
     server_config: ServerConfig,
     cancel: &CancelToken,
     actions: StreamSink<TUpdate>,
 ) {
     block_on(async {
-        request_file_impl(passphrase, storage_folder, server_config, actions, cancel).await;
+        request_file_impl(
+            passphrase,
+            code_length,
+            storage_folder,
+            server_config,
+            actions,
+            cancel,
+        )
+        .await;
     });
 }
 
-pub fn get_passphrase_uri(passphrase: String, rendezvous_server: Option<String>) -> String {
+/// `is_leader`: the code was made by the receiver, so whoever reads the link sends
+pub fn get_passphrase_uri(
+    passphrase: String,
+    rendezvous_server: Option<String>,
+    is_leader: bool,
+) -> String {
     let url = rendezvous_server.and_then(|a| url::Url::parse(a.as_str()).ok());
 
     magic_wormhole::uri::WormholeTransferUri {
         code: Code::from_str(&passphrase).unwrap(),
         rendezvous_server: url,
-        is_leader: false,
+        is_leader,
     }
     .to_string()
 }
@@ -237,4 +259,25 @@ pub fn default_rendezvous_url() -> String {
 
 pub fn default_transit_url() -> String {
     transit::DEFAULT_RELAY_SERVER.to_string()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn passphrase_uri_of_a_sender_code_has_no_role() {
+        assert_eq!(
+            get_passphrase_uri("7-guitarist-revenge".to_string(), None, false),
+            "wormhole-transfer:7-guitarist-revenge"
+        );
+    }
+
+    #[test]
+    fn passphrase_uri_of_a_receiver_code_asks_the_reader_to_send() {
+        assert_eq!(
+            get_passphrase_uri("7-guitarist-revenge".to_string(), None, true),
+            "wormhole-transfer:7-guitarist-revenge?role=leader"
+        );
+    }
 }

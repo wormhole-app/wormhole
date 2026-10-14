@@ -28,47 +28,61 @@ Stream<LogEntry> setupLogStream() =>
 Future<void> init({required String tempFilePath}) =>
     RustLib.instance.api.crateApiWormholeInit(tempFilePath: tempFilePath);
 
+/// `code`: a code made by the receiver to send to; `None` makes a new one
 Stream<TUpdate> sendFiles(
         {required List<String> filePaths,
         required String name,
         required int codeLength,
+        String? code,
         required ServerConfig serverConfig,
         required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeSendFiles(
         filePaths: filePaths,
         name: name,
         codeLength: codeLength,
+        code: code,
         serverConfig: serverConfig,
         cancel: cancel);
 
+/// `code`: a code made by the receiver to send to; `None` makes a new one
 Stream<TUpdate> sendFolder(
         {required String folderPath,
         required String name,
         required int codeLength,
+        String? code,
         required ServerConfig serverConfig,
         required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeSendFolder(
         folderPath: folderPath,
         name: name,
         codeLength: codeLength,
+        code: code,
         serverConfig: serverConfig,
         cancel: cancel);
 
+/// `passphrase`: the sender's code; `None` makes a new one for the sender to send to
 Stream<TUpdate> requestFile(
-        {required String passphrase,
+        {String? passphrase,
+        required int codeLength,
         required String storageFolder,
         required ServerConfig serverConfig,
         required CancelToken cancel}) =>
     RustLib.instance.api.crateApiWormholeRequestFile(
         passphrase: passphrase,
+        codeLength: codeLength,
         storageFolder: storageFolder,
         serverConfig: serverConfig,
         cancel: cancel);
 
+/// `is_leader`: the code was made by the receiver, so whoever reads the link sends
 Future<String> getPassphraseUri(
-        {required String passphrase, String? rendezvousServer}) =>
+        {required String passphrase,
+        String? rendezvousServer,
+        required bool isLeader}) =>
     RustLib.instance.api.crateApiWormholeGetPassphraseUri(
-        passphrase: passphrase, rendezvousServer: rendezvousServer);
+        passphrase: passphrase,
+        rendezvousServer: rendezvousServer,
+        isLeader: isLeader);
 
 Future<BuildInfo> getBuildInfo() =>
     RustLib.instance.api.crateApiWormholeGetBuildInfo();

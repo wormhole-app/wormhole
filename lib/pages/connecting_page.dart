@@ -24,10 +24,14 @@ class ConnectingPage extends StatefulWidget {
     required this.stream,
     required this.finish,
     this.onCancel,
+    this.isReceiver = false,
   });
 
   final Stream<TUpdate> stream;
   final Widget Function(String file) finish;
+
+  /// A receive with our own code: its code is for the sender to send to.
+  final bool isReceiver;
 
   /// Aborts the running transfer. When set, the app bar shows a cancel
   /// button and the back gesture asks to cancel instead of being blocked.
@@ -142,6 +146,7 @@ class _ConnectingPageState extends State<ConnectingPage> {
       case Events.code:
         return _guardIfCancellable(TransferCode(
           data: event,
+          isReceiver: widget.isReceiver,
         ));
       case Events.startTransfer:
       case Events.connectionType:

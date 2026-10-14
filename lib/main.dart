@@ -16,6 +16,7 @@ import 'settings/settings.dart';
 import 'theme/dark_theme.dart';
 import 'theme/light_theme.dart';
 import 'theme/theme_provider.dart';
+import 'transfer/send_target.dart';
 import 'utils/logger.dart';
 
 Future<void> main() async {
@@ -154,7 +155,10 @@ class _MyAppState extends State<MyApp> {
                 const _FallbackMaterialLocalizationsDelegate(),
               ],
               supportedLocales: AppLocalizations.supportedLocales,
-              home: const Navigation(),
+              home: ChangeNotifierProvider(
+                create: (_) => SendTarget(),
+                child: const Navigation(),
+              ),
             );
           },
         ),

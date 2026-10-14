@@ -22,12 +22,15 @@ import 'package:wormhole/src/rust/frb_generated.dart';
 import 'package:wormhole/theme/dark_theme.dart';
 import 'package:wormhole/theme/light_theme.dart';
 import 'package:wormhole/theme/theme_provider.dart';
+import 'package:wormhole/transfer/send_target.dart';
 import 'package:wormhole/transfer/transfer_provider.dart';
 
 class _MockRustLibApi implements RustLibApi {
   @override
   Future<String> crateApiWormholeGetPassphraseUri(
-          {required String passphrase, String? rendezvousServer}) =>
+          {required String passphrase,
+          String? rendezvousServer,
+          required bool isLeader}) =>
       Future.value('wormhole-transfer:$passphrase');
 
   @override
@@ -69,7 +72,8 @@ class _MockRustLibApi implements RustLibApi {
       throw UnimplementedError();
   @override
   Stream<TUpdate> crateApiWormholeRequestFile(
-          {required String passphrase,
+          {String? passphrase,
+          required int codeLength,
           required String storageFolder,
           required ServerConfig serverConfig,
           required CancelToken cancel}) =>
@@ -79,6 +83,7 @@ class _MockRustLibApi implements RustLibApi {
           {required List<String> filePaths,
           required String name,
           required int codeLength,
+          String? code,
           required ServerConfig serverConfig,
           required CancelToken cancel}) =>
       throw UnimplementedError();
@@ -87,6 +92,7 @@ class _MockRustLibApi implements RustLibApi {
           {required String folderPath,
           required String name,
           required int codeLength,
+          String? code,
           required ServerConfig serverConfig,
           required CancelToken cancel}) =>
       throw UnimplementedError();
@@ -277,6 +283,7 @@ Widget _buildApp(ScreenshotDevice device, Widget page, Brightness brightness,
         ),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => TransferProvider()),
+        ChangeNotifierProvider(create: (_) => SendTarget()),
       ],
       child: _AppShell(page: page),
     ),

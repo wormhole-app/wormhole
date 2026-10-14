@@ -13,6 +13,7 @@ import '../src/rust/api/wormhole.dart';
 import '../navigation/navigation.dart';
 import '../pages/connecting_page.dart';
 import '../pages/toasts/error_toast.dart';
+import '../pages/toasts/info_toast.dart';
 import '../pages/transfer_widgets/transfer_finished.dart';
 import '../pages/transfer_widgets/receive_saf_finalize.dart';
 import '../settings/settings.dart';
@@ -20,18 +21,29 @@ import '../utils/paths.dart';
 import '../utils/saf.dart';
 import '../utils/logger.dart';
 import '../utils/code.dart';
+import 'send_target.dart';
 import 'transfer_provider.dart';
 import 'demo_transfer.dart';
 
 class TransferReceiver extends StatefulWidget {
   const TransferReceiver(
-      {super.key, required this.child, required this.pushPage});
+      {super.key,
+      required this.child,
+      required this.pushPage,
+      required this.showTab,
+      required this.isTransferRunning});
 
   final Widget child;
 
   /// Switches to the given tab and pushes the page onto its navigator.
   /// Provided by [Navigation], which owns the per-tab navigators.
   final void Function(AppTab tab, Widget page) pushPage;
+
+  /// Switches to the given tab and returns it to its root page.
+  final void Function(AppTab tab) showTab;
+
+  /// Whether a transfer that can still be cancelled runs on the given tab.
+  final bool Function(AppTab tab) isTransferRunning;
 
   @override
   State<TransferReceiver> createState() => _TransferReceiverState();
@@ -73,7 +85,8 @@ class _TransferReceiverState extends State<TransferReceiver> {
     }
   }
 
-  void _sendFolder(String name, String path, bool causedByIntent) async {
+  void _sendFolder(String name, String path, bool causedByIntent,
+      {String? code}) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
 
     final cancelToken = CancelToken();
@@ -81,19 +94,21 @@ class _TransferReceiverState extends State<TransferReceiver> {
         folderPath: path,
         name: name,
         codeLength: codeLength,
+        code: code,
         serverConfig: await _getServerConfig(),
         cancel: cancelToken);
     _showConnectionPage(stream, cancelToken, causedByIntent);
   }
 
-  void _sendFiles(
-      String name, List<String> filepaths, bool causedByIntent) async {
+  void _sendFiles(String name, List<String> filepaths, bool causedByIntent,
+      {String? code}) async {
     final codeLength = (await Settings.getWordLength()) ?? Defaults.wordlength;
     final cancelToken = CancelToken();
     final stream = sendFiles(
         name: name,
         filePaths: filepaths,
         codeLength: codeLength,
+        code: code,
         serverConfig: await _getServerConfig(),
         cancel: cancelToken);
 
@@ -126,7 +141,8 @@ class _TransferReceiverState extends State<TransferReceiver> {
     return serverConfig;
   }
 
-  void _receiveFile(String passphrase) async {
+  /// [passphrase]: the sender's code; null makes a new one for the sender.
+  void _receiveFile(String? passphrase) async {
     final askForFolder = await Settings.getAskForFolder();
 
     // On Android, scoped storage blocks raw writes into a user-picked folder.
@@ -151,7 +167,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
     }
 
     // Check if this is a demo code for App Store review
-    if (isDemoCode(passphrase)) {
+    if (passphrase != null && isDemoCode(passphrase)) {
       // Use demo transfer stream instead of real wormhole connection
       final s = generateDemoReceiveStream(dpath);
       if (!mounted) return;
@@ -172,9 +188,12 @@ class _TransferReceiverState extends State<TransferReceiver> {
         (Platform.isAndroid &&
             (await DeviceInfoPlugin().androidInfo).version.sdkInt >= 33) ||
         await Permission.storage.request().isGranted) {
+      final codeLength =
+          (await Settings.getWordLength()) ?? Defaults.wordlength;
       final cancelToken = CancelToken();
       final s = requestFile(
           passphrase: passphrase,
+          codeLength: codeLength,
           storageFolder: dpath,
           serverConfig: await _getServerConfig(),
           cancel: cancelToken);
@@ -190,6 +209,7 @@ class _TransferReceiverState extends State<TransferReceiver> {
               ? ReceiveFinished(file: file)
               : ReceiveSafFinalize(tempPath: file, treeUri: safTreeUri),
           onCancel: cancelToken.cancel,
+          isReceiver: passphrase == null,
         ),
       );
     } else {
@@ -199,6 +219,21 @@ class _TransferReceiverState extends State<TransferReceiver> {
                   .transfer_error_storagepermission)
           .show(context);
     }
+  }
+
+  /// A receiver showed its code for us to send to: open the send page with
+  /// the code set, unless a send is still running there.
+  void _setSendTarget(String code) {
+    if (!mounted) return;
+    if (widget.isTransferRunning(AppTab.send)) {
+      InfoToast(
+              message:
+                  AppLocalizations.of(context)!.toast_info_transfer_running)
+          .show(context);
+      return;
+    }
+    widget.showTab(AppTab.send);
+    Provider.of<SendTarget>(context, listen: false).code = code;
   }
 
   @override
@@ -211,21 +246,23 @@ class _TransferReceiverState extends State<TransferReceiver> {
       clearReceiveTempDir();
     }
 
-    provider.addOnSendListener((name, path) {
-      _sendFiles(name, path, false);
+    provider.addOnSendListener((name, path, code) {
+      _sendFiles(name, path, false, code: code);
     });
 
-    provider.addOnSendFolderListener((name, path) {
-      _sendFolder(name, path, false);
+    provider.addOnSendFolderListener((name, path, code) {
+      _sendFolder(name, path, false, code: code);
     });
 
-    provider.addOnSendTextListener((text) {
-      _sendText(text);
+    provider.addOnSendTextListener((text, code) {
+      _sendText(text, code: code);
     });
 
     provider.addOnReceiveListener((passphrase) {
       _receiveFile(passphrase);
     });
+
+    provider.addOnSendTargetListener(_setSendTarget);
   }
 
   @override
@@ -258,21 +295,26 @@ class _TransferReceiverState extends State<TransferReceiver> {
 
   void registerIntentReceiveHandler() {
     AppLinks().uriLinkStream.listen((uri) {
-      final passphrase = passphraseFromTransferUri(uri);
-      if (passphrase == null) {
+      final transferUri = parseTransferUri(uri);
+      if (transferUri == null) {
         AppLogger.debug('Ignoring non-transfer URI scheme: ${uri.scheme}');
         return;
       }
-      _receiveFile(passphrase);
+      if (transferUri.isLeader) {
+        _setSendTarget(transferUri.code);
+      } else {
+        _receiveFile(transferUri.code);
+      }
     });
   }
 
-  void _sendText(String text, {bool causedByIntent = false}) async {
+  void _sendText(String text,
+      {bool causedByIntent = false, String? code}) async {
     final tempDir = await getTemporaryDirectory();
     final tempFile = File('${tempDir.path}/message.txt');
     await tempFile.writeAsString(text);
     AppLogger.info('Sending text (${text.length} chars)');
-    _sendFiles('message.txt', [tempFile.path], causedByIntent);
+    _sendFiles('message.txt', [tempFile.path], causedByIntent, code: code);
   }
 
   void _sendIntentFile(List<SharedAttachment?> attachments) async {

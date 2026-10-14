@@ -1,20 +1,18 @@
 use crate::api::{CancelToken, ErrorType, Events, ServerConfig, TUpdate, Value};
 use crate::frb_generated::StreamSink;
 use crate::wormhole::handler::{gen_progress_handler, gen_transit_handler};
-use crate::wormhole::helpers::{gen_app_config, gen_relay_hints, sanitize_filename};
+use crate::wormhole::helpers::{
+    gen_app_config, gen_relay_hints, open_mailbox, parse_code, sanitize_filename,
+};
 use crate::wormhole::path::find_free_filepath;
 use async_std::fs::{OpenOptions, remove_file};
-use magic_wormhole::{Code, MailboxConnection, Wormhole, transfer, transit};
+use magic_wormhole::{Wormhole, transfer, transit};
 use std::path::Path;
 use std::rc::Rc;
-use std::str::FromStr as _;
-
-fn parse_code(passphrase: &str) -> Result<Code, String> {
-    Code::from_str(passphrase).map_err(|error| error.to_string())
-}
 
 pub async fn request_file_impl(
-    passphrase: String,
+    passphrase: Option<String>,
+    code_length: u8,
     storage_folder: String,
     server_config: ServerConfig,
     actions: StreamSink<TUpdate>,
@@ -37,7 +35,8 @@ pub async fn request_file_impl(
     };
     let appconfig = gen_app_config(&server_config);
 
-    let code = match parse_code(&passphrase) {
+    // without a passphrase, make a code for the sender to send to
+    let code = match passphrase.as_deref().map(parse_code).transpose() {
         Ok(code) => code,
         Err(e) => {
             _ = actions.add(TUpdate::new(
@@ -48,10 +47,12 @@ pub async fn request_file_impl(
         }
     };
 
+    let own_code = code.is_none();
+
     // the connection phase has no cancel handler of its own, so drop the
     // connection futures on cancel
     let connection = match cancel
-        .guard(MailboxConnection::connect(appconfig, code, true))
+        .guard(open_mailbox(appconfig, code, code_length))
         .await
     {
         None => return,
@@ -64,6 +65,14 @@ pub async fn request_file_impl(
             return;
         }
     };
+
+    // the sender needs our code
+    if own_code {
+        _ = actions.add(TUpdate::new(
+            Events::Code,
+            Value::String(connection.code().to_string()),
+        ));
+    }
 
     let wormhole = match cancel.guard(Wormhole::connect(connection)).await {
         None => return,

@@ -12,11 +12,24 @@
   "send_page_more_button" : "More Options",
   "send_page_text_hint" : "Enter text to send",
   "send_page_text_send" : "Send",
+  "send_page_code_button" : "Send to a Code",
+  "send_page_code_hint" : "Receiver's code",
+  "send_page_code_set" : "Continue",
+  "send_page_target_label" : "Sending to {code}",
+  "@send_page_target_label" : {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "send_page_target_clear" : "Don't send to this code",
 
   "receive_page_label" : "Receive File",
   "receive_page_sublabel" : "Enter the transmit code from the sender",
   "receive_page_textfield_hint" : "Transmit code",
   "receive_page_button" : "Receive File",
+  "receive_page_own_code_button" : "Receive with My Code",
 
   "transfer_finished_label" : "Finished receive of file!",
   "transfer_finished_open" : "Open file",
@@ -32,7 +45,9 @@
 
   "transfer_connecting" : "Connecting...",
   "transfer_code_label" : "Your transmit code is:",
+  "transfer_code_label_receiver" : "Give this code to the sender:",
   "transfer_code_help" : "The receiver needs to enter or scan the code.\nIt has to use an app compatible with the magic-wormhole protocol like this app or <link> for Desktops.",
+  "transfer_code_help_receiver" : "The sender needs to scan or enter the code in this app (\"Send to a Code\"), or in another app that can send to a receiver's code, like the magic-wormhole command line (wormhole send --code).",
   "transfer_code_help_title" : "How to use this code?",
   "transfer_cancel" : "Cancel",
   "transfer_cancel_confirm" : "Are you sure you want to cancel?",
@@ -99,5 +114,6 @@
 
   "toast_error_qr_fail" : "Failed to Scan QR Code",
   "toast_error_qr_invalid" : "Scanned QR Code Invalid",
-  "toast_info_passphrase_copy" : "Passphrase copied to clipboard"
+  "toast_info_passphrase_copy" : "Passphrase copied to clipboard",
+  "toast_info_transfer_running" : "Finish or cancel the current transfer first"
 }
